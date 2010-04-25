@@ -11,8 +11,8 @@
 \LoadClass[a4wide,onecolumn,12pt]{report}
 \usepackage[cm]{fullpage}
 
+\usepackage[american]{babel}
 \usepackage{csquotes}
-\usepackage[english]{babel}
 
 % Use sans-serif font
 % \usepackage{helvet}
@@ -85,32 +85,22 @@
 %% Bibliography
 %%---------------------------------------------------------------------------%%
 
-% Use REFERENCES as heading rather than bibliography
-\renewcommand{\bibname}{REFERENCES}
-
-% Bibliography should be single spaced, and placed in the table of contents
-%\RequirePackage[sort]{natbib}
-%\bibliographystyle{apalike2}
-%\usepackage{url}
-
-\RequirePackage[natbib=true,style=apa]{biblatex}
-
-% FIXME: Can't use this, it's broken doesn't support our bibtex files very well
-% Use actual apacite package
-% \RequirePackage{apacite}
-% \bibliographystyle{apacite}
+% Use the excellent biblatex package with apa style
+% minnames=1,maxnames=2 - abbreviates all author names in citations
+% hyperref - links in pdf
+\RequirePackage[hyperref=true,style=apa,minnames=1,maxnames=2]{biblatex}
 
 %%---------------------------------------------------------------------------%%
 %% PDF Hyperlinks
 %%---------------------------------------------------------------------------%%
 
 % Use hyperlinks for convenience, but let's not make them coloured
-%\usepackage[pdftex,bookmarks,colorlinks,breaklinks,pagebackref,
-%pdftitle={TITLE},pdfauthor={AUTHOR}]{hyperref}
-%\hypersetup{
-%  colorlinks,%
-%  citecolor=black,%
-%  filecolor=black,%
-%  linkcolor=black,%
-%  urlcolor=black
-%}
+\usepackage[pdftex,bookmarks,colorlinks,breaklinks,
+pdftitle={TITLE},pdfauthor={AUTHOR}]{hyperref}
+\hypersetup{
+  colorlinks,%
+  citecolor=black,%
+  filecolor=black,%
+  linkcolor=black,%
+  urlcolor=black
+}
