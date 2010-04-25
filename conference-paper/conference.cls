@@ -10,11 +10,13 @@
 \ProcessOptions
 \LoadClass[a4wide,onecolumn,12pt]{report}
 \usepackage[cm]{fullpage}
+
+\usepackage{csquotes}
 \usepackage[english]{babel}
 
 % Use sans-serif font
 % \usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
+%\renewcommand{\familydefault}{\sfdefault}
 
 % Support for floats
 \usepackage{float}
@@ -87,9 +89,11 @@
 \renewcommand{\bibname}{REFERENCES}
 
 % Bibliography should be single spaced, and placed in the table of contents
-\RequirePackage[super,sort]{natbib}
-\bibliographystyle{apalike2}
-\usepackage{url}
+%\RequirePackage[sort]{natbib}
+%\bibliographystyle{apalike2}
+%\usepackage{url}
+
+\RequirePackage[natbib=true,style=apa]{biblatex}
 
 % FIXME: Can't use this, it's broken doesn't support our bibtex files very well
 % Use actual apacite package
@@ -101,12 +105,12 @@
 %%---------------------------------------------------------------------------%%
 
 % Use hyperlinks for convenience, but let's not make them coloured
-\usepackage[pdftex,bookmarks,colorlinks,breaklinks,pagebackref,
-pdftitle={TITLE},pdfauthor={AUTHOR}]{hyperref}
-\hypersetup{
-  colorlinks,%
-  citecolor=black,%
-  filecolor=black,%
-  linkcolor=black,%
-  urlcolor=black
-}
+%\usepackage[pdftex,bookmarks,colorlinks,breaklinks,pagebackref,
+%pdftitle={TITLE},pdfauthor={AUTHOR}]{hyperref}
+%\hypersetup{
+%  colorlinks,%
+%  citecolor=black,%
+%  filecolor=black,%
+%  linkcolor=black,%
+%  urlcolor=black
+%}

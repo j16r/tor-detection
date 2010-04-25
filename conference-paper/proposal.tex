@@ -1,7 +1,10 @@
 \documentclass{conference}
 
-% Packages
+% For graphics
 \usepackage{graphicx}
+
+% Bibliography
+\bibliography{papers,websites,patents}
 
 % Begin document
 \begin{document}
@@ -24,7 +27,7 @@ Traditional attacks against anonymous systems aim to uncover the identities of t
 
 The Internet has revolutionised the political sphere in providing a platform for the publication of speech to a far greater audience than was ever available before digital communications systems \citep{Bonchek:1997p3455}. The publication of less desirable political speech, criticism or challenging ideas still carries with it great risk, with numerous publications leading to arrest. This has spawned headlines such as \emph{Egypt arrests another blog critic} \citeyear{website:egypt-arrests}, \emph{Chinese couple sue Yahoo! in US over torture case} \citep{website:china-yahoo-torture}, \emph{Vietnam bloggers arrested over China shirt protest} \citep{website:vietnam-bloggers-arrested}, \emph{23 Journalists/Bloggers Arrested in Iran, Including Head of Top Group} \citeyear{website:iran-bloggers-arrested} and \emph{Blogger Arrests} \citep{website:blogger-arrests}. The Internet, like conventional media is still vulnerable to censorship by oppressive governments and malicious attackers \citep{Crandall:2007p6165,Karlin:2009p6166}.
 
-In response to these threats, a number of systems have been proposed which use cryptography to provide censorship resistance and anonymity, including The Second Generation Onion Router (Tor). Tor is an anonymous network which uses various techniques to provide low latency anonymity to network participants \citep{Dingledine:2004p314}. It also aims to provide resistance against censorship based blocking attempts \citep{Dingledine:2008p1542}.
+In response to these threats, a number of systems have been proposed which use cryptography to provide censorship resistance and anonymity, including The Second Generation Onion Router (Tor). Tor is an anonymous network which uses Onion Routing to provide low latency anonymity to network participants \citep{Dingledine:2004p314}. It also aims to provide resistance against censorship based blocking attempts \citep{Dingledine:2008p1542}.
 
 Although Tor provides censorship resistance and a certain amount of privacy, it may be possible to use traffic analysis techniques to automatically identify Tor connections and target them for attacks. Since Tor relies on large numbers of users for the protections it provides, attacks that affect the reliability of the network can discourage participation, rendering it`s protections useless. This paper proposes a statistical methodology for identifying Tor traffic which may be used for such attacks in the future.
 
@@ -32,13 +35,11 @@ Although Tor provides censorship resistance and a certain amount of privacy, it 
 
 Tor`s availability, unrestrictive license and platform portability has made it a popular anonymous network with around one thousand eight hundred users at the time of writing \citep{website:tor-anonymity-online}. It has been the subject of many technical papers proposing traffic analysis attacks, however the primary objective has historically been attacks that reveal the identity of participants. As stated in \citet{Murdoch:2005p325} ``The principal objective of an adversary attacking an anonymous communication system is to link the initiators of connections with their respective communication partners and vice versa''.
 
-The traffic analysis techniques proposed in this paper will attempt to classify network streams belonging to Tor users and distinguish them from regular encrypted communications.
+The traffic analysis techniques proposed will attempt to classify network streams belonging to Tor users to distinguish them from regular encrypted communications.
 
 \section{Research Questions}
 
-The ability of Tor to connect on any port and it`s usage of strong encryption mean that recognizing traffic belonging to Tor is not straightforward. However it is possible that the communications patterns exhibited by Tor nodes are recognizeable using statistical methods.
-
-This raises the question: is it possible to distinguish the traffic created by these networks, from encrypted traffic produced by conventional software? This question can be broken down further:
+The ability of Tor to connect on any port and it`s usage of strong encryption mean that recognizing traffic belonging to Tor is not straightforward. However it is possible that the communications patterns exhibited by Tor nodes are recognizeable using statistical methods. This raises the question: is it possible to distinguish the traffic created by these networks, from encrypted traffic produced by conventional software? This question can be broken down further:
 
 \begin{enumerate*}
 \item Can the traffic be classified using automated matching techniques?
@@ -51,8 +52,11 @@ This raises the question: is it possible to distinguish the traffic created by t
 
 The first anonymous network system was proposed in \citet{Chaum:1981p296}. This proposal included the use of public key cryptography and a centrally located server known as a `mix'. By wrapping the information and address of a destination in a message and encrypting it with the mix`s public key, only the mix system is able to read the message.
 
+Onion routing was first described in a patent by \cite{Michael:2001}. Like the mix network is uses public key cryptography to provide anonymity, it differs in that messages are repeatedly encrypted then passed through several nodes in a network known as onion routers. Each of these routers is capable of removing a single layer of encryption to reveal delivery instructions. This layering prevents individual nodes obtaining the identity of the sender, receiver and the contents of the message.
+
 \subsection{The Second Generation Onion Router (Tor)}
 
+The Second Generation Onion Router (Tor) uses a form of Onion Routing 
 The Tor network, like the Mix-Net proposed by \citet{Chaum:1981p296} uses public key encryption and cascades of servers to ensure message anonymity \citep{Dingledine:2004p314}. In Tor these mixes are known as ‘relays’. Relays that allow connections directly from Tor clients are known as ‘bridges’ and relays that deliver messages from the frontier of the Tor network are known as ‘exit nodes’. Figure \ref{tor-network} shows how a client connects to the Tor network.
 
 \begin{figure}[H]
@@ -79,43 +83,41 @@ Heuristics based matching techniques have also been used to identify traffic bel
 
 \subsubsection{Expectation-Maximisation}
 
-The first use of machine learning to categorise traffic flows appears in \cite{McGregor:2004p3826}. A detailed analysis of the attributes that can be used for machine learning and an attempt at coarse grained classification using an Expectation-Maximisation (EM) algorithm are demonstrated. The same technique is also demonstrated in \cite{Soule:2004p3817} using histograms for finer grained classification. The EM algorithm is again used in \cite{Zander:2005p6212} and \cite{Erman:2006p3825}, with the latter also comparing this algorithm favourably against a Naïve Bayes classifier.
+The first use of machine learning to categorise traffic flows appears in \citet{McGregor:2004p3826}. A detailed analysis of the attributes that can be used for machine learning and an attempt at coarse grained classification using an Expectation-Maximisation (EM) algorithm are demonstrated. The same technique is also demonstrated in \citet{Soule:2004p3817} using histograms for finer grained classification. The EM algorithm is again used in \citet{Zander:2005p6212} and \citet{Erman:2006p3825}, with the latter also comparing this algorithm favourably against a Naïve Bayes classifier.
 
 \subsubsection{Naïve Bayes}
 
-\cite{Moore:2005p3827} use a supervised Naïve Bayes to classify traffic flows that have previously been sorted into groups by analysing the flow content. This paper focuses on many of the most commonly used Internet protocols while \cite{Bonfiglio:2007p6453} uses the technique for identifying traffic belonging to the commercial Skype application.
+\citet{Moore:2005p3827} use a supervised Naïve Bayes to classify traffic flows that have previously been sorted into groups by analysing the flow content. This paper focuses on many of the most commonly used Internet protocols while \citet{Bonfiglio:2007p6453} uses the technique for identifying traffic belonging to the commercial Skype application.
 
-\cite{Herrmann:2009p1189} use Bayesian networks to fingerprint visited websites accessed through Privacy Enhancing Technologies (PET), including Tor. This technique performed poorly when applied to the Tor network, but it suggests that Tor traffic has particular characteristics that distinguish it from many existing PETs. It makes a particularly useful observation: “The most frequent packet sizes in the Tor traffic dumps are, in descending order, 1500, −52, −638, 52, 638 and 1150 bytes, accounting for 87.6 \% of all Tor packets.”
+\citet{Herrmann:2009p1189} use Bayesian networks to fingerprint visited websites accessed through Privacy Enhancing Technologies (PET), including Tor. This technique performed poorly when applied to the Tor network, but it suggests that Tor traffic has particular characteristics that distinguish it from many existing PETs. It makes a particularly useful observation: “The most frequent packet sizes in the Tor traffic dumps are, in descending order, 1500, −52, −638, 52, 638 and 1150 bytes, accounting for 87.6 \% of all Tor packets.”
 
 \subsubsection{Hidden Markov Model}
 
-Hidden Markov Models are first used as a traffic analysis technique in HMM profiles for network traffic classification \citep{Wright:2004p3860}. The primary identification characteristics for use with this algorithm are packet size and inter-packet arrival times. With refinement this algorithm is used with increasing accuracy in \cite{Wright:2006p322} and \cite{Dainotti:2008p1435}. HMMs are also used in \cite{Bernaille:2005p6205} to discover distinguishing characteristics of traffic flows, rather than specifically as a classifier.
+Hidden Markov Models are first used as a traffic analysis technique in HMM profiles for network traffic classification \citep{Wright:2004p3860}. The primary identification characteristics for use with this algorithm are packet size and inter-packet arrival times. With refinement this algorithm is used with increasing accuracy in \citet{Wright:2006p322} and \citet{Dainotti:2008p1435}. HMMs are also used in \citet{Bernaille:2005p6205} to discover distinguishing characteristics of traffic flows, rather than specifically as a classifier.
 
 \subsubsection{Clustering}
 
-Clustering algorithms group observations into subsets based on similar characteristics. They have been used in a number of traffic classification techniques with the K-Means clustering technique being the most prominent. K-Means cluster analysis appears in Bernaille et al. (2006), \cite{Erman:2007p3764}, \cite{Erman:2007p6206}. The use of the Density Based Spatial Clustering of Applications with Noise (DBSCAN) algorithm appears in \cite{Erman:2006p3766}, alongside K-Means and Autoscan algorithms.
+Clustering algorithms group observations into subsets based on similar characteristics. They have been used in a number of traffic classification techniques with the K-Means clustering technique being the most prominent. K-Means cluster analysis appears in Bernaille et al. (2006), \citet{Erman:2007p3764}, \citet{Erman:2007p6206}. The use of the Density Based Spatial Clustering of Applications with Noise (DBSCAN) algorithm appears in \citet{Erman:2006p3766}, alongside K-Means and Autoscan algorithms.
 
 \subsubsection{Other Techniques}
 
-Other algorithms used for traffic classification include Nearest Neighbour and  Linear Discriminant Analysis \citep{Roughan:2004p3823}, Normalized Threshold \citep{Crotti:2007p3824}. The use of the Gaussian Mixture Model to identify applications and identities inside SSH tunnels was demonstrated in \cite{Dusi:2008p6254}.
+Other algorithms used for traffic classification include Nearest Neighbour and  Linear Discriminant Analysis \citep{Roughan:2004p3823}, Normalized Threshold \citep{Crotti:2007p3824}. The use of the Gaussian Mixture Model to identify applications and identities inside SSH tunnels was demonstrated in \citet{Dusi:2008p6254}.
 
 \subsubsection{Comparing Techniques}
 
-It is difficult to say what machine learning technique is the most effective as no consensus has been reached, the literature covers a wide variety of techniques each with vastly different goals and no two techniques can be directly compared as the data used for analysis has not been disclosed \citep{Kim:2007p3867}. However some attempt has been made at comparison in \cite{Williams:2006p3849} which suggests that the C4.5 algorithm has the greatest performance and accuracy when compared to a number of Bayesian algorithms. \cite{Mohd:2009p6484} compares thirty machine learning algorithms  to find random tree, IBI, IBK and random forest algorithms obtaining the greatest classification accuracy.
+It is difficult to say what machine learning technique is the most effective as no consensus has been reached, the literature covers a wide variety of techniques each with vastly different goals and no two techniques can be directly compared as the data used for analysis has not been disclosed \citep{Kim:2007p3867}. However some attempt has been made at comparison in \citet{Williams:2006p3849} which suggests that the C4.5 algorithm has the greatest performance and accuracy when compared to a number of Bayesian algorithms. \citet{Mohd:2009p6484} compares thirty machine learning algorithms  to find random tree, IBI, IBK and random forest algorithms obtaining the greatest classification accuracy.
 
-An excellent meta study on traffic analysis techniques is presented in \cite{Nguyen:2008p3837}. This paper compares many of the published papers, the techniques used, criteria analysed and how effectively they meet stated goals.
+An excellent meta study on traffic analysis techniques is presented in \citet{Nguyen:2008p3837}. This paper compares many of the published papers, the techniques used, criteria analysed and how effectively they meet stated goals.
 
 \section{Theoretical Framework}
 
-The proposed research will use a methodology typical of machine learning traffic analysis papers, substituting data captured from a controlled simulation in place of live network captures. 
-
-The experiment will be conducted in two phases, the first being a data collection phase. The second phase will include a quasi experimental methodology which may include data manipulation techniques to prepare the collected data and a comparison of various heuristics and machine learning based traffic analysis to classify the collected data.
+The proposed experiment will employ a quasi-experimental research method, employing techniques common to traffic analysis papers. This includes the capturing of packet traces, development of a matching technique/algorithm and documentation of efficacy and results. The first phase of the experiment covers the data capturing phase, while the second phase concludes the traffic analysis technique.
 
 \subsection{Assumptions}
 
 It is assumed that the usage patterns exhibited by individual users will be smaller than the communications characteristics that will lead to the identification of anonymous and censorship resistant networks. Thus there is no need to obtain a large sample of regular network traffic from varying user profiles.
 
-As of the current implementation, Tor network traffic is readily distinguishable by looking at the handshake packets. It is likely that this weakness will be addressed in a future version of the Tor protocol as it is recognised as a design goal in \cite{Dingledine:2008p1542}. For this reason, this proposal focuses on traffic analysis techniques that are content agnostic.
+As of the current implementation, Tor network traffic is readily distinguishable by looking at the handshake packets. It is likely that this weakness will be addressed in a future version of the Tor protocol as it is recognised as a design goal in \citet{Dingledine:2008p1542}. For this reason, this proposal focuses on traffic analysis techniques that are content agnostic.
 
 \subsection{Variables}
 
@@ -133,17 +135,17 @@ An attempt will be made to reduce the impact of these variables by capturing pac
 
 \section{Materials and Methods}
 
-The experiment will consist of two phases, first a simulation phase which involves the capture of packets belonging to a Tor network
+The experiment will consist of two phases, first a simulation phase which involves the capture of packets belonging to a Tor network, the second will be a comparison and documentation of the results of using several techniques to identify Tor traffic.
 
-Figure \ref{network-diagram} shows the placement of applications and relevant data flows.
+Figure \ref{network-diagram} shows the placement of applications and relevant data flows for the simulation phase.
 
 \begin{figure}
-\center \includegraphics[scale=0.8]{network-diagram}
+\center \includegraphics[scale=0.7]{network-diagram}
 \caption{Network Diagram}
 \label{network-diagram}
 \end{figure}
 
-\bibliography{papers,websites}
+\printbibliography[title=REFERENCES]
 
 \end{document}
 
