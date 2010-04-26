@@ -8,7 +8,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{conference}[2010/04/19 Thesis Style]
 \ProcessOptions
-\LoadClass[a4wide,onecolumn,12pt]{report}
+\LoadClass[onecolumn,12pt]{report}
 \usepackage[cm]{fullpage}
 
 \usepackage[american]{babel}
@@ -88,7 +88,10 @@
 % Use the excellent biblatex package with apa style
 % minnames=1,maxnames=2 - abbreviates all author names in citations
 % hyperref - links in pdf
-\RequirePackage[hyperref=true,style=apa,minnames=1,maxnames=2]{biblatex}
+\RequirePackage[url=false,hyperref=true,style=apa,minnames=1,maxnames=2]{biblatex}
+
+% Don't force sentence case
+\renewcommand{\MakeSentenceCase}[1]{}
 
 %%---------------------------------------------------------------------------%%
 %% PDF Hyperlinks
