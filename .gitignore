@@ -1,1 +1,14 @@
 *.swp
+*.log
+proposal/*.aux
+proposal/*.eps
+proposal/*.png
+proposal/*.make
+proposal/*.temp
+proposal/*.out
+proposal/*.d
+proposal/*.fls
+proposal/*.bbl
+proposal/*.blg
+proposal/*.pdf
+proposal/proposal-blx.bib
