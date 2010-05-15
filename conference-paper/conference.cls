@@ -88,7 +88,7 @@
 % Use the excellent biblatex package with apa style
 % minnames=1,maxnames=2 - abbreviates all author names in citations
 % hyperref - links in pdf
-\RequirePackage[url=false,hyperref=true,style=apa,minnames=1,maxnames=2]{biblatex}
+\RequirePackage[url=false,hyperref=true,style=numeric,minnames=1,maxnames=2]{biblatex}
 
 % Don't force sentence case
 \renewcommand{\MakeSentenceCase}[1]{}
