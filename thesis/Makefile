@@ -29,7 +29,7 @@
 #
 fileinfo	:= LaTeX Makefile
 author		:= Chris Monson
-version		:= 2.2.0-rc2
+version		:= 2.2.0-rc5
 #
 # Note that the user-global version is imported *after* the source directory,
 # so that you can use stuff like ?= to get proper override behavior.
@@ -104,6 +104,16 @@ export LC_ALL		?= C
 #		graceful solution to this issue.
 #
 # CHANGES:
+# Chris Monson (2010-07-28):
+# 	* Bumped version to 2.2.0-rc5 (rc4 is broken)
+# 	* Bail out when we find the use of the import.sty package
+# 	* Issue 90: Add -z to dvips invocation
+# 	* Issue 67: Add xelatex support (thanks to Nikolai Prokoschenko for the patch!)
+# 	* Issue 85: Add warning about make 3.80
+# Chris Monson (2010-06-20):
+# 	* Bumped version to 2.2.0-rc3
+# 	* Attempt to fix bug with ! error detection (issue 88)
+# 	* Added svg->pdf direct support (issue 89)
 # Chris Monson (2010-04-28):
 # 	* Bumped version to 2.2.0-rc2
 # 	* Fixed %._show target
@@ -592,6 +602,7 @@ BIBTEX		?= bibtex
 DVIPS		?= dvips
 LATEX		?= latex
 PDFLATEX	?= pdflatex
+XELATEX		?= xelatex
 EPSTOPDF	?= epstopdf
 MAKEINDEX	?= makeindex
 KPSEWHICH	?= kpsewhich
@@ -946,17 +957,27 @@ endif
 GNUPLOT_SED	:= global-gpi.sed gnuplot.sed
 GNUPLOT_GLOBAL	:= global._include_.gpi gnuplot.global
 
-ifneq "$(strip $(BUILD_STRATEGY))" "pdflatex"
+ifeq "$(strip $(BUILD_STRATEGY))" "latex"
 default_graphic_extension	?= eps
 latex_build_program		?= $(LATEX)
 build_target_extension		?= dvi
 hyperref_driver_pattern		?= hdvips
 hyperref_driver_error		?= Using dvips: specify ps2pdf in the hyperref options.
-else
+endif
+
+ifeq "$(strip $(BUILD_STRATEGY))" "pdflatex"
 default_graphic_extension	?= pdf
 latex_build_program		?= $(PDFLATEX)
 build_target_extension		?= pdf
 hyperref_driver_pattern		?= hpdf.*
+hyperref_driver_error		?= Using pdflatex: specify pdftex in the hyperref options (or leave it blank).
+endif
+
+ifeq "$(strip $(BUILD_STRATEGY))" "xelatex"
+default_graphic_extension	?= pdf
+latex_build_program		?= $(XELATEX)
+build_target_extension		?= pdf
+hyperref_driver_pattern		?= hdvipdf.*
 hyperref_driver_error		?= Using pdflatex: specify pdftex in the hyperref options (or leave it blank).
 endif
 
@@ -1121,10 +1142,17 @@ graphic_source_extensions	:= fig \
 				   dot \
 				   eps.gz
 
-ifneq "$(strip $(BUILD_STRATEGY))" "pdflatex"
+ifeq "$(strip $(BUILD_STRATEGY))" "latex"
 graphic_source_extensions	+= png jpg
 graphic_target_extensions	:= eps ps
-else
+endif
+
+ifeq "$(strip $(BUILD_STRATEGY))" "pdflatex"
+graphic_source_extensions	+= eps
+graphic_target_extensions	:= pdf png jpg mps tif
+endif
+
+ifeq "$(strip $(BUILD_STRATEGY))" "xelatex"
 graphic_source_extensions	+= eps
 graphic_target_extensions	:= pdf png jpg mps tif
 endif
@@ -1271,7 +1299,8 @@ all_dot2tex_targets	:= $(addsuffix .dot_t,$(stems.dot))
 all_known_graphics	:= $(sort $(all_graphics_targets) $(wildcard *.$(default_graphic_extension)))
 
 default_pdf_targets	:= $(addsuffix .pdf,$(default_stems_ss))
-ifneq "$(strip $(BUILD_STRATEGY))" "pdflatex"
+
+ifeq "$(strip $(BUILD_STRATEGY))" "latex"
 default_ps_targets	:= $(addsuffix .ps,$(default_stems_ss))
 default_dvi_targets	:= $(addsuffix .dvi,$(default_stems_ss))
 pre_pdf_extensions	:= dvi ps
@@ -1474,6 +1503,17 @@ if $(EGREP) -q '^! LaTeX Error: File .*\.pstex.* not found' $1; then \
 fi
 endef
 
+# Checks for the use of import.sty and bails - we don't support subdirectories
+#
+# $(call die-on-import-sty,<log file>)
+define die-on-import-sty
+if $(EGREP) -s '/import.sty\)' '$1'; then \
+	$(ECHO) "$(C_ERROR)import.sty is not supported - included files must"; \
+	$(ECHO) "$(C_ERROR)be in the same directory as the primary document$(C_RESET)"; \
+	exit 1; \
+fi
+endef
+
 # Checks for build failure due to dot2tex, and gives instructions.
 #
 # $(call die-on-dot2tex,<parsed file>)
@@ -1668,7 +1708,7 @@ $(SED) \
 -e '  h' \
 -e '  b' \
 -e '}' \
--e 's/.*\(\n\{0,\}! .*\)/$(C_ERROR)\1$(C_RESET)/p' \
+-e 's/.*\(\n\{2,\}![[:space:]][^[:space:]]*[[:space:]]Error .*\)/$(C_ERROR)\1$(C_RESET)/p' \
 -e 'd' \
 $1
 endef
@@ -2019,7 +2059,7 @@ convert-dot-tex		= $(DOT2TEX) '$1' > '$2'
 # Converts svg files into .eps files
 #
 # $(call convert-svg,<svg file>,<eps file>,[gray])
-convert-svg	= $(INKSCAPE) --export-eps='$2' '$1'
+convert-svg	= $(INKSCAPE) --without-gui $(if $(filter %.pdf,$2)--export-pdf=,--export-eps)='$2' '$1'
 
 # Converts xvg files into .eps files
 #
@@ -2161,7 +2201,7 @@ endef
 # Convert DVI to Postscript
 # $(call make-ps,<dvi file>,<ps file>,<log file>,[<paper size>])
 make-ps		= \
-	$(DVIPS) -o '$2' $(if $(filter-out BEAMER,$4),-t$(firstword $4),) '$1' \
+	$(DVIPS) -z -o '$2' $(if $(filter-out BEAMER,$4),-t$(firstword $4),) '$1' \
 		$(if $(filter BEAMER,$4),| $(enlarge_beamer)) > $3 2>&1
 
 # Convert Postscript to PDF
@@ -2189,7 +2229,7 @@ all: $(default_pdf_targets) ;
 .PHONY: all-pdf
 all-pdf: $(default_pdf_targets) ;
 
-ifneq "$(strip $(BUILD_STRATEGY))" "pdflatex"
+ifeq "$(strip $(BUILD_STRATEGY))" "latex"
 .PHONY: all-ps
 all-ps: $(default_ps_targets) ;
 
@@ -2211,6 +2251,11 @@ show: all
 #
 source_includes	:= $(addsuffix .d,$(source_stems_to_include))
 graphic_includes := $(addsuffix .gpi.d,$(graphic_stems_to_include))
+
+# Check the version of the makefile
+ifneq "" "$(filter 3.79 3.80,$(MAKE_VERSION))"
+$(warning $(C_WARNING)Your version of make is too old.  Please upgrade.$(C_RESET))
+endif
 
 # Include only the dependencies used
 ifneq "" "$(source_includes)"
@@ -2241,7 +2286,7 @@ $(default_stems_ss): %: %.pdf ;
 $(addsuffix ._show,$(stems_ssg)): %._show: %.pdf
 	$(QUIET)$(VIEW_PDF) $< &
 
-ifneq "$(strip $(BUILD_STRATEGY))" "pdflatex"
+ifeq "$(strip $(BUILD_STRATEGY))" "latex"
 .SECONDARY: $(all_pdf_targets)
 %.pdf: %.ps %.embed.make
 	$(QUIET)$(call echo-build,$<,$@)
@@ -2317,7 +2362,7 @@ endif
 #	If we do, we delete that cookie file and do the normal multiple-runs
 #	routine.
 #
-ifneq "$(strip $(BUILD_STRATEGY))" "pdflatex"
+ifeq "$(strip $(BUILD_STRATEGY))" "latex"
 .SECONDARY: $(all_dvi_targets)
 endif
 %.$(build_target_extension): %.bbl %.aux %.$(build_target_extension).1st.make
@@ -2447,7 +2492,7 @@ endif
 .PHONY: all-graphics
 all-graphics:	$(all_graphics_targets);
 
-ifneq "$(strip $(BUILD_STRATEGY))" "pdflatex"
+ifeq "$(strip $(BUILD_STRATEGY))" "latex"
 .PHONY: all-pstex
 all-pstex:	$(all_pstex_targets);
 endif
@@ -2478,7 +2523,28 @@ endif
 	$(QUIET)$(call echo-graphic,$^,$@)
 	$(QUIET)$(call convert-fig,$<,$@,$(GRAY))
 
+%.pdf:	%.svg
+	$(QUIET)$(call echo-graphic,$^,$@)
+	$(QUIET)$(call convert-svg,$<,$@,$(GRAY))
 endif
+
+ifeq "$(strip $(BUILD_STRATEGY))" "xelatex"
+%.pdf: %.eps $(if $(GRAY),$(gray_eps_file))
+	$(QUIET)$(call echo-graphic,$^,$@)
+	$(QUIET)$(call convert-eps-to-pdf,$<,$@,$(GRAY))
+
+ifeq "$(strip $(GNUPLOT_OUTPUT_EXTENSION))" "pdf"
+%.pdf:	%.gpi %.gpi.d $(gpi_sed)
+	$(QUIET)$(call echo-graphic,$^,$@)
+	$(QUIET)$(call convert-gpi,$<,$@,$(GRAY))
+endif
+
+%.pdf:	%.fig
+	$(QUIET)$(call echo-graphic,$^,$@)
+	$(QUIET)$(call convert-fig,$<,$@,$(GRAY))
+
+endif
+
 
 %.eps:	%.gpi %.gpi.d $(gpi_sed)
 	$(QUIET)$(call echo-graphic,$^,$@)
@@ -2568,6 +2634,7 @@ endif
 	$(QUIET)\
 	$(call run-latex,$<,--recorder) || $(sh_true); \
 	$(CP) '$*.log' '$*.$(RESTARTS)-1.log'; \
+	$(call die-on-import-sty,$*.log); \
 	$(call die-on-dot2tex,$*.log); \
 	$(call die-on-no-aux,$*); \
 	$(call flatten-aux,$*.aux,$*.aux.make); \
