@@ -256,8 +256,7 @@
 %%---------------------------------------------------------------------------%%
 
 % Use hyperlinks for convenience, but let's not make them coloured
-\usepackage[pdftex,bookmarks,colorlinks,breaklinks,
-pdftitle={TITLE},pdfauthor={AUTHOR}]{hyperref}
+\usepackage[bookmarks,colorlinks,breaklinks]{hyperref}
 \hypersetup{
   colorlinks,%
   citecolor=black,%
