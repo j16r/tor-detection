@@ -1,5 +1,6 @@
 *.swp
 *.log
+proposal/*.log
 proposal/*.aux
 proposal/*.eps
 proposal/*.png
@@ -12,3 +13,16 @@ proposal/*.bbl
 proposal/*.blg
 proposal/*.pdf
 proposal/proposal-blx.bib
+thesis/*.log
+thesis/*.aux
+thesis/*.eps
+thesis/*.png
+thesis/*.make
+thesis/*.temp
+thesis/*.out
+thesis/*.d
+thesis/*.fls
+thesis/*.bbl
+thesis/*.blg
+thesis/*.pdf
+thesis/thesis-blx.bib
