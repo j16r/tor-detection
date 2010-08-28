@@ -1,0 +1,39 @@
+\chapter{Experiment}
+
+Several systems are configured and installed using the Ubuntu operating system with VirtualBox installed. The systems are:
+
+Lankiveil 192.168.0.16
+Client system
+Ginaz 192.168.0.17
+Web hosting system
+
+Ginaz
+Ginaz hosts a number of web site simultions. These include a series of static web sites with different configuration combinations, representing available web tools and technologies. \cite
+
+These sites are hosted using a self signed SSL certificate \cite, although most commercial sites would not use a self signed certificate, it should not have any bearing on the communications fingerprint \cite.
+
+Controls
+Web server:
+  Apache
+  Nginx
+Web site:
+  Static(1-20)
+  Random
+Method:
+  SSL
+  Tor
+  SSL over Tor
+Clients:
+  Selenium firefox
+  Curl
+
+
+Lankiveil 
+Lankiveil executes a basic ruby script which runs a number of simulations:
+\begin{itemize*}
+  \item RSpec tests that go through selenium scripts, simulating user interaction, by mimicking user interactions with a web site through the Firefox browser.
+  \item Automated fetching of websites using the Curl program.
+\end{itemize*}
+
+Corrin 192.168.0.18
+Is the control system, it monitors packets and ensures the simulation is running. tcpdump is configured on this system to monitor ports that have been configured for encrypted traffic.
