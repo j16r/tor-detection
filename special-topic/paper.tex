@@ -6,20 +6,60 @@
 % Bibliography
 \bibliography{fullrefs,websites,patents,papers}
 
-\begin{document}
-{\center \Large \bfseries \MakeUppercase{Using traffic analysis to identify Tor} \par}
+% Setup the variables for the title page
+\title{Using traffic analysis to identify The Second Generation Onion Router}
+\author{John Barker}
+\department{School of Computer and Security Science}
+\school{Edith Cowan University}
+\degree{Computer Science (Honours)}
+\email{jebarker@our.ecu.edu.au}
+\studentid{0991300}
+\supervisor{Dr Andrew Woodward}
+\supervisor{Mr Peter Hannay}
+\supervisor{Mr Patryk Szewczyk}
 
-{ \center
-  \begin{tabular*}{\textwidth}{cccc}
-  John Barker & Peter Hannay & Christopher Bolan & Patryk Szewczyk \\
-  jebarker@our.ecu.edu.au & p.hannay@ecu.edu.a & c.bolan@ecu.edu.au & p.szewczyk@ecu.edu.au \\
-  \end{tabular*}
-}
+\begin{document}
+\maketitle
+
+\chapter{Introduction}
+
+\section{Background}
+
+This document describes the procedures for configuring a small network of
+computer systems to emulate a small sample of web based traffic using both the
+HTTPS protocol and the Tor protocol. All traffic between the systems is captured
+for the purpose of traffic analysis.
 
 \input ../thesis/experiment
+
+\chapter{Appendix}
+
+\section{Manager Script}
+\inputminted{ruby}{../experiment/simulation/manager/run_simulation.rb}
+
+\section{Client Script}
+\inputminted{ruby}{../experiment/simulation/client/client.rb}
+
+\section{Selenium-RC Script}
+\inputminted{bash}{../experiment/simulation/client/selenium-rc-with_tor.sh}
+
+\section{Selenium-RC Script (with Tor)}
+\inputminted{bash}{../experiment/simulation/client/selenium-rc.sh}
+
+\section{Hosts file}
+\inputminted{bash}{../experiment/hosts}
+
+\section{Apache Site Configuration}
+\inputminted{apacheconf}{../experiment/simulation/site/000-default-ssl}
+
+\section{Tor Setup Script}
+\inputminted{bash}{../experiment/simulation/tor/make_private_network.sh}
+
+\section{Tor Running Script}
+\inputminted{bash}{../experiment/simulation/tor/run_private_network.sh}
 
 \printbibliography[title=REFERENCES]
 
 \end{document}
 
-% vim: fdm=syntax wrapmargin=80
+% vim: fdm=syntax

@@ -17,11 +17,13 @@
 % Support for floats
 \usepackage{float}
 
+% Package for syntax highlighting
+\usepackage{minted}
+\usepackage{verbatim}
+
 %%---------------------------------------------------------------------------%%
 %% Fonts - requires xetex
 %%---------------------------------------------------------------------------%%
-
-\ProvidesPackage{opentypefonts}[2008/03/05 Uses OpenType fonts instead of LaTeX defaults. Needs XeTeX.]
 
 \RequirePackage[cm-default]{fontspec}
 \RequirePackage{xunicode}
