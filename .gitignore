@@ -1,6 +1,6 @@
 *.swp
 *.log
-.bundle/config
+.bundle/
 .RData
 proposal/*.log
 proposal/*.aux
