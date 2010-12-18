@@ -105,6 +105,55 @@ There are 170 simulations which emulate simple website interactions which have d
 
 For the non-SSL portion of the experiment, Selenium is configured to use a special proxy which automatically accepts self signed certificates. Typical interactions with SSL encrypted websites are signed by a certificate authority, so no user interaction is required to begin browsing.
 
+\subsubsubsection{Selenium}
+
+SSL + Tor over selenium. 
+
+Generate a selenium firefox profile. First launch selenium in interactive mode specifying a proxy:
+
+java -jar $selenium.jar -interactive
+
+This will start a prompt to which you can edit commands, you must launch a browser to get selenium to create a firefox profile directory.
+
+cmd=getNewBrowserSession&1=*firefoxproxy&2=http://www.google.com
+
+Generate a firefox profile, then edit the proxy.pac file to 
+
+function FindProxyForURL(url, host) {
+   if(shExpMatch(url, '*/selenium-server/*')) {
+       return 'PROXY localhost:4444; PROXY proxy.ourdomain.dom:8080';
+   } else if (shExpMatch(host, '*dev.ourdomain.dom*')) {
+       return 'DIRECT';
+   } else if (shExpMatch(host, '*qa.ourdomain.dom*')) {
+       return 'DIRECT';
+   } else if (shExpMatch(host, '*staging.ourdomain.dom*')) {
+       return 'DIRECT';
+   } else {
+       return 'PROXY proxy.ourdomain.dom:8080';
+   }
+}
+
+or
+
+function FindProxyForURL(url, host) {
+   if(shExpMatch(host, '*torsim')) {
+       return 'PROXY localhost:8118';
+   }
+   return 'PROXY localhost:4444; DIRECT';
+}
+
+This makes sure that your proxy (Tor) gets used for outgoing connections, and the selenium proxy is used for running tests.
+
+To get SSL certificates accepted, you must manually accept them permanently for each host. This will update the cert_override.txt and cert8.db files.
+
+Tor must have the following setting supplied:
+
+ExitPolicyRejectPrivate 0
+
+Since we are using a 192.* network. - Not true, testing mode flag sets this.
+
+But the tor relays must be able to resolve names using DNS, if you use socks4a protocol.
+
 \subsubsection{Server System}
 
 The host system runs an apache web server which serves two sets of sample websites, static and dynamic. The static websites are served each from a different numbered directory and accessible over a different virtual host. This means that when a web browser is pointed at the directory \verb+site1.static.torsim+ the files in \verb+/var/www/thesis/experiment/simulation/static/site1+ are served to the browser.
