@@ -1,5 +1,7 @@
 *.swp
 *.log
+.bundle/config
+.RData
 proposal/*.log
 proposal/*.aux
 proposal/*.eps
@@ -13,6 +15,8 @@ proposal/*.bbl
 proposal/*.blg
 proposal/*.pdf
 proposal/proposal-blx.bib
+proposal/out/
+thesis/proposal.run.xml
 thesis/*.log
 thesis/*.aux
 thesis/*.eps
@@ -26,3 +30,20 @@ thesis/*.bbl
 thesis/*.blg
 thesis/*.pdf
 thesis/thesis-blx.bib
+thesis/thesis.run.xml
+thesis/out/
+special-topic/*.log
+special-topic/*.aux
+special-topic/*.eps
+special-topic/*.png
+special-topic/*.make
+special-topic/*.temp
+special-topic/*.out
+special-topic/*.d
+special-topic/*.fls
+special-topic/*.bbl
+special-topic/*.blg
+special-topic/*.pdf
+special-topic/paper-blx.bib
+special-topic/paper.run.xml
+special-topic/out/
