@@ -5,56 +5,94 @@
 
 The experiment described requires a number of computer systems and associated hardware to run the simulation and capture appropriate data. This equipment is described in the following chapter.
 
-\section{Personal Computer}
+\subsection{Personal Computer}
+
+Four computer systems were employed each with the same specifications.
+
+\subsection{Hub/Managed Router}
+
+The network equipment chosen to run the experiment is a simple hub or
+'repeater' which duplicates all packets transmitted on all ports. This makes it
+easy to monitor all communications across the network for analysis purposes
+\parencite{website:hub-reference}.
+
+\subsection{Tor Software}
 
 
-\section{Hub/Unmanaged Router}
-\section{Tor Software}
-\section{'tcpdump' Software}
-\section{Weka Software}
-\section{VirtualBox Software}
-\section{Ruby Software}
+\subsection{'tcpdump' Software}
 
-\section{Ubuntu Linux Software}
+The tcpdump software captures network packets that are transferred using
+network interfaces attached to the current hardware \parencite{:2009cr}.  It is
+available on most operating systems and supports a flexible filtering language
+for capturing only the specific packets desired. The format of output produced
+by tcpdump is well documented \parencite{:nx} which makes it ideal for
+transformation and processing by third party tools.
+
+\subsection{Weka Software}
+
+Weka is data mining software which includes tools for classification of data
+sources using a wide variety of machine learning algorithms
+\parencite{Hall:2009p7662}.
+
+\subsection{VirtualBox Software}
+
+VirtualBox is virtualization software that allows the running of a guest
+operating system in its own environment on another host operating system
+\parencite{:fk}.  It supports snapshots and a remote control facility which
+make it useful for running repetitions in an experimental environment
+\parencite{:uq}.
+
+\subsection{Ruby Software}
+
+Ruby is an object orientated, dynamic programming language which is useful for
+quick prototyping and as such has been used to automate the simulation
+described in this experiment \parencite{:2010uq}.
+
+(I used it because it is a language that is fast to develop in and I am
+familiar with it)
+
+\subsection{Ubuntu Linux Software}
 
 The Ubuntu Linux operating system is freely available Linux operating system
 available for desktop personal computers.
 
+\cite{:2010ly}
 
-\section{Selenium Software}
+\subsection{Selenium Software}
 
 Selenium is a web testing framework with a number of components that allow
 developers to write automated tests of web applications using most modern web
 browsers \parencite{:2010ys}. Using the Selenium framework one can mimic the
 actions of an actual user interacting with a web site.
 
-\section{Firefox Software}
+\subsection{Firefox Software}
 
 Firefox is a web browser developed by the Mozilla organization and freely
 available for most desktop personal computers \parencite{mozilla}. It's strong
 standards compliance \parencite{Hammond:2010fk} and popularity
-\parencite{:2010kx,:2010vn} on the simulation platform make it an ideal candidate for
-this experiment .
+\parencite{:2010kx,:2010vn} on the simulation platform make it an ideal
+candidate for this experiment.
 
-\section{OpenSSH Software}
+\subsection{OpenSSH Software}
 
-\cite{Tucker:2010ly}
+OpenSSH is a freely available suite of connectivity tools
+\parencite{:2010zr,:ve} that supports remote command execution
+\parencite{Tucker:2010ly}.
+
 \cite{:2010zr}
-\cite{:ve}
 
-\section{Apache Software}
+\subsection{Apache Software}
 
 \cite{:qf}
 
-\section{Sinatra Software}
+\subsection{Sinatra Software}
 
+Sinatra is a simple framework for creating dynamic web applications using the
+Ruby programming language \parencite{:2010bh}.
 
+\section{Procedure}
 
-
-
-
-
-\section{Hardware Configuration}
+\subsection{Hardware Configuration}
 
 All systems will be configured and connected to the same isolated network
 through the hub as shown in Figure \ref{physical-setup}.
@@ -65,7 +103,7 @@ through the hub as shown in Figure \ref{physical-setup}.
   \label{physical-setup}
 \end{figure}
 
-\section{Software Configuration}
+\subsection{Software Configuration}
 
 Software is installed and configured on all machines. The simulation network is
 configured to use the private Tor directory server rather than the public ones
