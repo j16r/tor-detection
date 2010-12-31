@@ -112,6 +112,25 @@
 }
 
 %%---------------------------------------------------------------------------%%
+%% Code sections
+%%---------------------------------------------------------------------------%%
+
+\usepackage{listings}
+\lstset{ %
+basicstyle=\ttfamily,
+xleftmargin=36,
+xrightmargin=12,
+numberstyle=\tiny,              % the size of the fonts that are used for the line-numbers
+numbers=left,                   % where to put the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it's 1 each line 
+tabsize=2,                      % sets default tabsize to 2 spaces
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)},         % if you want to add a comment within your code
+}
+
+
+%%---------------------------------------------------------------------------%%
 %% Tables
 %%---------------------------------------------------------------------------%%
 
@@ -249,7 +268,13 @@
 % Use the excellent biblatex package with apa style
 % minnames=1,maxnames=2 - abbreviates all author names in citations
 % hyperref - links in pdf
-\RequirePackage[url=false,hyperref=true,style=apa,minnames=1,maxnames=2]{biblatex}
+\RequirePackage[
+  url = false,
+  hyperref = true,
+  style = apa,
+  minnames = 1,
+  maxnames = 2,
+  bibencoding = utf8]{biblatex}
 
 %%---------------------------------------------------------------------------%%
 %% PDF Hyperlinks
