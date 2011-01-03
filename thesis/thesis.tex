@@ -603,6 +603,92 @@ ensure this outcome.
 
 \input experiment.tex
 
+\chapter{Results}
+
+\section{Results}
+
+The classification results are tabulated below. The best performing algorithm
+j4.8 was able to classify HTTP over Tor with 97.8\% accuracy and a false
+positive rate of 4.3\%. HTTPS was more easily identified with a 97\% accuracy
+and low false positive rate of 0.7\%.
+
+\begin{tabular}{lrrr}
+  \toprule
+  & True Positive Rate & False Positive Rate & ROC \\
+  \midrule
+  Random Forest\\
+  \midrule
+  HTTPS & 0.957 & 0.036\\
+  HTTP over Tor & 0.937 & 0.037\\
+  HTTPS over Tor & 0.977 & 0.003\\
+  \midrule
+  j4.8 With 10 fold cross validation\\
+  \midrule
+  HTTPS & 0.951 & 0.04\\
+  HTTP over Tor & 0.978 & 0.043\\
+  HTTPS over Tor & 0.97 & 0.007\\
+  \midrule
+  Random Tree\\
+  \midrule
+  HTTPS & 0.961 & 0.046\\
+  HTTP over Tor & 0.906 & 0.04\\
+  HTTPS over Tor & 0.955 & 0.01\\
+  \midrule
+  Adaboost\\
+  \midrule
+  HTTPS & 0.95 & 0.001\\
+  HTTP over Tor & 0.999 & 0.324\\
+  HTTPS over Tor & 0 & 0\\
+  \botomrule
+  \label{table:results}
+\end{tabular}
+
+\chapter{Discussion of Results}
+
+\section{Limitations}
+
+The classifiers developed within this experiment have been trained against
+a relatively small sample set of simulated data, which may only represent
+a small fraction of the width and breadth of conditions available on a wider
+area network. The characteristics that allow for classification of Tor network
+may be masked by the natural variability introduced by a heterogeneous network.
+
+\section{Addressing Research Questions}
+
+\subsection{Can the traffic be classified using automated matching techniques?}
+
+Yes.
+
+\subsection{Do these networks have characteristics that make them readily
+distinguishable using heuristics based matching?}
+
+\subsection{Do they have characteristics that make them distinguishable using a
+machine learning technique?}
+
+Yes.
+
+\subsection{How long does a user have to be connected to the network before a
+confident match can be made?}
+
+Don't know... yet.
+
+\section{Possible Implications of Results}
+
+\chapter{Conclusion}
+
+While it is difficult to draw a broad conclusion with the limited nature of the
+experiment conducted, the findings suggest that the strategies used by anonymous
+networks to thwart identity revealing traffic analysis may make them easier to
+identify.
+
+Research has shown that the low latency design of Tor means it is vulnerable to
+traffic analysis attacks that correlate traffic patterns with users. This
+transparency should in fact make Tor more difficult to classify than more
+'anonymous' network designs which employ batching and traffic normalizing.
+Steganography is a difficult problem and it may be that the extra traffic
+required to maintain the Tor network means it will always be easily
+differentiated from regular encrypted traffic.
+
 \printbibliography[title=REFERENCES]
 
 \end{document}
