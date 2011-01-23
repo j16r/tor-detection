@@ -118,8 +118,8 @@
 \usepackage{listings}
 \lstset{ %
 basicstyle=\ttfamily,
-xleftmargin=36,
-xrightmargin=12,
+xleftmargin=36pt,
+xrightmargin=12pt,
 numberstyle=\tiny,              % the size of the fonts that are used for the line-numbers
 numbers=left,                   % where to put the line-numbers
 stepnumber=1,                   % the step between two line-numbers. If it's 1 each line 
