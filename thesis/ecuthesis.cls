@@ -9,19 +9,17 @@
 \ProvidesClass{ecuthesis}[2010/04/19 Thesis Style]
 \ProcessOptions
 \LoadClass[onecolumn,12pt]{report}
-\usepackage[cm]{fullpage}
+\RequirePackage[cm]{fullpage}
 
 % Don't use hyphenation
 \hyphenpenalty=100000
 
 % Support for floats
-\usepackage{float}
+\RequirePackage{float}
 
 %%---------------------------------------------------------------------------%%
 %% Fonts - requires xetex
 %%---------------------------------------------------------------------------%%
-
-\ProvidesPackage{opentypefonts}[2008/03/05 Uses OpenType fonts instead of LaTeX defaults. Needs XeTeX.]
 
 \RequirePackage[cm-default]{fontspec}
 \RequirePackage{xunicode}
@@ -38,11 +36,11 @@
 %%---------------------------------------------------------------------------%%
 
 % This package gives us more control over title format
-\usepackage[calcwidth]{titlesec}
+\RequirePackage[calcwidth]{titlesec}
 
 % Customize the chapter titles with a line underneath and no 'Chapter X' 
 % label
-\usepackage[avantgarde]{quotchap}
+\RequirePackage[avantgarde]{quotchap}
 
 % Don't use up so much space for chapters
 \renewcommand\chapterheadstartvskip{\vspace*{-7\baselineskip}}
@@ -83,7 +81,7 @@
 %%---------------------------------------------------------------------------%%
 
 % Use the fancy header package
-\usepackage{fancyhdr}
+\RequirePackage{fancyhdr}
 
 % Reset the defaults
 \fancyhead{}
@@ -115,7 +113,7 @@
 %% Code sections
 %%---------------------------------------------------------------------------%%
 
-\usepackage{listings}
+\RequirePackage{listings}
 \lstset{ %
 basicstyle=\ttfamily,
 xleftmargin=36pt,
@@ -134,14 +132,14 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
 %% Tables
 %%---------------------------------------------------------------------------%%
 
-\usepackage{booktabs}
+\RequirePackage{booktabs}
 
 %%---------------------------------------------------------------------------%%
 %% Lists
 %%---------------------------------------------------------------------------%%
 
 % mdwlist provides more compact lists
-\usepackage{mdwlist}
+\RequirePackage{mdwlist}
 
 %%---------------------------------------------------------------------------%%
 %% Customize the abstract
@@ -265,6 +263,9 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
 %% Bibliography
 %%---------------------------------------------------------------------------%%
 
+\RequirePackage[american]{babel}
+\RequirePackage{csquotes}
+
 % Use the excellent biblatex package with apa style
 % minnames=1,maxnames=2 - abbreviates all author names in citations
 % hyperref - links in pdf
@@ -275,21 +276,8 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
   minnames = 1,
   maxnames = 2,
   bibencoding = utf8]{biblatex}
-
-%%---------------------------------------------------------------------------%%
-%% PDF Hyperlinks
-%%---------------------------------------------------------------------------%%
-
-% Use hyperlinks for convenience, but let's not make them coloured
-\usepackage[bookmarks,colorlinks,breaklinks]{hyperref}
-\hypersetup{
-  colorlinks,%
-  citecolor=black,%
-  filecolor=black,%
-  linkcolor=black,%
-  urlcolor=black
-}
-
+\DeclareLanguageMapping{american}{american-apa}
+  
 % Custom chapters and biblatex conflict slightly, so render the references heading
 % in a different way
 \defbibheading{bibliography}[\bibname]{
@@ -297,3 +285,16 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
   \section*{#1}
   \markboth{#1}{#1}}
 
+%%---------------------------------------------------------------------------%%
+%% PDF Hyperlinks
+%%---------------------------------------------------------------------------%%
+
+% Use hyperlinks for convenience, but let's not make them coloured
+\RequirePackage[bookmarks,colorlinks,breaklinks]{hyperref}
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
