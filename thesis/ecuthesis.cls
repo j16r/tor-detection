@@ -281,7 +281,7 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
 % Custom chapters and biblatex conflict slightly, so render the references heading
 % in a different way
 \defbibheading{bibliography}[\bibname]{
-  \pagebreak
+  \chapter{Bibliography}
   \section*{#1}
   \markboth{#1}{#1}}
 
