@@ -639,7 +639,7 @@ and low false positive rate of 0.7\%.
   HTTPS & 0.95 & 0.001\\
   HTTP over Tor & 0.999 & 0.324\\
   HTTPS over Tor & 0 & 0\\
-  \botomrule
+  \bottomrule
   \label{table:results}
 \end{tabular}
 
@@ -688,6 +688,20 @@ transparency should in fact make Tor more difficult to classify than more
 Steganography is a difficult problem and it may be that the extra traffic
 required to maintain the Tor network means it will always be easily
 differentiated from regular encrypted traffic.
+
+\chapter{Appendix}
+
+\section{Manager Script}
+
+\lstinputlisting{../experiment/simulation/manager/run_simulation.rb}
+
+\section{Client Script}
+
+\lstinputlisting[]{../experiment/simulation/client/client.rb}
+
+\section{Run Tor Network Script}
+
+\lstinputlisting[]{../experiment/simulation/tor/run_private_network.sh}
 
 \printbibliography[title=REFERENCES]
 

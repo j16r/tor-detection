@@ -16,7 +16,6 @@ easy to monitor all communications across the network for analysis purposes
 
 \subsection{Tor Software}
 
-
 \subsection{'tcpdump' Software}
 
 The tcpdump software captures network packets that are transferred using
@@ -30,20 +29,22 @@ transformation and processing by third party tools.
 
 Weka is data mining software which includes tools for classification of data
 sources using a wide variety of machine learning algorithms
-\parencite{Hall:2009p7662}.
+\parencite{Hall:2009p7662}. It supports processing of an input
+Attribute-Relation File Format (ARFF), a file which contains ASCII text
+describing a list of items with common attributes. Items can be given an
+attribute which provides a nominal classification for verification purposes.
 
 \subsection{VirtualBox Software}
 
-VirtualBox is virtualization software that allows the running of a guest
-operating system in its own environment on another host operating system
-\parencite{:fk}.  It supports snapshots and a remote control facility which
-make it useful for running repetitions in an experimental environment
-\parencite{:uq}.
+VirtualBox provides a virtualization environment that allows guest operating
+systems to run in a virtual environment on a host operating system
+\parencite{:fk}. It supports snapshots and a remote control facility which make
+it useful for running a controlled experiment \parencite{:uq}.
 
 \subsection{Ruby Software}
 
 Ruby is an object orientated, dynamic programming language which is useful for
-quick prototyping and as such has been used to automate the simulation
+rapid prototyping and as such has been used to automate the simulation
 described in this experiment \parencite{:2010uq}.
 
 (I used it because it is a language that is fast to develop in and I am
@@ -58,10 +59,12 @@ available for desktop personal computers.
 
 \subsection{Selenium Software}
 
-Selenium is a web testing framework with a number of components that allow
-developers to write automated tests of web applications using most modern web
-browsers \parencite{:2010ys}. Using the Selenium framework one can mimic the
-actions of an actual user interacting with a web site.
+Selenium is a web testing framework which allows automated testing of web pages
+through any Javascript enabled web browser \parencite{:2010ys}. A web browser
+can be controlled remotely using the Selenium Remote Control Server component,
+which in turn can be controlled with a number of programming languages including
+Ruby. This experiment makes use of a number of selenium scripts which
+approximate user interactions with a website which trigger network traffic. 
 
 \subsection{Firefox Software}
 
@@ -125,7 +128,7 @@ configured with on the network.
   Client Guest & Desktop & 192.168.0.16\\
   Server Guest & Server & 192.168.0.17\\
   Tor Network Guest & Server & 192.168.0.18\\
-  \botomrule
+  \bottomrule
   \label{table:hosts}
 \end{tabular}
 
@@ -138,12 +141,50 @@ data flows.
   \label{network-diagram}
 \end{figure}
 
+\subsubsection{Standard OS Installation Procedure}
+\label{section:os_install}
+
+All systems in the experiment use a variation of the Ubuntu Linux operating
+system. The installation process followed is detailed below:
+
+\begin{enumerate*}
+  \item Configure system BIOS to boot from CD-ROM
+  \item Insert Ubuntu operating system installation CD
+  \item Select the language you wish to use for installation (English) and click
+    'Forward'
+  \item Select the region (Australia/Perth) and click 'Forward'
+  \item Select an appropriate keymap (USA) and click 'Forward'
+  \item Select 'Erase and use the entire disk' and click 'Forward'
+  \item Enter the user name (John Barker), select 'Log in automatically' and click 'Forward'
+\end{enumerate*}
+
+At this point the installation will begin and should take about 35 minutes.
+'Log in automatically' is selected to ensure that the experiment will continue
+even if power is lost. Once installation is complete remove the CD and reboot
+the system. Once booted the system is ready for further configuration.
+
+Each system is given a statically assigned IP address, this is done by editing
+the file \verb+/etc/network/interfaces+ and changing the line \verb+iface eth0 inet dhcp+
+to:
+
+\begin{lstlisting}[language=sh]
+iface eth0 inet static
+  address 192.168.0.16
+  netmask 255.255.255.0
+  network 192.168.0.0
+  broadcast 192.168.0.255
+\end{lstlisting}
+
+Substituting \verb+eth0+ with the physical network interface identifier as
+appropriate, and the address \verb+192.168.0.16+ with the desired value.
+
 \subsection{Sniffing System}
 
-The sniffing system was based on a basic installation of the Ubuntu 10.04 server
-operating system with no additional packages installed.
+The sniffing system is prepared as described in \ref{section:os_install} with an
+Ubuntu 10.04 server CD. The base install of Ubuntu server has all the required
+packages included so no additional software installation is required.
 
-An init.d script was installed to execute the tcpdump program with a specific
+An init.d script was created to execute the tcpdump program with a specific
 filter string after the system had powered on. All capture files were limited to
 1mb in size and put into a time stamped directory. To ensure that only relevant
 packets were collected the filter string was tuned for each phase of the
@@ -151,37 +192,55 @@ experiment. The filter string for each phase is shown below.
 
 Phase 1:
 \begin{lstlisting}[language=sh]
-dst port 443
+tcp port 443
 \end{lstlisting}
 
 Phase 2 and 3:
 \begin{lstlisting}[language=sh]
-dst port 5000-5015
+tcp portrange 5000-5015
+\end{lstlisting}
+
+The capture script appears below with the filter string as required for phase 2
+and 3:
+
+\begin{lstlisting}[language=sh]
+#!/bin/bash
+export capture_date=`date`
+cd /home/john/ssl-captures
+mkdir "./${capture_date}"
+tcpdump -vv -C 1 -i eth0 -w "./${capture_date}/capture.dat" tcp portrange 5001-5015
 \end{lstlisting}
 
 \subsection{Host Systems}
 
-All the host systems are configured identically. The following procedure is
-carried out to prepare a host system.
+The host systems all run an identically configured Ubuntu 10.04 desktop
+operating system, except for the IP address which is configured as detailed in
+\ref{table:hosts}. To support the guest operating systems, VirtualBox is
+required. The procedure for installing VirtualBox is detailed below:
 
-\begin{itemize*}
-  \item Install Ubuntu 10.04 Desktop Operating System
-    \begin{itemize*}
-      \item Use entire disk
-      \item Set time zone to GMT +8 WST (Perth)
-    \end{itemize*}
-  \item Turn off automatic package updates
-  \item Turn off power saving features
-  \item Install OpenSSH Server
-  \item Add Virtual Box repository to sources.lst
-  \item Update sources and install Virtual Box
-  \item Ensure Virtual Box starts with system and disable all other start
-    up applications
-\end{itemize*}
+\begin{enumerate*}
+  \item Edit the file \verb+/etc/apt/sources.lst+ and add the line:
+\begin{lstlisting}[language=sh]
+deb http://download.virtualbox.org/virtualbox/debian lucid non-free
+\end{lstlisting}
+  \item Install the GPG key for the Virtual Box packages:
+\begin{lstlisting}[language=sh]
+wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+\end{lstlisting}
+  \item Then install VirtualBox 3.2 with the command:
+\begin{lstlisting}[language=sh]
+sudo apt-get update && sudo apt-get install virtualbox-3.2
+\end{lstlisting}
+\end{enumerate*}
+
+The guest operating system images can then be created or imported from an
+external disk.
+
+\subsubsection{Server Host}
 
 One of the host systems is set aside as a management system, which is
 responsible for ensuring the experiment runs and restarts it if there are any
-problems. On this machine a private ssh key is created, and copied to the
+problems. On this machine a private SSH key is created, and copied to the
 authorized keys file on all other hosts. This allows the management system to
 connect to all the other systems and issue commands without user interaction.
 
@@ -191,7 +250,15 @@ systems and opens a socket which waits for a connection that indicates that the
 experiment has finished. Every time it starts the experiment, it rolls back
 each virtual machine to a preconfigured snapshot. If the experiment takes too
 long, say because a virtual machine hangs or something is wrong, it will be
-started without waiting for the finish condition.
+started without waiting for the finish condition. Figure
+\ref{manager-flow-diagram} contains a diagram which outlines the basic flow of
+the manager script.
+
+\begin{figure}[H]
+  \centering\includegraphics[scale=0.7]{manager-flow}
+  \caption{Manager Script Flow Chart}
+  \label{manager-flow-diagram}
+\end{figure}
 
 Note that restarting each snapshot ensures that the system clock of each guest
 operating system is synchronized with that of the host operating system. The
@@ -235,19 +302,23 @@ special proxy which automatically accepts self signed certificates. Typical
 interactions with SSL encrypted websites are signed by a certificate authority,
 so no user interaction is required to begin browsing.
 
-\subsubsubsection{Selenium}
+\paragraph{Selenium}
 
 SSL + Tor over selenium. 
 
-Generate a selenium firefox profile. First launch selenium in interactive mode specifying a proxy:
+Generate a selenium firefox profile. First launch selenium in interactive mode
+specifying a proxy:
 
 \begin{lstlisting}[language=sh]
 java -jar $selenium.jar -interactive
 \end{lstlisting}
 
-This will start a prompt to which you can edit commands, you must launch a browser to get selenium to create a firefox profile directory.
+This will start a prompt to which you can edit commands, you must launch a
+browser to get selenium to create a firefox profile directory.
 
+\begin{lstlisting}[language=sh]
 cmd=getNewBrowserSession&1=*firefoxproxy&2=http://www.google.com
+\end{lstlisting}
 
 Generate a firefox profile, then edit the proxy.pac file to 
 
@@ -278,9 +349,12 @@ function FindProxyForURL(url, host) {
 }
 \end{lstlisting}
 
-This makes sure that your proxy (Tor) gets used for outgoing connections, and the selenium proxy is used for running tests.
+This makes sure that your proxy (Tor) gets used for outgoing connections, and
+the selenium proxy is used for running tests.
 
-To get SSL certificates accepted, you must manually accept them permanently for each host. This will update the cert_override.txt and cert8.db files.
+To get SSL certificates accepted, you must manually accept them permanently for
+each host. This will update the \verb+cert_override.txt+ and \verb+cert8.db+
+files.
 
 Tor must have the following setting supplied:
 
@@ -315,83 +389,6 @@ three Tor directory authorities as well as fifteen relays.
 
 Each Tor instance on the Tor Simulation system is given it's own separate
 directory for configuration, logging and temporary files.
-
-\section{Procedure}
-
-\subsection{Preparation}
-
-\subsubsection{Host Systems}
-
-The preparation for the host operating systems is identical except for the
-hostname and IP address.
-
-Installing the Host operating system:
-
-\begin{enumerate*}
-  \item Power on machine
-  \item Interrupt BIOS boot process
-  \begin{enumerate*}
-    \item Load default BIOS settings
-    \item Set boot order to ensure CD-ROM is first
-    \item Disable unnecessary boot devices
-    \item Ensure system clock is correct
-  \end{enumerate*}
-  \item Boot from Ubuntu 10.04 Desktop cd
-  \item Select the language you wish to use for installation (English) and click 'Forward'
-  \item Select the region (Australia/Perth) and click 'Forward'
-  \item Select an appropriate keymap (USA) and click 'Forward'
-  \item Select 'Erase and use the entire disk' and click 'Forward'
-  \item Enter your details, select 'Log in automatically' and click 'Forward'
-\end{enumerate*}
-
-At this point the installation will begin and should take about 35 minutes.
-'Log in automatically' is selected to ensure that the experiment will continue
-even if power is lost. Once installation is complete remove the CD and reboot
-the system.
-
-Configuring the Host operating system:
-
-\begin{enumerate*}
-  \item Configure the network adapter
-  \item Install Virtual Box
-  \item Load the guest operating system virtual machine image
-\end{enumerate*}
-
-To install Virtual Box, the following procedure is used:
-
-\begin{enumerate*}
-  \item Edit the file \verb+/etc/apt/sources.lst+ and add the line:
-  \begin{verbatim}
-deb http://download.virtualbox.org/virtualbox/debian lucid non-free
-  \end{verbatim}
-  \item Install the GPG key for the Virtual Box packages:
-  \begin{verbatim}
-wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
-  \end{verbatim}
-  \item Then install VirtualBox 3.2 with the command:
-  \begin{verbatim}
-sudo apt-get update && sudo apt-get install virtualbox-3.2
-  \end{verbatim}
-\end{enumerate*}
-
-For the management system, some additional commands need to be run:
-
-\begin{enumerate*}
-  \item Generate a private ssh key for the user with the command:
-    \verb+ssh-keygen+, when prompted for a password enter nothing.
-  \item SSH to the other host systems on the network, and copy the contents of
-    \verb+$HOME/.ssh/id_rsa.pub+ into \verb+$HOME/.ssh/authorized_keys+ on the
-    destination system.
-  \item Install ruby so that the management script can be run:
-    \begin{lstlisting}[language=sh]
-sudo apt-get install ruby rubygems
-    \end{lstlisting}
-  \item Ensure the script \verb+run_simulation.rb+ is started on login.
-\end{enumerate*}
-
-\subsubsection{Tor System}
-
-Install Ubuntu 10.04 Server.
 
 Deploy the experiment files.
 
@@ -461,6 +458,7 @@ data.
 The data captured was in the form of 1mb capture files which were recombined
 with mergecap and processed by NetAI to produce ARFF format files for use by
 Weka. Each data set were given the nominal classification 'http',
-'http_over_tor' and 'https_over_tor', all other nominal attributes were removed.
+'http\_over\_tor' and 'https\_over\_tor', all other nominal attributes were
+removed.
 
 % vim: fdm=syntax tw=80
