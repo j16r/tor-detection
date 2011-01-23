@@ -213,7 +213,7 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
 
     \vfill
 
-      A proposal for a thesis submitted in partial fulfilment of the requirements for the degree of\\
+      A thesis submitted in partial fulfilment of the requirements for the degree of\\
 
       {\large \@degree}
 
