@@ -275,7 +275,8 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
   style = apa,
   minnames = 1,
   maxnames = 2,
-  bibencoding = utf8]{biblatex}
+  bibencoding = utf8,
+  backend=biber]{biblatex}
 \DeclareLanguageMapping{american}{american-apa}
   
 % Custom chapters and biblatex conflict slightly, so render the references heading
