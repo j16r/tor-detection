@@ -205,7 +205,7 @@ implemented. The Internet, was developed without encryption features
 \parencite{website:internet}.
 
 Early work in encrypted Internet communications includes the Secure Network
-Programming (SNP) applications programming interface (API)
+Programming (SNP) Applications Programming Interface (API)
 \parencite{Woo:1994p2532}. This was a simple framework providing numerous
 encryption, signing and authentication methods. The Secure Sockets Layer (SSL)
 is an encryption layer which provided end-to-end communications secrecy on the
@@ -214,9 +214,9 @@ exchange secret keys using public key algorithms.
 
 This proposed standard went through a number of revisions, with early versions
 suffering security flaws \parencite{Wagner:1996p385}. SSL is now known as
-Transport Layer Security, with the latest version 1.2 being released August
-2008 \parencite{website:TLS}. TLS addresses some issues in SSL and provides a
-number of enhancements, but is not compatible with SSL.
+Transport Layer Security (TLS), with the latest version 1.2 being released
+August 2008 \parencite{website:TLS}. TLS addresses some issues in SSL and
+provides a number of enhancements, but is not compatible with SSL.
 
 The Hypertext Transfer Protocol Secure (HTTPS) provides encryption using both
 the TLS and SSL protocols \parencite{website:HTTPS} and is available in almost
@@ -228,16 +228,15 @@ TLS protocol.
 
 \section{Anonymous and Censorship Resistant Networks}
 
-The first anonymous network system \emph{MixNet}, was described in
+The first anonymous network system MixNet, was described in
 \textcite{Chaum:1981p296}. This proposal makes essential usage of public key
-encryption to prevent eavesdroppers from obtaining message delivery
-information. Senders in the network communicate with a centrally located server
-known as a \emph{mix}, delivering a message with the address of the intended
-recipient. The mix server discards any information about the sender and
-delivers it to the final destination. Figure \ref{chaums-mix-network} depicts
-the process of message delivery in Chaum's MixNet. Chaum's proposal also
-allowed for the chaining of multiple mix servers together to form a
-\emph{cascade}.
+encryption to prevent eavesdroppers from obtaining message delivery information.
+Senders in the network communicate with a centrally located server known as a
+\emph{mix}, delivering a message with the address of the intended recipient. The
+mix server discards any information about the sender and delivers it to the
+final destination. Figure \ref{chaums-mix-network} depicts the process of
+message delivery in Chaum's MixNet. Chaum's proposal also allowed for the
+chaining of multiple mix servers together to form a \emph{cascade}.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\linewidth]{chaums-mix-network}
