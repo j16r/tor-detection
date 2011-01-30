@@ -85,7 +85,7 @@ traffic analysis attacks, the primary objective has historically been the
 attempt to reveal participant identities: ``The principal objective of an
 adversary attacking an anonymous communication system is to link the initiators
 of connections with their respective communication partners and vice versa''
-\parencite[page 3]{Murdoch:2005p325}.
+\parencite[3]{Murdoch:2005p325}.
 
 The traffic analysis techniques proposed will attempt to classify network
 streams belonging to Tor users to distinguish them from regular encrypted
@@ -495,7 +495,7 @@ simulation in place of live network captures.
 
 The experiment will be conducted in two phases, the first being a data
 collection phase. The second phase will include a quasi experimental
-methodology which may include data manipulation techniques to prepare the
+methodology which will include data manipulation techniques to prepare the
 collected data and a comparison of various heuristics and machine learning
 based traffic analysis to classify the collected data.
 
@@ -615,36 +615,39 @@ j4.8 was able to classify HTTP over Tor with 97.8\% accuracy and a false
 positive rate of 4.3\%. HTTPS was more easily identified with a 97\% accuracy
 and low false positive rate of 0.7\%.
 
-\begin{tabular}{lrrr}
-  \toprule
-  & True Positive Rate & False Positive Rate & ROC \\
-  \midrule
-  Random Forest\\
-  \midrule
-  HTTPS & 0.957 & 0.036\\
-  HTTP over Tor & 0.937 & 0.037\\
-  HTTPS over Tor & 0.977 & 0.003\\
-  \midrule
-  j4.8 With 10 fold cross validation\\
-  \midrule
-  HTTPS & 0.951 & 0.04\\
-  HTTP over Tor & 0.978 & 0.043\\
-  HTTPS over Tor & 0.97 & 0.007\\
-  \midrule
-  Random Tree\\
-  \midrule
-  HTTPS & 0.961 & 0.046\\
-  HTTP over Tor & 0.906 & 0.04\\
-  HTTPS over Tor & 0.955 & 0.01\\
-  \midrule
-  Adaboost\\
-  \midrule
-  HTTPS & 0.95 & 0.001\\
-  HTTP over Tor & 0.999 & 0.324\\
-  HTTPS over Tor & 0 & 0\\
-  \bottomrule
-  \label{table:results}
-\end{tabular}
+\begin{table}
+  \begin{tabular}{lrrr}
+    \toprule
+    & True Positive Rate & False Positive Rate & ROC \\
+    \midrule
+    Random Forest\\
+    \midrule
+    HTTPS & 0.957 & 0.036\\
+    HTTP over Tor & 0.937 & 0.037\\
+    HTTPS over Tor & 0.977 & 0.003\\
+    \midrule
+    j4.8 With 10 fold cross validation\\
+    \midrule
+    HTTPS & 0.951 & 0.04\\
+    HTTP over Tor & 0.978 & 0.043\\
+    HTTPS over Tor & 0.97 & 0.007\\
+    \midrule
+    Random Tree\\
+    \midrule
+    HTTPS & 0.961 & 0.046\\
+    HTTP over Tor & 0.906 & 0.04\\
+    HTTPS over Tor & 0.955 & 0.01\\
+    \midrule
+    Adaboost\\
+    \midrule
+    HTTPS & 0.95 & 0.001\\
+    HTTP over Tor & 0.999 & 0.324\\
+    HTTPS over Tor & 0 & 0\\
+    \bottomrule
+    \label{table:results}
+  \end{tabular}
+  \caption{Results}
+\end{table}
 
 \chapter{Discussion of Results}
 
