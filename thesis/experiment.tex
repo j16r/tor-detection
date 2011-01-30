@@ -7,90 +7,93 @@ The experiment described requires a number of computer systems and associated
 hardware to run the simulation and capture appropriate data. This equipment is
 described in the following chapter.
 
-\subsection{Hub/Managed Router}
+\begin{enumerate}
+  \item Hub/Managed Router
 
-The network equipment chosen to run the experiment is a simple hub or
-'repeater' which duplicates all packets transmitted on all ports. This makes it
-easy to monitor all communications across the network for analysis purposes
-\parencite{website:hub-reference}.
+  The network equipment chosen to run the experiment is a simple hub or
+  'repeater' which duplicates all packets transmitted on all ports. This makes it
+  easy to monitor all communications across the network for analysis purposes
+  \parencite{website:hub-reference}.
 
-\subsection{Tor Software}
+  \item 'tcpdump' Software
 
-\subsection{'tcpdump' Software}
+  The tcpdump software captures network packets that are transferred using
+  network interfaces attached to the current hardware \parencite{:2009cr}.  It is
+  available on most operating systems and supports a flexible filtering language
+  for capturing only the specific packets desired. The format of output produced
+  by tcpdump is well documented \parencite{:nx} which makes it ideal for
+  transformation and processing by third party tools.
 
-The tcpdump software captures network packets that are transferred using
-network interfaces attached to the current hardware \parencite{:2009cr}.  It is
-available on most operating systems and supports a flexible filtering language
-for capturing only the specific packets desired. The format of output produced
-by tcpdump is well documented \parencite{:nx} which makes it ideal for
-transformation and processing by third party tools.
+  \item Tor Software
 
-\subsection{Weka Software}
+  \item Weka Software
 
-Weka is data mining software which includes tools for classification of data
-sources using a wide variety of machine learning algorithms
-\parencite{Hall:2009p7662}. It supports processing of an input
-Attribute-Relation File Format (ARFF), a file which contains ASCII text
-describing a list of items with common attributes. Items can be given an
-attribute which provides a nominal classification for verification purposes.
+  Weka is data mining software which includes tools for classification of data
+  sources using a wide variety of machine learning algorithms
+  \parencite{Hall:2009p7662}. It supports processing of an input
+  Attribute-Relation File Format (ARFF), a file which contains ASCII text
+  describing a list of items with common attributes. Items can be given an
+  attribute which provides a nominal classification for verification purposes.
 
-\subsection{VirtualBox Software}
+  \item VirtualBox Software
 
-VirtualBox provides a virtualization environment that allows guest operating
-systems to run in a virtual environment on a host operating system
-\parencite{:fk}. It supports snapshots and a remote control facility which make
-it useful for running a controlled experiment \parencite{:uq}.
+  VirtualBox provides a virtualization environment that allows guest operating
+  systems to run in a virtual environment on a host operating system
+  \parencite{:fk}. It supports snapshots and a remote control facility which make
+  it useful for running a controlled experiment \parencite{:uq}.
 
-\subsection{Ruby Software}
+  \item Ruby Software
 
-Ruby is an object orientated, dynamic programming language which is useful for
-rapid prototyping and as such has been used to automate the simulation
-described in this experiment \parencite{:2010uq}.
+  Ruby is an object orientated, dynamic programming language which is useful for
+  rapid prototyping and as such has been used to automate the simulation
+  described in this experiment \parencite{:2010uq}.
 
-(I used it because it is a language that is fast to develop in and I am
-familiar with it)
+  (I used it because it is a language that is fast to develop in and I am
+  familiar with it)
 
-\subsection{Ubuntu Linux Software}
+  \item Ubuntu Linux Software
 
-The Ubuntu Linux operating system is freely available Linux operating system
-available for desktop personal computers.
+  The Ubuntu Linux operating system is freely available Linux operating system
+  available for desktop personal computers.
 
 \cite{:2010ly}
 
-\subsection{Selenium Software}
+  \item Selenium Software
 
-Selenium is a web testing framework which allows automated testing of web pages
-through any Javascript enabled web browser \parencite{:2010ys}. A web browser
-can be controlled remotely using the Selenium Remote Control Server component,
-which in turn can be controlled with a number of programming languages including
-Ruby. This experiment makes use of a number of selenium scripts which
-approximate user interactions with a website which trigger network traffic. 
+  Selenium is a web testing framework which allows automated testing of web pages
+  through any Javascript enabled web browser \parencite{:2010ys}. A web browser
+  can be controlled remotely using the Selenium Remote Control Server component,
+  which in turn can be controlled with a number of programming languages including
+  Ruby. This experiment makes use of a number of selenium scripts which
+  approximate user interactions with a website which trigger network traffic. 
 
-\subsection{Firefox Software}
+  \item Firefox Software
 
-Firefox is a web browser developed by the Mozilla organization and freely
-available for most desktop personal computers \parencite{mozilla}. It's strong
-standards compliance \parencite{Hammond:2010fk} and popularity
-\parencite{:2010kx,:2010vn} on the simulation platform make it an ideal
-candidate for this experiment.
+  Firefox is a web browser developed by the Mozilla organization and freely
+  available for most desktop personal computers \parencite{mozilla}. It's strong
+  standards compliance \parencite{Hammond:2010fk} and popularity
+  \parencite{:2010kx,:2010vn} on the simulation platform make it an ideal
+  candidate for this experiment.
 
-\subsection{OpenSSH Software}
+  \item OpenSSH Software
 
-OpenSSH is a freely available suite of connectivity tools
-\parencite{:2010zr,:ve} that supports remote command execution
-\parencite{Tucker:2010ly}.
+  OpenSSH is a freely available suite of connectivity tools
+  \parencite{:2010zr,:ve} that supports remote command execution
+  \parencite{Tucker:2010ly}.
 
-\cite{:2010zr}
+  \cite{:2010zr}
 
-\subsection{Apache Software}
+  \item Apache Software
 
-The Apache web server is the most prevalent web server used on the internet
-\parencite{2010:dq}.  \cite{:qf}
+  The Apache web server is the most prevalent web server used on the internet
+  \parencite{2010:dq}.  \cite{:qf}
 
-\subsection{Sinatra Software}
+  \item Sinatra Software
 
-Sinatra is a simple framework for creating dynamic web applications using the
-Ruby programming language \parencite{:2010bh}.
+  Sinatra is a simple framework for creating dynamic web applications using the
+  Ruby programming language \parencite{:2010bh}.
+
+\end{enumerate}
 
 \section{Procedure}
 
