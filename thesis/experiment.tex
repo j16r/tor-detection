@@ -26,6 +26,9 @@ described in the following chapter.
 
   \item Tor Software
 
+  The Tor software is available on a number of operating systems and the Tor
+  project makes packages available for the Ubuntu operating system.
+
   \item Weka Software
 
   Weka is data mining software which includes tools for classification of data
@@ -46,17 +49,18 @@ described in the following chapter.
 
   Ruby is an object orientated, dynamic programming language which is useful for
   rapid prototyping and as such has been used to automate the simulation
-  described in this experiment \parencite{:2010uq}.
-
-  (I used it because it is a language that is fast to develop in and I am
-  familiar with it)
+  described in this experiment \parencite{:2010uq}. It is supported by the
+  Selenium framework and so can be used to automate a web browser and includes
+  community developed plug-in modules called gems that provide functionality for
+  monitoring automated software and performing test sequences.
 
   \item Ubuntu Linux Software
 
   The Ubuntu Linux operating system is freely available Linux operating system
-  available for desktop personal computers.
-
-\cite{:2010ly}
+  available for desktop personal computers \parencite{:2010ly}. It comes
+  packaged with the 'tcpdump' software and can be configured in a reliable and
+  consistent way with typical set of POSIX tools and the 'apt-get' package
+  manager. \parencite{Pereira:2011uq}.
 
   \item Selenium Software
 
@@ -65,13 +69,13 @@ described in the following chapter.
   can be controlled remotely using the Selenium Remote Control Server component,
   which in turn can be controlled with a number of programming languages including
   Ruby. This experiment makes use of a number of selenium scripts which
-  approximate user interactions with a website which trigger network traffic. 
+  approximate user interactions with a website which trigger network traffic.
 
   \item Firefox Software
 
   Firefox is a web browser developed by the Mozilla organization and freely
-  available for most desktop personal computers \parencite{mozilla}. It's strong
-  standards compliance \parencite{Hammond:2010fk} and popularity
+  available for most desktop personal computers \parencite{Foundation:2011fk}.
+  It's strong standards compliance \parencite{Hammond:2010fk} and popularity
   \parencite{:2010kx,:2010vn} on the simulation platform make it an ideal
   candidate for this experiment.
 
@@ -79,14 +83,12 @@ described in the following chapter.
 
   OpenSSH is a freely available suite of connectivity tools
   \parencite{:2010zr,:ve} that supports remote command execution
-  \parencite{Tucker:2010ly}.
-
-  \cite{:2010zr}
+  \parencite{Tucker:2010ly, :2010zr}.
 
   \item Apache Software
 
   The Apache web server is the most prevalent web server used on the internet
-  \parencite{2010:dq}.  \cite{:qf}
+  \parencite{2010:dq}. Details about apache go here \parencite{:qf}.
 
   \item Sinatra Software
 
@@ -167,8 +169,8 @@ even if power is lost. Once installation is complete remove the CD and reboot
 the system. Once booted the system is ready for further configuration.
 
 Each system is given a statically assigned IP address, this is done by editing
-the file \verb+/etc/network/interfaces+ and changing the line \verb+iface eth0 inet dhcp+
-to:
+the file \verb+/etc/network/interfaces+ and changing the line
+\verb+iface eth0 inet dhcp+ to:
 
 \begin{lstlisting}[language=sh]
 iface eth0 inet static
