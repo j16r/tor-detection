@@ -29,7 +29,7 @@
 
 \setsansfont[Mapping=tex-text,Scale=1.1]{Raleway}
 \setmainfont[Mapping=tex-text,Scale=1.0]{Optima}
-\setmonofont{Monaco}
+\setmonofont{Menlo}
 
 %%---------------------------------------------------------------------------%%
 %% Table of contents
@@ -122,17 +122,17 @@
 %%---------------------------------------------------------------------------%%
 
 \RequirePackage{listings}
-\lstset{ %
-basicstyle=\ttfamily,
-xleftmargin=36pt,
-xrightmargin=12pt,
-numberstyle=\tiny,              % the size of the fonts that are used for the line-numbers
-numbers=left,                   % where to put the line-numbers
-stepnumber=1,                   % the step between two line-numbers. If it's 1 each line 
-tabsize=2,                      % sets default tabsize to 2 spaces
-breaklines=true,                % sets automatic line breaking
-breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
-escapeinside={\%*}{*)},         % if you want to add a comment within your code
+\lstset{
+  basicstyle=\ttfamily,
+  xleftmargin=36pt,
+  xrightmargin=12pt,
+  numberstyle=\tiny,              % the size of the fonts that are used for the line-numbers
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line 
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
 }
 
 
@@ -205,7 +205,7 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
   \else
     \typeout{Too many supervisors specified, maximum allowed is 7}
   \fi
-} 
+}
 
 % Title page
 \renewcommand{\maketitle}{
@@ -283,16 +283,20 @@ escapeinside={\%*}{*)},         % if you want to add a comment within your code
   style = apa,
   minnames = 1,
   maxnames = 2,
-  bibencoding = utf8,
-  backend=biber]{biblatex}
+  bibencoding = utf8]{biblatex}
 \DeclareLanguageMapping{american}{american-apa}
+\DefineBibliographyStrings{american}{% adapt language
+  page = {{}p\adddot},
+  pages = {{}pp\adddot},
+}
   
 % Custom chapters and biblatex conflict slightly, so render the references heading
 % in a different way
 \defbibheading{bibliography}[\bibname]{
   \chapter{Bibliography}
   \section*{#1}
-  \markboth{#1}{#1}}
+  \markboth{#1}{#1}
+}
 
 %%---------------------------------------------------------------------------%%
 %% PDF Hyperlinks
