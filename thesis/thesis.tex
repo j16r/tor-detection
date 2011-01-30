@@ -160,11 +160,11 @@ key cryptography in his publication \citetitle{Jevons:1874vn}. He recognised
 that certain mathematical operations yielded products that were impossible or
 difficult to reverse in order to uncover the factors used.
 
-The possibility of public key cryptography, or \emph{non-secret
-encryption} was conceived by James H. Ellis in \citeyear{Ellis:1970p3249} and
-later developed into both a method for sharing secret encryption keys by
-Malcolm J. Williamson in 1974 \parencite{Singh:1999:CBE} and a method for
-asymmetric encryption \parencite{Cocks:1973p3265}.
+The possibility of public key cryptography, or non-secret encryption was
+conceived by James H. Ellis in \citeyear{Ellis:1970p3249} and later developed
+into both a method for sharing secret encryption keys by Malcolm J. Williamson
+in 1974 \parencite{Singh:1999:CBE} and a method for asymmetric encryption
+\parencite{Cocks:1973p3265}.
 
 These papers were not published at the time due to their military
 classification, allowing these methods to be reinvented independently
@@ -232,11 +232,11 @@ The first anonymous network system MixNet, was described in
 \textcite{Chaum:1981p296}. This proposal makes essential usage of public key
 encryption to prevent eavesdroppers from obtaining message delivery information.
 Senders in the network communicate with a centrally located server known as a
-\emph{mix}, delivering a message with the address of the intended recipient. The
-mix server discards any information about the sender and delivers it to the
-final destination. Figure \ref{chaums-mix-network} depicts the process of
-message delivery in Chaum's MixNet. Chaum's proposal also allowed for the
-chaining of multiple mix servers together to form a \emph{cascade}.
+mix, delivering a message with the address of the intended recipient. The mix
+server discards any information about the sender and delivers it to the final
+destination. Figure \ref{chaums-mix-network} depicts the process of message
+delivery in Chaum's MixNet. Chaum's proposal also allowed for the chaining of
+multiple mix servers together to form a cascade.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\linewidth]{chaums-mix-network}
@@ -249,20 +249,19 @@ each design being influenced by diverse motivations for obtaining anonymity.
 These include:
 
 \begin{itemize*}
-  \item Anonymous remailers such as \emph{Babel} \parencite{Gulcu:1996p1662}
-    and \emph{Mixminion} \parencite{Danezis:2003ys}.
+  \item Anonymous remailers such as Babel \parencite{Gulcu:1996p1662} and
+    Mixminion \parencite{Danezis:2003ys}.
   \item Networks that provide mathematically provable anonymity
     \parencite{Chaum:1988p5869,Waidner:1989p5870,Berman:2004p303}.
   \item Anonymity that degrades gracefully when subject to attack, so called
-    \emph{robust anonymity} \parencite{Waidner:1989p5870,Jakobsson:1998p5137}.
-  \item Anonymous publishing in \emph{Freedom} \parencite{Goldberg:1999p2231}
-    and \emph{Freenet} \parencite{Clarke:2001p2435}.
-  \item Peer to Peer (P2P) anonymity such as \emph{MorphMix}
-    \parencite{Rennhard:2002p4559}, \emph{Tarzan} \parencite{Freedman:2002kx} and
-    \emph{P5} \parencite{P5Sherwood:2005p5872}.
-  \item Censorship resistance in \emph{aChord} and \emph{gnuNet}
-    \parencite{Hazel:2002p6929}, \emph{Infranet} \parencite{Feamster:2002p307}
-    and of course Tor.
+    robust anonymity \parencite{Waidner:1989p5870,Jakobsson:1998p5137}.
+  \item Anonymous publishing in Freedom \parencite{Goldberg:1999p2231} and
+    Freenet \parencite{Clarke:2001p2435}.
+  \item Peer to Peer (P2P) anonymity such as MorphMix
+    \parencite{Rennhard:2002p4559}, Tarzan \parencite{Freedman:2002kx} and P5
+    \parencite{P5Sherwood:2005p5872}.
+  \item Censorship resistance in aChord and gnuNet \parencite{Hazel:2002p6929},
+    Infranet \parencite{Feamster:2002p307} and of course Tor.
 \end{itemize*}
 
 This is by no means an exhaustive list, for an excellent survey of anonymous
@@ -294,11 +293,11 @@ other anonymous networks.
 
 Like MixNet, public key cryptography is combined with intermediate servers
 responsible for message delivery to provide a degree of anonymity. In Tor,
-these mixes are known as \emph{relays} and are typically chained together to
-construct a \emph{circuit}. Clients connect to the Tor network by communicating
-with a special relay known as a \emph{bridge}, which constitutes the first
+these mixes are known as relays and are typically chained together to
+construct a circuit. Clients connect to the Tor network by communicating
+with a special relay known as a bridge, which constitutes the first
 relay in a circuit. Traffic is repeatedly delivered through relays until it
-reaches another special relay known as an \emph{exit node}, where it is
+reaches another special relay known as an exit node, where it is
 delivered unencrypted to the final destination. Figure \ref{tor-network} shows
 this typical usage of the Tor network.
 
@@ -309,17 +308,16 @@ this typical usage of the Tor network.
 \end{figure}
 
 Messages delivered through the Tor network are encrypted multiple times using a
-variation of onion routing \parencite{Michael:2001} known as \emph{telescopic
-onion routing}. Circuits are built incrementally, obtaining a session key from
-each successive relay in the circuit and encrypting messages so that
-intermediate relays are unable to decrypt the message. Since circuits can take
-some time to build, they are pre-emptively created at regular intervals
-\parencite[p. 5]{Dingledine:2004p314}. Although Tor does not support many of
-the traffic normalization techniques that provide strong anonymity, messages
-passed through the Tor network are packaged in \emph{cells} of a fixed size of
-512 bytes \parencite[p. 5]{Dingledine:2004p314}. Tor also provides application
-level filters that remove identifying features from common application
-protocols.
+variation of onion routing \parencite{Michael:2001} known as telescopic onion
+routing. Circuits are built incrementally, obtaining a session key from each
+successive relay in the circuit and encrypting messages so that intermediate
+relays are unable to decrypt the message. Since circuits can take some time to
+build, they are pre-emptively created at regular intervals
+\parencite[5]{Dingledine:2004p314}. Although Tor does not support many of the
+traffic normalization techniques that provide strong anonymity, messages passed
+through the Tor network are packaged in cells of a fixed size of 512 bytes
+\parencite[5]{Dingledine:2004p314}. Tor also provides application level filters
+that remove identifying features from common application protocols.
 
 After it was noticed that Tor was being used to circumvent censorship as well
 as for anonymity, a publication was released which attempts to identify the
@@ -571,7 +569,7 @@ network. Network switching equipment has limited resources for routing packets
 and competing network traffic can introduce congestion which would radically
 alter the observable communications patterns \parencite{Jacobson:1995p6768}.
 Tor also supports congestion mitigation techniques which alter communication
-patterns \parencite[p. 8]{Dingledine:2004p314}.
+patterns \parencite[8]{Dingledine:2004p314}.
 
 Latency and network performance over the Internet are highly variable and
 beyond the control of any one individual. Usage patterns vary according to
@@ -585,14 +583,14 @@ latency high bandwidth communications or congestion as necessary.
 \subsection{Application Protocol}
 
 Tor provides communications facilities to a number of Internet enabled
-applications by providing an interface using the SOCKS protocol \parencite[p.
-17]{Dingledine:2004p314}. This means that the Tor network can proxy regular web
-browsing, email or any other TCP or UDP based communication protocol
+applications by providing an interface using the SOCKS protocol
+\parencite[17]{Dingledine:2004p314}. This means that the Tor network can proxy
+regular web browsing, email or any other TCP or UDP based communication protocol
 \parencite{website:socks}. Each of these application protocols have their own
 distinguishing communications characteristics which will influence the matching
-algorithm. It is not yet clear how transparent the Tor network will be
-regarding these characteristics and thus, for the purposes of classification a
-single protocol should be chosen.
+algorithm. It is not yet clear how transparent the Tor network will be regarding
+these characteristics and thus, for the purposes of classification a single
+protocol should be chosen.
 
 \subsection{Caching}
 
