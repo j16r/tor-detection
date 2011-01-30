@@ -28,6 +28,10 @@ thesis/*.fls
 thesis/*.bbl
 thesis/*.blg
 thesis/*.pdf
+thesis/*.bcf
+thesis/*.lof
+thesis/*.lot
+thesis/*.toc
 thesis/out/
 special-topic/*.log
 special-topic/*.aux
