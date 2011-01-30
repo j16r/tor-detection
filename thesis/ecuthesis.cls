@@ -46,7 +46,7 @@
 % This package gives us more control over title format
 \RequirePackage[calcwidth]{titlesec}
 
-% Customize the chapter titles with a line underneath and no 'Chapter X' 
+% Customize the chapter titles with a line underneath and no 'Chapter X'
 % label
 \RequirePackage[avantgarde]{quotchap}
 
@@ -128,11 +128,12 @@
   xrightmargin=12pt,
   numberstyle=\tiny,              % the size of the fonts that are used for the line-numbers
   numbers=left,                   % where to put the line-numbers
-  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line 
+  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line
   tabsize=2,                      % sets default tabsize to 2 spaces
   breaklines=true,                % sets automatic line breaking
   breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
   escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  showstringspaces=false,         % don't show spaces in strings as little _ style characters
 }
 
 
@@ -154,6 +155,7 @@
 %%---------------------------------------------------------------------------%%
 
 \renewenvironment{abstract}{
+  \pagebreak
   \normalbaselines
   \section*{ABSTRACT}
   \em }
@@ -289,7 +291,7 @@
   page = {{}p\adddot},
   pages = {{}pp\adddot},
 }
-  
+
 % Custom chapters and biblatex conflict slightly, so render the references heading
 % in a different way
 \defbibheading{bibliography}[\bibname]{
