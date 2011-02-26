@@ -29,14 +29,18 @@
 \begin{abstract}
 \thispagestyle{empty}
 
-Traditional attacks against anonymity providing systems aim to uncover the
-identities of those involved. However, a more likely goal of attackers is to
-block or degrade the network itself, discouraging participation and forcing
-vulnerable users to communicate using less secure means. Since anonymous
-networks operate on known protocols and employ strong encryption it is
-difficult to distinguish them from regular traffic. This proposal describes a
-method for identifying traffic belonging to anonymous networks by examining
-their communication patterns.
+Anonymous networks provide security for users by obfuscating messages with
+encryption and hiding communications amongst cover traffic provided by other
+network participants. In the academic literature, traditionally these networks
+have been attacked with techniques that aim to uncover the identify of
+participants. But the success of an anonymous network relies not only on it's
+technical capabilities, but on adoption by a large enough user base to provide
+adequate cover traffic. If anonymous network participants can be identified, the
+users can be harassed, discouraging participation. Tor is an example of widely
+used anonymous network which uses a form of Onion Routing to provide low latency
+anonymous communications. This paper demonstrates that traffic from a simulated
+Tor network can be distinguished from regular encrypted traffic, suggesting that
+real world Tor users may be vulnerable to the same analysis.
 
 \end{abstract}
 
