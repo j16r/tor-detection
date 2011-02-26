@@ -30,7 +30,7 @@
 #
 fileinfo	:= LaTeX Makefile
 author		:= Chris Monson
-version		:= 2.2.0-rc9
+version		:= 2.2.0-rc10
 #
 # Note that the user-global version is imported *after* the source directory,
 # so that you can use stuff like ?= to get proper override behavior.
@@ -106,6 +106,12 @@ export LC_ALL		?= C
 #
 #
 # CHANGES:
+# Chris Monson (2011-02-03):
+# * Bumped version to 2.2.0-rc10
+# * Issue 112: Added path normalization for cygwin systems
+# * Fixed a bug in get-missing-inputs where we weren't specifying target files
+# Chris Monson (2011-01-24):
+# * Issue 111: Added .jpeg as a possible image extension
 # Chris Monson (2011-01-21):
 # * Issue 110: Long filenames not produced correctly in .d file
 # * Fixed problem with unknown control sequence error parsing
@@ -655,6 +661,8 @@ MAKEINDEX	?= makeindex
 KPSEWHICH	?= kpsewhich
 GS		?= gs
 # = OPTIONAL PROGRAMS =
+# == For MikTex under Cygwin, to get path names right
+CYGPATH		?= cygpath
 # == Makefile Color Output ==
 TPUT		?= tput
 # == TeX Generation ==
@@ -679,6 +687,19 @@ PSNUP		?= psnup
 VIEW_POSTSCRIPT	?= gv
 VIEW_PDF	?= xpdf
 VIEW_GRAPHICS	?= display
+
+# If cygpath is present, then we create a path-norm function that uses it,
+# otherwise the function is just a no-op.  Issue 112 has details.
+USE_CYGPATH := $(if $(shell $(WHICH) $(CYGPATH)),yes,)
+
+# $(call get-cygpath,<path>)
+define get-cygpath
+$(shell $(CYGPATH) -u "$(shell $(CYGPATH) -s -w $1)")
+endef
+
+define path-norm
+$(if $(USE_CYGPATH),$(call get-cygpath,$1),$1)
+endef
 
 # Command options for embedding fonts and postscript->pdf conversion
 PS_EMBED_OPTIONS	?= -dPDFSETTINGS=/printer -dEmbedAllFonts=true -dSubsetFonts=true -dMaxSubsetPct=100
@@ -1053,6 +1074,7 @@ all_files.xvg		?= $(wildcard *.xvg)
 all_files.svg		?= $(wildcard *.svg)
 all_files.png		?= $(wildcard *.png)
 all_files.jpg		?= $(wildcard *.jpg)
+all_files.jpeg		?= $(wildcard *.jpeg)
 all_files.eps.gz	?= $(wildcard *.eps.gz)
 all_files.eps		?= $(wildcard *.eps)
 
@@ -1099,6 +1121,7 @@ files.xvg	:= $(call filter-buildable,xvg)
 files.svg	:= $(call filter-buildable,svg)
 files.png	:= $(call filter-buildable,png)
 files.jpg	:= $(call filter-buildable,jpg)
+files.jpeg	:= $(call filter-buildable,jpeg)
 files.eps.gz	:= $(call filter-buildable,eps.gz)
 files.eps	:= $(call filter-buildable,eps)
 
@@ -1122,6 +1145,7 @@ default_files.xvg	:= $(call filter-default,xvg)
 default_files.svg	:= $(call filter-default,svg)
 default_files.png	:= $(call filter-default,png)
 default_files.jpg	:= $(call filter-default,jpg)
+default_files.jpeg	:= $(call filter-default,jpeg)
 default_files.eps.gz	:= $(call filter-default,eps.gz)
 default_files.eps	:= $(call filter-default,eps)
 
@@ -1158,6 +1182,7 @@ all_stems.xvg		:= $(call get-stems,xvg,all)
 all_stems.svg		:= $(call get-stems,svg,all)
 all_stems.png		:= $(call get-stems,png,all)
 all_stems.jpg		:= $(call get-stems,jpg,all)
+all_stems.jpeg		:= $(call get-stems,jpeg,all)
 all_stems.eps.gz	:= $(call get-stems,eps.gz,all)
 all_stems.eps		:= $(call get-stems,eps,all)
 
@@ -1174,6 +1199,7 @@ default_stems.xvg		:= $(call get-stems,xvg,default)
 default_stems.svg		:= $(call get-stems,svg,default)
 default_stems.png		:= $(call get-stems,png,default)
 default_stems.jpg		:= $(call get-stems,jpg,default)
+default_stems.jpeg		:= $(call get-stems,jpeg,default)
 default_stems.eps.gz		:= $(call get-stems,eps.gz,default)
 default_stems.eps		:= $(call get-stems,eps,default)
 
@@ -1190,6 +1216,7 @@ stems.xvg		:= $(call get-stems,xvg)
 stems.svg		:= $(call get-stems,svg)
 stems.png		:= $(call get-stems,png)
 stems.jpg		:= $(call get-stems,jpg)
+stems.jpeg		:= $(call get-stems,jpeg)
 stems.eps.gz		:= $(call get-stems,eps.gz)
 stems.eps		:= $(call get-stems,eps)
 
@@ -1206,18 +1233,18 @@ graphic_source_extensions	:= fig \
 				   eps.gz
 
 ifeq "$(strip $(BUILD_STRATEGY))" "latex"
-graphic_source_extensions	+= png jpg
+graphic_source_extensions	+= png jpg jpeg
 graphic_target_extensions	:= eps ps
 endif
 
 ifeq "$(strip $(BUILD_STRATEGY))" "pdflatex"
 graphic_source_extensions	+= eps
-graphic_target_extensions	:= pdf png jpg mps tif
+graphic_target_extensions	:= pdf png jpg jpeg mps tif
 endif
 
 ifeq "$(strip $(BUILD_STRATEGY))" "xelatex"
 graphic_source_extensions	+= eps
-graphic_target_extensions	:= pdf png jpg mps tif
+graphic_target_extensions	:= pdf png jpg jpeg mps tif
 endif
 
 all_stems_source	:= $(call concat-stems,tex,all)
@@ -1403,13 +1430,6 @@ gpi_global	:= $(strip \
 # be parsed, the second is a list of files that will show up as dependencies in
 # the new .d file created here.
 #
-# NOTE: BSD sed does not understand \|, so we have to do something more
-# clunky to extract suitable extensions.
-#
-# Also, we do a little bit of funny rewriting up front (TARGETS=) to make sure
-# that we can properly backslash-escape spaces in file names (e.g, on Cygwin
-# for tex distributions that have "Program Files" in their name).
-#
 # $(call get-inputs,<parsed file>,<target files>)
 define get-inputs
 $(SED) \
@@ -1424,8 +1444,8 @@ $(SED) \
 -e '/\.dot_t$$/b addtargets' \
 -e 'd' \
 -e ':addtargets' \
--e 's!^!$2: !' \
-$1 | $(SORT) | $(UNIQ)
+-e 's!.*!$2: $$(call path-norm,&)!' \
+'$1' | $(SORT) | $(UNIQ)
 endef
 
 # $(call get-missing-inputs,<log file>,<target files>)
@@ -1487,7 +1507,7 @@ $(SED) \
 -e '  p' \
 -e '  s/.*//' \
 -e '  x' \
--e '  s!^.*!TARGET_FILES: &!' \
+-e '  s!^.*!$2: $$(call path-norm,&)!' \
 -e '  p' \
 -e '}' \
 -e 'd' \
@@ -2221,7 +2241,7 @@ $(PNGTOPNM) "$1" \
 	> "$2"
 endef
 
-# Creation of .eps files from .jpg files
+# Creation of .eps files from .jpg/.jpeg files
 #
 # Thanks to brubakee for this solution.
 #
@@ -2767,6 +2787,10 @@ ifneq "$(default_graphic_extension)" "pdf"
 # Similarly for these, we don't need eps if we have supported extensions
 # already.
 %.eps: %.jpg $(if $(GRAY),$(gray_eps_file))
+	$(QUIET)$(call echo-graphic,$^,$@)
+	$(QUIET)$(call convert-jpg,$<,$@,$(GRAY))
+
+%.eps: %.jpeg $(if $(GRAY),$(gray_eps_file))
 	$(QUIET)$(call echo-graphic,$^,$@)
 	$(QUIET)$(call convert-jpg,$<,$@,$(GRAY))
 
