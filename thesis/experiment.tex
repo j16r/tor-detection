@@ -389,41 +389,7 @@ Each RSpec example specifies the site to test and the directions to send to the
 Firefox browser, the first RSpec example is listed below and shows a simple test
 which accesses \verb+https://site1.static.torsim/+ and opens the root web page.
 
-\begin{lstlisting}[language=ruby]
-require "rubygems"
-gem "rspec"
-gem "selenium-client"
-require "selenium/client"
-require "selenium/rspec/spec_helper"
-
-describe "site1.static.torsim.1" do
-  attr_reader :selenium_driver
-  alias :page :selenium_driver
-
-  before(:all) do
-    @verification_errors = []
-    @selenium_driver = Selenium::Client::Driver.new \
-      :host => "localhost",
-      :port => 4444,
-      :browser => "*firefoxproxy",
-      :url => "https://site1.static.torsim/",
-      :timeout_in_second => 60
-  end
-
-  before(:each) do
-    @selenium_driver.start_new_browser_session
-  end
-  
-  append_after(:each) do
-    @selenium_driver.close_current_browser_session
-    @verification_errors.should == []
-  end
-  
-  it "test_site1.static.torsim.1" do
-    page.open "/"
-  end
-end
-\end{lstlisting}
+\lstinputlisting[language=ruby]{../experiment/simulation/client/scripts/site1.static.torsim.1_spec.rb}
 
 \paragraph{Selenium}
 
@@ -472,7 +438,8 @@ function FindProxyForURL(url, host) {
 This makes sure that Tor gets used for outgoing connections, and the selenium
 proxy is used for running tests.
 
-But the tor relays must be able to resolve names using DNS, if you use socks4a protocol.
+But the tor relays must be able to resolve names using DNS, if you use socks4a
+protocol.
 
 \subsubsection{Server Guest}
 
@@ -505,7 +472,7 @@ The Tor Network Guest is responsible for emulating a Tor network. It runs three
 Tor directory authorities as well as fifteen relays. Tor was installed on the
 Tor Network Guest using the same procedure listed in \ref{install-tor}. By
 default the Tor installation runs at start time, but this is disabled by
-removing execute permissions from the file \verb+/etc/init.d/tor+.
+removing executable permissions from the file \verb+/etc/init.d/tor+.
 
 The Tor nodes are configured using the script included in the Appendix section
 \ref{generate-tor-network-script}. At boot time the Tor Network Guest executes
