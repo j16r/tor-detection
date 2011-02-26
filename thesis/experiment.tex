@@ -46,7 +46,7 @@ described in the following chapter.
   VirtualBox software allows multiple guest operating systems to run in an
   isolated virtual environment on a host operating system \parencite{:fk}.
   It is free software and supports both snapshots and a remote control facility
-  which make it useful for running a controlled experiment \parencite{:uq}.
+  which make it useful for running a controlled experiment \parencite{Oracle:2011kx}.
 
   \item Ruby Software
 
@@ -102,6 +102,12 @@ described in the following chapter.
   Ruby programming language \parencite{:2010bh}. Sinatra requires very little
   configuration and development time to develop dynamic web applications.
 
+  \item RSpec
+
+  RSpec is a testing framework for Ruby which allows the creation of examples in
+  an easy to read Domain Specific Language (DSL). It is well integrated with
+  Selenium which makes it ideal for running large suites of Selenium tests.
+
 \end{enumerate}
 
 \section{Procedure}
@@ -109,6 +115,14 @@ described in the following chapter.
 The experiment involves two stages, an initial configuration stage to prepare
 equipment, install software, configure and test the design and the final stage
 of executing the simulation to capture packet traces.
+
+The final stage simulation will be run in three phases:
+
+\begin{enumerate*}
+  \item Web requests over HTTPS
+  \item Web requests over HTTP proxied by Tor
+  \item Web requests over HTTPS proxied by Tor
+\end{enumerate*}
 
 \subsection{Hardware Configuration}
 
@@ -123,16 +137,15 @@ in figure \ref{physical-setup}.
 
 \subsection{Software Configuration}
 
-Table \ref{table:hosts} shows the role of each system in the experiment as well
-as the edition of operating system in use and the IP address they were
-configured with on the network.
+Table \ref{table:hosts} shows the role, edition of the Ubuntu operating system
+installed and the IP address assigned to each host in the experiment network.
 
 \begin{tabular}{lrr}
   \toprule
   Role & Operating System Version & IP Address\\
   \midrule
   Client Host & Desktop & 192.168.0.100\\
-  Server Host & Desktop & 192.168.0.001\\
+  Server Host & Desktop & 192.168.0.101\\
   Tor Host & Desktop & 192.168.0.102\\
   \midrule
   Sniffing System & Server & 192.168.0.200\\
@@ -145,12 +158,30 @@ configured with on the network.
 \end{tabular}
 
 Figure \ref{network-diagram} shows the placement of applications and relevant
-data flows.
+data flows when running the simulation in HTTPS mode.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\linewidth]{network-diagram}
-  \caption{Network Diagram}
+  \caption{Network Diagram: Phase 1}
   \label{network-diagram}
+\end{figure}
+
+Figure \ref{network-diagram-with-tor} shows the network configuration when
+running the experiment in HTTP over Tor mode.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=\linewidth]{network-diagram-with-tor}
+  \caption{Network Diagram: Phase 2}
+  \label{network-diagram-with-tor}
+\end{figure}
+
+Figure \ref{network-diagram-with-tor-encrypted} shows the network configuration when
+running the experiment in HTTPS over Tor mode.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=\linewidth]{network-diagram-with-tor-encrypted}
+  \caption{Network Diagram: Phase 3}
+  \label{network-diagram-with-tor-encrypted}
 \end{figure}
 
 \subsection{Standard OS Installation Procedure}
@@ -188,7 +219,8 @@ iface eth0 inet static
 \end{lstlisting}
 
 Substituting \verb+eth0+ with the physical network interface identifier as
-appropriate, and the address \verb+192.168.0.16+ with the desired value.
+appropriate, and the address \verb+192.168.0.16+ with the desired value. All
+systems were assigned IP Addresses as listed in \ref{table:hosts}.
 
 \subsection{Sniffing System}
 
@@ -226,9 +258,9 @@ tcpdump -vv -C 1 -i eth0 -w "./${capture_date}/capture.dat" tcp portrange 5001-5
 \subsection{Host Systems}
 
 The host systems all run an identically configured Ubuntu 10.04 desktop
-operating system, except for the IP address which is configured as detailed in
+operating system, except for the IP address which is configured as described in
 \ref{table:hosts}. To support the guest operating systems, VirtualBox is
-required. The procedure for installing VirtualBox is detailed below:
+required. The procedure used to install VirtualBox is described below:
 
 \begin{enumerate*}
   \item Edit the file \verb+/etc/apt/sources.lst+ and add the line:
@@ -245,26 +277,45 @@ sudo apt-get update && sudo apt-get install virtualbox-3.2
 \end{lstlisting}
 \end{enumerate*}
 
-The guest operating system images can then be created or imported from an
-external disk.
+The guest operating systems were copied across using a USB thumb drive and
+installed using the VirtualBox import feature.
 
-\subsubsection{Server Host}
+\subsubsection{Client Host}
 
-One of the host systems is set aside as a management system, which is
+One of the host systems was set aside as a management system, which is
 responsible for ensuring the experiment runs and restarts it if there are any
-problems. On this machine a private SSH key is created, and copied to the
-authorized keys file on all other hosts. This allows the management system to
-connect to all the other systems and issue commands without user interaction.
+problems.
 
-The management script runs on the management system to watch the experiment's
-progress. This is a simple Ruby script which uses SSH to control the other Host
-systems and opens a socket which waits for a connection that indicates that the
-experiment has finished. Every time it starts the experiment, it rolls back
-each virtual machine to a preconfigured snapshot. If the experiment takes too
-long, say because a virtual machine hangs or something is wrong, it will be
-started without waiting for the finish condition. Figure
-\ref{manager-flow-diagram} contains a diagram which outlines the basic flow of
-the manager script.
+For delivering remote commands from the management system to other hosts without
+interactive prompts, SSH is used with automatic private key authentication. To
+enable automatic private key authentication, first a private key was generated
+by executing the following commands in a terminal prompt:
+
+\begin{enumerate*}
+  \item \verb+ssh-keygen+
+  \item Press enter to use default keyfile (\verb+/Users/john/.ssh/id_rsa+)
+  \item Press enter twice to supply a blank passphrase
+\end{enumerate*}
+
+The public key is then copied to the other hosts using secure copy (SCP), for example:
+\begin{lstlisting}[language=sh]
+  scp ~/.ssh/id_rsa.pub john@192.168.0.101:
+\end{lstlisting}
+
+This file was then appended to the authorized hosts file on each system, by
+executing the following command from each host system:
+\begin{lstlisting}[language=sh]
+  cat id_rsa.pub >> ~/.ssh/authorized_keys
+\end{lstlisting}
+
+The management script runs on the management system to monitor experiment
+progress. This simple script manages the VirtualBox instances on the other hosts
+by remotely executing VirtualBox control commands using SSH. It ensures that
+each time the experiment is finished, the VirtualBox instances are rolled back
+and restarted. If the experiment takes too long, it is manually restarted. The
+script listens on a port for a connection from the experiment client which
+indicates the experiment has finished. Figure \ref{manager-flow-diagram}
+contains a diagram which outlines the basic flow of the manager script.
 
 \begin{figure}[H]
   \centering\includegraphics[scale=0.7]{manager-flow}
@@ -279,12 +330,11 @@ correct operation.
 
 \subsection{Guest Systems}
 
-\subsubsection{Client System}
+\subsubsection{Client Guest}
 
 The client system runs Ubuntu 10.04 Desktop Operating System as well as a
 number of applications that allow it to perform automated web browsing. Tor is
-configured on this system as well for the Tor part of the experiment but is
-initially disabled.
+configured on this system but disabled for the first phase of the simulation.
 
 The software installed on this system includes:
 
@@ -302,109 +352,20 @@ The software installed on this system includes:
 \end{itemize*}
 
 The client operation is controlled by a Ruby script which ensures that the
-Selenium-RC server is running, executes a number of Selenium browser
-simulations using RSpec and reports it's success by connecting to an open
-socket on the management system.
+Selenium-RC server is running, executes a number of Selenium browser simulations
+using RSpec and reports completion by connecting to an open socket on the
+management system. This script is configured to run at boot time so that as soon
+as the system is powered on the simulation commences. The complete client script
+is included in the Appendix, section \ref{client-script}.
 
-There are 170 simulations which emulate simple website interactions which have
-different traffic profiles against 30 different websites on the Server system.
+The simulation component consists of 170 different RSpec examples which emulate
+various profiles of website traffic against 30 different example websites
+provided by the Server system.
 
-For the non-SSL portion of the experiment, Selenium is configured to use a
-special proxy which automatically accepts self signed certificates. Typical
-interactions with SSL encrypted websites are signed by a certificate authority,
-so no user interaction is required to begin browsing.
+\paragraph{Tor}
+\label{install-tor}
 
-\paragraph{Selenium}
-
-SSL + Tor over selenium. 
-
-Generate a selenium firefox profile. First launch selenium in interactive mode
-specifying a proxy:
-
-\begin{lstlisting}[language=sh]
-java -jar $selenium.jar -interactive
-\end{lstlisting}
-
-This will start a prompt to which you can edit commands, you must launch a
-browser to get selenium to create a firefox profile directory.
-
-\begin{lstlisting}[language=sh]
-cmd=getNewBrowserSession&1=*firefoxproxy&2=http://www.google.com
-\end{lstlisting}
-
-Generate a firefox profile, then edit the proxy.pac file to 
-
-\begin{lstlisting}[language=sh]
-function FindProxyForURL(url, host) {
-   if(shExpMatch(url, '*/selenium-server/*')) {
-       return 'PROXY localhost:4444; PROXY proxy.ourdomain.dom:8080';
-   } else if (shExpMatch(host, '*dev.ourdomain.dom*')) {
-       return 'DIRECT';
-   } else if (shExpMatch(host, '*qa.ourdomain.dom*')) {
-       return 'DIRECT';
-   } else if (shExpMatch(host, '*staging.ourdomain.dom*')) {
-       return 'DIRECT';
-   } else {
-       return 'PROXY proxy.ourdomain.dom:8080';
-   }
-}
-\end{lstlisting}
-
-or
-
-\begin{lstlisting}[language=sh]
-function FindProxyForURL(url, host) {
-   if(shExpMatch(host, '*torsim')) {
-       return 'PROXY localhost:8118';
-   }
-   return 'PROXY localhost:4444; DIRECT';
-}
-\end{lstlisting}
-
-This makes sure that your proxy (Tor) gets used for outgoing connections, and
-the selenium proxy is used for running tests.
-
-To get SSL certificates accepted, you must manually accept them permanently for
-each host. This will update the \verb+cert_override.txt+ and \verb+cert8.db+
-files.
-
-Tor must have the following setting supplied:
-
-\begin{lstlisting}[language=sh]
-ExitPolicyRejectPrivate 0
-\end{lstlisting}
-
-Since we are using a 192.* network. - Not true, testing mode flag sets this.
-
-But the tor relays must be able to resolve names using DNS, if you use socks4a protocol.
-
-\subsubsection{Server System}
-
-The host system runs an apache web server which serves two sets of sample
-websites, static and dynamic. The static websites are served each from a
-different numbered directory and accessible over a different virtual host. This
-means that when a web browser is pointed at the directory
-\verb+site1.static.torsim+ the files in
-\verb+/var/www/thesis/experiment/simulation/static/site1+ are served to the
-browser.
-
-For the SSL part of the experiment, only the HTTPS port 443 is accessed and all
-information is sent to the browser using encryption.
-
-The dynamic sample websites change subtly with each attempted access. There are
-10 sample websites each a slightly different Ruby Sinatra application.
-
-\subsubsection{Tor Simulation}
-
-The Tor Simulation Guest is responsible for emulating a Tor network. It runs
-three Tor directory authorities as well as fifteen relays.
-
-Each Tor instance on the Tor Simulation system is given it's own separate
-directory for configuration, logging and temporary files.
-
-Deploy the experiment files.
-
-Install Tor:
+Tor is installed on the client guest using the following procedure:
 
 \begin{enumerate*}
   \item Edit the file \verb+/etc/apt/sources.lst+ and add the line:
@@ -422,34 +383,141 @@ sudo apt-get update && sudo apt-get install tor
     \end{lstlisting}
 \end{enumerate*}
 
-\subsubsection{Client System}
+\paragraph{RSpec}
 
-Install Ubuntu 10.04 Desktop as in the Host system directions, leaving out the
-Virtual Box installation.
+Each RSpec example specifies the site to test and the directions to send to the
+Firefox browser, the first RSpec example is listed below and shows a simple test
+which accesses \verb+https://site1.static.torsim/+ and opens the root web page.
+
+\begin{lstlisting}[language=ruby]
+require "rubygems"
+gem "rspec"
+gem "selenium-client"
+require "selenium/client"
+require "selenium/rspec/spec_helper"
+
+describe "site1.static.torsim.1" do
+  attr_reader :selenium_driver
+  alias :page :selenium_driver
+
+  before(:all) do
+    @verification_errors = []
+    @selenium_driver = Selenium::Client::Driver.new \
+      :host => "localhost",
+      :port => 4444,
+      :browser => "*firefoxproxy",
+      :url => "https://site1.static.torsim/",
+      :timeout_in_second => 60
+  end
+
+  before(:each) do
+    @selenium_driver.start_new_browser_session
+  end
+  
+  append_after(:each) do
+    @selenium_driver.close_current_browser_session
+    @verification_errors.should == []
+  end
+  
+  it "test_site1.static.torsim.1" do
+    page.open "/"
+  end
+end
+\end{lstlisting}
+
+\paragraph{Selenium}
+
+There are a number of concerns with using Selenium and HTTPS as well as self
+signed certificates.
+
+Typical websites that provide HTTPS on the world wide web have a server
+certificate signed by a trusted authority, so the user is not required to agree
+to communicating with a possibly forged website. For the experiment a self
+signed certificate was used, which triggers a number of security warnings when
+accessed through most modern browsers. To automate acceptance of this security
+risk Selenium was configured with a special proxy which implicitly accepts any
+self signed certificates. The following steps were used to configure this proxy:
 
 \begin{enumerate*}
-  \item Deploy the experiment files onto the client system.
-  \item Install Ruby
-  \item Install the bundler ruby gem with the command:
-    \begin{lstlisting}[language=sh]
-gem install bundler
-    \end{lstlisting}
-  \item Install the required client ruby gems by executing the bundler from the client directory in the deployed experiment files.
-    \begin{lstlisting}[language=sh]
-bundle install
-    \end{lstlisting}
-  \item Ensure that the client script is executed at system startup.
+  \item A Firefox custom profile was generated. First Selenium was launched in
+    interactive mode:
+\begin{lstlisting}[language=sh]
+java -jar $selenium.jar -interactive
+\end{lstlisting}
+  \item This starts an interactive prompt, a Firefox browser is then launched
+    using the following command:
+\begin{lstlisting}[language=sh]
+cmd=getNewBrowserSession&1=*firefoxproxy&2=http://www.google.com
+\end{lstlisting}
+  \item This created a profile directory in /tmp. This directory is copied to a
+    safe place, then all files were deleted except for \verb+cert_override.txt+
+    and \verb+cert8.db+.
+  \item All of the simulation sites were manually visited, with the server
+    certificate being permanently accepted. This saves the certificates to
+    \verb+cert_override.txt+ for future sessions.
 \end{enumerate*}
 
-\subsubsection{Configuring the Management Script}
+To configure selenium for use in Phase 2 and 3, the file \verb+proxy.pac+ is
+added to the Firefox profile with the following text:
 
-Once all systems are deployed, the management script needs to be altered to
+\begin{lstlisting}[language=java]
+function FindProxyForURL(url, host) {
+   if(shExpMatch(host, '*torsim')) {
+       return 'PROXY localhost:8118';
+   }
+   return 'PROXY localhost:4444; DIRECT';
+}
+\end{lstlisting}
+
+This makes sure that Tor gets used for outgoing connections, and the selenium
+proxy is used for running tests.
+
+But the tor relays must be able to resolve names using DNS, if you use socks4a protocol.
+
+\subsubsection{Server Guest}
+
+The host system runs an Apache web server which serves two sets of sample
+websites, static and dynamic. The static websites are served each from a
+different numbered directory and accessible over a different virtual host. This
+means that when a web browser is pointed at the host
+\verb+https://site1.static.torsim/+ the files in
+\verb+/var/www/thesis/experiment/simulation/static/site1+ are served to the
+browser.
+
+The dynamic web sites use Sinatra to serve content that varies over time, an
+example Sinatra script for \verb+https://site59.dynamic.torsim/+ is included
+below:
+
+\paragraph{index.rb}
+\lstinputlisting[language=ruby]{../experiment/simulation/site/dynamic/site59/index.rb}
+
+\paragraph{index.haml}
+\lstinputlisting[language=ruby]{../experiment/simulation/site/dynamic/site59/views/index.haml}
+
+Each time this site is accessed it renders a random number of iframes between 1
+and 20, with each iframe accessing the URI \verb+/content+ which renders between
+1 and 1000 random characters. This website periodically refreshes itself every
+five seconds.
+
+\subsubsection{Tor Network Guest}
+
+The Tor Network Guest is responsible for emulating a Tor network. It runs three
+Tor directory authorities as well as fifteen relays. Tor was installed on the
+Tor Network Guest using the same procedure listed in \ref{install-tor}. By
+default the Tor installation runs at start time, but this is disabled by
+removing execute permissions from the file \verb+/etc/init.d/tor+.
+
+The Tor nodes are configured using the script included in the Appendix section
+\ref{generate-tor-network-script}. At boot time the Tor Network Guest executes
+the Run Tor Network Script included in the Appendix section
+\ref{run-tor-network-script}.
 
 \subsection{Execution}
 
-Running the experiment is a matter of ensuring all Host systems are powered on,
-if everything is configured correctly the experiment will continue to run until
-stopped manually.
+Running the experiment is a matter of ensuring all hardware is configured
+correctly, all network connections active and all systems are powered on. Each
+simulation phase was executed for two weeks without any power outages or
+failures.
 
 \subsection{Processing of Results}
 
