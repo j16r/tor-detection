@@ -661,7 +661,8 @@ may be masked by the natural variability introduced by a heterogeneous network.
 
 \subsection{Can the traffic be classified using automated matching techniques?}
 
-Yes.
+Yes, the classification algorithms trialled were all able to identify Tor traffic
+with reasonable accuracy.
 
 \subsection{Do these networks have characteristics that make them readily
 distinguishable using heuristics based matching?}
@@ -674,7 +675,6 @@ Yes.
 \subsection{How long does a user have to be connected to the network before a
 confident match can be made?}
 
-Don't know... yet.
 
 \section{Possible Implications of Results}
 
@@ -697,14 +697,22 @@ differentiated from regular encrypted traffic.
 
 \section{Manager Script}
 
+\label{manager-script}
 \lstinputlisting[language=ruby]{../experiment/simulation/manager/run_simulation.rb}
 
 \section{Client Script}
 
+\label{client-script}
 \lstinputlisting[language=ruby]{../experiment/simulation/client/client.rb}
+
+\section{Generate Tor Network Script}
+
+\label{generate-tor-network-script}
+\lstinputlisting[language=sh]{../experiment/simulation/tor/make_private_network.sh}
 
 \section{Run Tor Network Script}
 
+\label{run-tor-network-script}
 \lstinputlisting[language=sh]{../experiment/simulation/tor/run_private_network.sh}
 
 \printbibliography[title=REFERENCES]
