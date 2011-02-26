@@ -495,7 +495,7 @@ goals.
 
 The experiment conducted in this paper utilize a non-equivalent group design.
 The experimental groups are generated using simulations which allow for a great
-deal of control over independent variables, ensuring minimal difference between
+deal of control over confounding variables, ensuring minimal difference between
 the control and treatment groups. Both experiment groups perform the exact same
 simulations. The control group performs all simulations using regular HTTPS,
 while the treatment group proxies all communications over Tor. The treatment
@@ -682,20 +682,37 @@ confident match can be made?}
 
 \section{Possible Implications of Results}
 
-\chapter{Conclusion}
-
-While it is difficult to draw a broad conclusion with the limited nature of the
-experiment conducted, the findings suggest that the strategies used by anonymous
-networks to thwart identity revealing traffic analysis may make them easier to
-identify.
+The research results suggest that the strategies used by anonymous networks to
+hide the identity of network participants, may make those anonymous networks
+more easy to distinguish from networks and software that do not provide any
+anonymity.
 
 Research has shown that the low latency design of Tor means it is vulnerable to
 traffic analysis attacks that correlate traffic patterns with users. This
-transparency should in fact make Tor more difficult to classify than more
-'anonymous' network designs which employ batching and traffic normalizing.
-Steganography is a difficult problem and it may be that the extra traffic
-required to maintain the Tor network means it will always be easily
-differentiated from regular encrypted traffic.
+vulnerability is indicative of the subtle amount of overhead incurred when
+sending traffic through Tor. This should make it difficult to identify whether a
+connection is using Tor VS not using Tor, though it is clearly still possible.
+Reducing this overhead further may reduce the success of Tor traffic
+identification.
+
+Stronger anonymity providing networks utilize more sophisticated techniques to
+hide individual identities such as batching, queuing and normalization. While
+they may be more resistant to identity uncovering attacks, this may also make
+them more easily identifiable by classification techniques.
+
+\chapter{Conclusion}
+
+Using Tor as a communications proxy incurs some overhead, sufficient enough that
+when using a Tor proxy in controlled conditions, Tor traffic can be
+distinguished from regularly encrypted traffic. This overhead may be sufficient
+enough that Tor nodes in a real world network can be identified by using readily
+available eavesdropping techniques.
+
+However, the experiment was based on a small set of simulated data, with which
+it would be impossible to cover all the possible real world conditions. The
+variability present in the real Tor network may make this classification
+technique impossible. Further research needs to be conducted with live packet
+traces from real participants in the Tor network.
 
 \chapter{Appendix}
 
