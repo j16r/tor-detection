@@ -10,10 +10,13 @@ described in the following chapter.
 \begin{enumerate}
   \item Hub/Managed Router
 
-  The network equipment chosen to run the experiment is a simple hub or
-  'repeater' which duplicates all packets transmitted on all ports. This makes it
-  easy to monitor all communications across the network for analysis purposes
-  \parencite{website:hub-reference}.
+  Most modern network appliances used for routing, even those labelled as hubs,
+  include switching capabilities, which means that packets routed are only
+  delivered to the addressed host. This makes eavesdropping difficult. For
+  the purpose of this experiment a simple hub or repeater is required. A hub
+  does not examine packet delivery information, it simple broadcasts all packets
+  received to every connected port, allowing for passive eavesdropping without
+  complicated network configuration \parencite{website:hub-reference}.
 
   \item 'tcpdump' Software
 
@@ -40,19 +43,18 @@ described in the following chapter.
 
   \item VirtualBox Software
 
-  VirtualBox provides a virtualization environment that allows guest operating
-  systems to run in a virtual environment on a host operating system
-  \parencite{:fk}. It supports snapshots and a remote control facility which make
-  it useful for running a controlled experiment \parencite{:uq}.
+  VirtualBox software allows multiple guest operating systems to run in an
+  isolated virtual environment on a host operating system \parencite{:fk}.
+  It is free software and supports both snapshots and a remote control facility
+  which make it useful for running a controlled experiment \parencite{:uq}.
 
   \item Ruby Software
 
   Ruby is an object orientated, dynamic programming language which is useful for
-  rapid prototyping and as such has been used to automate the simulation
-  described in this experiment \parencite{:2010uq}. It is supported by the
-  Selenium framework and so can be used to automate a web browser and includes
-  community developed plug-in modules called gems that provide functionality for
-  monitoring automated software and performing test sequences.
+  rapid prototyping and is supported by a large community that has developed
+  powerful add on software in the form of Ruby Gems \parencite{:2010uq}. These
+  Gems include support for the Selenium browser testing framework, process
+  monitoring, dynamic web content generation and automated testing.
 
   \item Ubuntu Linux Software
 
@@ -60,7 +62,7 @@ described in the following chapter.
   available for desktop personal computers \parencite{:2010ly}. It comes
   packaged with the 'tcpdump' software and can be configured in a reliable and
   consistent way with typical set of POSIX tools and the 'apt-get' package
-  manager. \parencite{Pereira:2011uq}.
+  manager \parencite{Pereira:2011uq}.
 
   \item Selenium Software
 
@@ -68,8 +70,8 @@ described in the following chapter.
   through any Javascript enabled web browser \parencite{:2010ys}. A web browser
   can be controlled remotely using the Selenium Remote Control Server component,
   which in turn can be controlled with a number of programming languages including
-  Ruby. This experiment makes use of a number of selenium scripts which
-  approximate user interactions with a website which trigger network traffic.
+  Ruby. Using Selenium the typical interactions a user makes when viewing a
+  website can be simulated.
 
   \item Firefox Software
 
@@ -83,17 +85,22 @@ described in the following chapter.
 
   OpenSSH is a freely available suite of connectivity tools
   \parencite{:2010zr,:ve} that supports remote command execution
-  \parencite{Tucker:2010ly, :2010zr}.
+  \parencite{Tucker:2010ly, :2010zr}. The client component of OpenSSH is
+  installed by default on the Ubuntu operating system and the server component
+  is easily installed using the apt-get package management system.
 
   \item Apache Software
 
-  The Apache web server is the most prevalent web server used on the internet
-  \parencite{2010:dq}. Details about apache go here \parencite{:qf}.
+  The Apache web server is the most prevalent web server used on the Internet
+  \parencite{2010:dq}. The Apache web server can serve static web content over
+  both the HTTP and HTTPS protocols \parencite{Foundation:2011uq}. Combined with
+  software such as Sinatra it can serve dynamic web content.
 
   \item Sinatra Software
 
   Sinatra is a simple framework for creating dynamic web applications using the
-  Ruby programming language \parencite{:2010bh}.
+  Ruby programming language \parencite{:2010bh}. Sinatra requires very little
+  configuration and development time to develop dynamic web applications.
 
 \end{enumerate}
 
@@ -105,7 +112,7 @@ of executing the simulation to capture packet traces.
 
 \subsection{Hardware Configuration}
 
-Four identical IBM desktop computer systems were prepared and arranged as shown
+Four identical desktop computer systems were prepared and arranged as shown
 in figure \ref{physical-setup}.
 
 \begin{figure}[H]
