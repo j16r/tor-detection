@@ -1,0 +1,114 @@
+\chapter{Discussion of Results}
+
+\section{Results}
+
+The classification results are tabulated below. The best performing algorithm
+random forest was able to classify HTTP over Tor with 93.7\% accuracy and a
+false positive rate of 3.7\%. HTTPS over Tor was more easily identified with a
+97.7\% accuracy and low false positive rate of 0.3\%.
+
+\begin{table}[H]
+  \begin{tabular}{lrrr}
+    \toprule
+    & True Positive Rate & False Positive Rate & ROC \\
+    \midrule
+    Random Forest\\
+    \midrule
+    HTTPS & 0.957 & 0.036 & 0.99\\
+    HTTP over Tor & 0.937 & 0.037 & 0.986\\
+    HTTPS over Tor & 0.977 & 0.003 & 0.999\\
+    Weighted Avg. & 0.954 & 0.03 & 0.99\\
+    \midrule
+    j4.8 With 10 fold cross validation\\
+    \midrule
+    HTTPS & 0.951 & 0.04 & 0.989\\
+    HTTP over Tor & 0.978 & 0.043 & 0.98\\
+    HTTPS over Tor & 0.97 & 0.007 & 0.992\\
+    Weighted Avg. & 0.964 & 0.018 & 0.986\\
+    \midrule
+    Random Tree\\
+    \midrule
+    HTTPS & 0.961 & 0.046 & 0.963\\
+    HTTP over Tor & 0.906 & 0.04 & 0.94\\
+    HTTPS over Tor & 0.955 & 0.01 & 0.972\\
+    Weighted Avg. & 0.941 & 0.037 & 0.957\\
+    \midrule
+    Adaboost\\
+    \midrule
+    HTTPS & 0.95 & 0.001 & 0.975\\
+    HTTP over Tor & 0.999 & 0.324 & 0.838\\
+    HTTPS over Tor & 0 & 0 & 0.777\\
+    Weighted Avg. & 0.785 & 0.109 & 0.891\\
+    \bottomrule
+  \end{tabular}
+  \caption{Results}
+  \label{table:results}
+\end{table}
+
+\section{Limitations}
+
+The classifiers developed within this experiment have been trained against
+a relatively small sample set of simulated data, which may only represent
+a small fraction of the width and breadth of conditions available on a wider
+area network. The characteristics that allow for classification of Tor network
+may be masked by the natural variability introduced by a heterogeneous network.
+
+\section{Addressing Research Questions}
+
+\begin{enumerate*}
+  \item{Can the traffic be classified using automated matching techniques?}
+
+  Yes, the classification algorithms trialled were all able to identify Tor traffic
+  with reasonable accuracy.
+
+  \item{Do these networks have characteristics that make them readily
+  distinguishable using heuristics based matching?}
+
+  Insert answer here.
+
+  \item{Do they have characteristics that make them distinguishable using a
+  machine learning technique?}
+
+  Insert answer here.
+
+  \item{How long does a user have to be connected to the network before a
+  confident match can be made?}
+
+  Insert answer here.
+
+\end{enumerate*}
+
+
+\section{Possible Implications of Results}
+
+The research results suggest that the strategies used by anonymous networks to
+hide the identity of network participants, may make those anonymous networks
+more easy to distinguish from networks and software that do not provide any
+anonymity.
+
+Research has shown that the low latency design of Tor means it is vulnerable to
+traffic analysis attacks that correlate traffic patterns with users. This
+vulnerability is indicative of the subtle amount of overhead incurred when
+sending traffic through Tor. This should make it difficult to identify whether a
+connection is using Tor VS not using Tor, though it is clearly still possible.
+Reducing this overhead further may reduce the success of Tor traffic
+identification.
+
+Stronger anonymity providing networks utilize more sophisticated techniques to
+hide individual identities such as batching, queuing and normalization. While
+they may be more resistant to identity uncovering attacks, this may also make
+them more easily identifiable by classification techniques.
+
+\section{Conclusion}
+
+Using Tor as a communications proxy incurs some overhead, sufficient enough that
+when using a Tor proxy in controlled conditions, Tor traffic can be
+distinguished from regularly encrypted traffic. This overhead may be sufficient
+enough that Tor nodes in a real world network can be identified by using readily
+available eavesdropping techniques.
+
+However, this experiment was based on a small set of simulated data, with which
+it would be impossible to cover all the possible real world conditions. The
+variability present in the real Tor network may make this classification
+technique impossible. Further research needs to be conducted with live packet
+traces from real participants in the Tor network.

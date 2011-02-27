@@ -85,9 +85,9 @@ described in the following chapter.
 
   OpenSSH is a freely available suite of connectivity tools
   \parencite{:2010zr,:ve} that supports remote command execution
-  \parencite{Tucker:2010ly, :2010zr}. The client component of OpenSSH is
-  installed by default on the Ubuntu operating system and the server component
-  is easily installed using the apt-get package management system.
+  \parencite{Tucker:2010ly}. The client component of OpenSSH is installed by
+  default on the Ubuntu operating system and the server component is easily
+  installed using the apt-get package management system.
 
   \item Apache Software
 
@@ -104,9 +104,10 @@ described in the following chapter.
 
   \item RSpec
 
-  RSpec is a testing framework for Ruby which allows the creation of examples in
-  an easy to read Domain Specific Language (DSL). It is well integrated with
-  Selenium which makes it ideal for running large suites of Selenium tests.
+  RSpec is a behaviour driven testing framework for Ruby which allows the
+  creation of examples in an easy to read Domain Specific Language (DSL)
+  \parencite{Chelimsky:2010vn}. It is well integrated with Selenium which makes
+  it ideal for running large suites of Selenium tests.
 
 \end{enumerate}
 
@@ -127,12 +128,12 @@ The final stage simulation will be run in three phases:
 \subsection{Hardware Configuration}
 
 Four identical desktop computer systems were prepared and arranged as shown
-in figure \ref{physical-setup}.
+in figure \ref{fig:physical-setup}.
 
 \begin{figure}[H]
   \centering\includegraphics[scale=0.7]{physical-setup}
   \caption{Physical Setup}
-  \label{physical-setup}
+  \label{fig:physical-setup}
 \end{figure}
 
 \subsection{Software Configuration}
@@ -140,71 +141,75 @@ in figure \ref{physical-setup}.
 Table \ref{table:hosts} shows the role, edition of the Ubuntu operating system
 installed and the IP address assigned to each host in the experiment network.
 
-\begin{tabular}{lrr}
-  \toprule
-  Role & Operating System Version & IP Address\\
-  \midrule
-  Client Host & Desktop & 192.168.0.100\\
-  Server Host & Desktop & 192.168.0.101\\
-  Tor Host & Desktop & 192.168.0.102\\
-  \midrule
-  Sniffing System & Server & 192.168.0.200\\
-  \midrule
-  Client Guest & Desktop & 192.168.0.16\\
-  Server Guest & Server & 192.168.0.17\\
-  Tor Network Guest & Server & 192.168.0.18\\
-  \bottomrule
+\begin{table}[H]
+  \begin{tabular}{lrr}
+    \toprule
+    Role & Operating System Version & IP Address\\
+    \midrule
+    Client Host & Desktop & 192.168.0.100\\
+    Server Host & Desktop & 192.168.0.101\\
+    Tor Host & Desktop & 192.168.0.102\\
+    \midrule
+    Sniffing System & Server & 192.168.0.200\\
+    \midrule
+    Client Guest & Desktop & 192.168.0.16\\
+    Server Guest & Server & 192.168.0.17\\
+    Tor Network Guest & Server & 192.168.0.18\\
+    \bottomrule
+  \end{tabular}
+  \caption{System Roles}
   \label{table:hosts}
-\end{tabular}
+\end{table}
 
-Figure \ref{network-diagram} shows the placement of applications and relevant
+Figure \ref{fig:network-diagram} shows the placement of applications and relevant
 data flows when running the simulation in HTTPS mode.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\linewidth]{network-diagram}
   \caption{Network Diagram: Phase 1}
-  \label{network-diagram}
+  \label{fig:network-diagram}
 \end{figure}
 
-Figure \ref{network-diagram-with-tor} shows the network configuration when
+Figure \ref{fig:network-diagram-with-tor} shows the network configuration when
 running the experiment in HTTP over Tor mode.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\linewidth]{network-diagram-with-tor}
   \caption{Network Diagram: Phase 2}
-  \label{network-diagram-with-tor}
+  \label{fig:network-diagram-with-tor}
 \end{figure}
 
-Figure \ref{network-diagram-with-tor-encrypted} shows the network configuration when
+Figure \ref{fig:network-diagram-with-tor-encrypted} shows the network configuration when
 running the experiment in HTTPS over Tor mode.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\linewidth]{network-diagram-with-tor-encrypted}
   \caption{Network Diagram: Phase 3}
-  \label{network-diagram-with-tor-encrypted}
+  \label{fig:network-diagram-with-tor-encrypted}
 \end{figure}
 
 \subsection{Standard OS Installation Procedure}
 \label{section:os_install}
 
 All systems in the experiment use a variation of the Ubuntu Linux operating
-system. The installation process followed is detailed below:
+system. Table \ref{table:config-options} specifies the options supplied when
+installing each operating system for the experiment.
 
-\begin{enumerate*}
-  \item Configure system BIOS to boot from CD-ROM
-  \item Insert Ubuntu operating system installation CD
-  \item Select the language you wish to use for installation (English) and click
-    'Forward'
-  \item Select the region (Australia/Perth) and click 'Forward'
-  \item Select an appropriate keymap (USA) and click 'Forward'
-  \item Select 'Erase and use the entire disk' and click 'Forward'
-  \item Enter the user name (John Barker), select 'Log in automatically' and click 'Forward'
-\end{enumerate*}
-
-At this point the installation will begin and should take about 35 minutes.
-'Log in automatically' is selected to ensure that the experiment will continue
-even if power is lost. Once installation is complete remove the CD and reboot
-the system. Once booted the system is ready for further configuration.
+\begin{table}[H]
+  \begin{tabular}{lr}
+    \toprule
+    Prompt & Value\\
+    \midrule
+    Where are you? & Australia/Perth\\
+    Which layout is most similar to your keyboard? & USA\\
+    How do you want to partition the disk? & Erase and use the entire disk\\
+    What is your name? & John Barker\\
+    What name do you want to use to log in? & john\\
+    \bottomrule
+  \end{tabular}
+  \caption{Ubuntu Installation Parameters}
+  \label{table:config-options}
+\end{table}
 
 Each system is given a statically assigned IP address, this is done by editing
 the file \verb+/etc/network/interfaces+ and changing the line
@@ -230,7 +235,7 @@ packages included so no additional software installation is required.
 
 An init.d script was created to execute the tcpdump program with a specific
 filter string after the system had powered on. All capture files were limited to
-1mb in size and put into a time stamped directory. To ensure that only relevant
+1MB in size and put into a time stamped directory. To ensure that only relevant
 packets were collected the filter string was tuned for each phase of the
 experiment. The filter string for each phase is shown below.
 
@@ -491,18 +496,21 @@ failures.
 The experiment was run over the course of 8 weeks yielding three sets of sample
 data.
 
-\begin{tabular}{lrr}
-  \toprule
-  Phase & Size (bytes) & Number of sessions\\
-  \midrule
-  HTTPS & 2326328 & 236659\\
-  HTTP over Tor & 2869624 & 168876\\
-  HTTPS over Tor & 1591112 & 95203\\
-  \bottomrule
-  \label{table:datasets}
-\end{tabular}
+\begin{table}[H]
+  \begin{tabular}{lrr}
+    \toprule
+    Phase & Size in bytes & Number of sessions\\
+    \midrule
+    HTTPS & 2326328 & 236659\\
+    HTTP over Tor & 2869624 & 168876\\
+    HTTPS over Tor & 1591112 & 95203\\
+    \bottomrule
+    \label{table:datasets}
+  \end{tabular}
+  \caption{Captured Data}
+\end{table}
 
-The data captured was in the form of 1mb capture files which were recombined
+The data captured was in the form of 1MB capture files which were recombined
 with mergecap and processed by NetAI to produce ARFF format files for use by
 Weka. Each data set were given the nominal classification 'http',
 'http\_over\_tor' and 'https\_over\_tor', all other nominal attributes were
