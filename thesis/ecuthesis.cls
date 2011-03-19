@@ -85,6 +85,37 @@
 \emergencystretch 2em
 
 %%---------------------------------------------------------------------------%%
+%% Bibliography
+%%---------------------------------------------------------------------------%%
+
+\RequirePackage[american]{babel}
+\RequirePackage{csquotes}
+
+% Use the excellent biblatex package with apa style
+% minnames=1,maxnames=2 - abbreviates all author names in citations
+% hyperref - links in pdf
+\RequirePackage[
+  url = false,
+  hyperref = true,
+  style = apa,
+  minnames = 1,
+  maxnames = 2,
+  bibencoding = utf8]{biblatex}
+\DeclareLanguageMapping{american}{american-apa}
+\DefineBibliographyStrings{american}{% adapt language
+  page = {{}p\adddot},
+  pages = {{}pp\adddot},
+}
+
+% Custom chapters and biblatex conflict slightly, so render the references heading
+% in a different way
+\defbibheading{bibliography}[\bibname]{
+  \chapter{Bibliography}
+  \section*{#1}
+  \markboth{#1}{#1}
+}
+
+%%---------------------------------------------------------------------------%%
 %% Headers and footers
 %%---------------------------------------------------------------------------%%
 
@@ -267,37 +298,6 @@
 
     \end{flushleft}
   \clearpage
-}
-
-%%---------------------------------------------------------------------------%%
-%% Bibliography
-%%---------------------------------------------------------------------------%%
-
-\RequirePackage[american]{babel}
-\RequirePackage{csquotes}
-
-% Use the excellent biblatex package with apa style
-% minnames=1,maxnames=2 - abbreviates all author names in citations
-% hyperref - links in pdf
-\RequirePackage[
-  url = false,
-  hyperref = true,
-  style = apa,
-  minnames = 1,
-  maxnames = 2,
-  bibencoding = utf8]{biblatex}
-\DeclareLanguageMapping{american}{american-apa}
-\DefineBibliographyStrings{american}{% adapt language
-  page = {{}p\adddot},
-  pages = {{}pp\adddot},
-}
-
-% Custom chapters and biblatex conflict slightly, so render the references heading
-% in a different way
-\defbibheading{bibliography}[\bibname]{
-  \chapter{Bibliography}
-  \section*{#1}
-  \markboth{#1}{#1}
 }
 
 %%---------------------------------------------------------------------------%%
