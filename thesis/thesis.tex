@@ -48,39 +48,40 @@ real world Tor users may be vulnerable to the same analysis.
 
 \section{Background}
 
-The Internet has revolutionised the political sphere in providing a platform
-for the publication of speech to a far greater audience than was ever available
-before digital communications systems \parencite{Bonchek:1997p3455}. The
-publication of less desirable political speech, criticism or challenging ideas
-still carries with it great risk, with numerous publications leading to arrest.
-This has spawned headlines such as \textcite{website:egypt-arrests},
-\citetitle{website:china-yahoo-torture}
-\parencite{website:china-yahoo-torture},
-\citetitle{website:vietnam-bloggers-arrested}
-\parencite{website:vietnam-bloggers-arrested},
-\textcite{website:iran-bloggers-arrested} and
-\citetitle{website:blogger-arrests} \parencite{website:blogger-arrests}. The
-Internet, like conventional media, is still vulnerable to censorship by
-oppressive governments and malicious attackers
-\parencite{Crandall:2007p6165,Karlin:2009p6166}.
+The first anonymous digital network, commonly known as MixNet was proposed in
+\textcite{Chaum:1981p296}. The foundation of MixNet was the use of an
+intermediary which forwarded messages from clients without any identifying
+details. Numerous proposals and implementations followed such as Freedom
+\parencite{Goldberg:1999p2231} and aChord \parencite{Hazel:2002p6929}. The
+Second Generation Onion Router (Tor), is an anonymous network which uses a
+variant of Onion Routing, to provide low latency anonymous communications to a
+wide variety of Internet communications protocols
+\parencite{Dingledine:2004p314}. It also aims to provide resistance against
+censorship based blocking attempts \parencite{Dingledine:2008p1542}.
 
-In response to these threats, a number of systems have been proposed which use
-various techniques, primarily cryptography and covering traffic, to provide
-censorship resistance and anonymity. The Second Generation Onion Router (Tor),
-is an anonymous network which uses a variant of Onion Routing, to provide low
-latency anonymous communications to a wide variety of Internet communications
-protocols \parencite{Dingledine:2004p314}. It also aims to provide resistance
-against censorship based blocking attempts \parencite{Dingledine:2008p1542}.
+Tor was originally developed by the U.S. Naval Research Lab in 1997
+\parencite{Syverson:1997kz} for application by the U.S. Navy. It has since been
+adopted by The Tor Project, Inc. and is made publicly available, finding usage
+in journalism, law enforcement, activism and military applications
+\parencite{The-Tor-Project-Inc.:2011uq}. Tor is one of the most successful and
+widely deployed anonymous networks, with an average of two hundred thousand
+active users as of March 2011 \parencite{The-Tor-Project-Inc.:2011fk}.
 
-Although Tor succeeds to a certain extent in these goals, it may be possible to
-use traffic analysis techniques to automatically identify Tor connections and
-target them for attacks. Since Tor relies on large numbers of users for the
-protections it provides, attacks that affect the reliability of the network can
-discourage participation, making it ineffective. This paper proposes a traffic
-analysis methodology for identifying Tor traffic which may be used for such
-attacks in the future.
+Although Tor succeeds to a certain extent in providing anonymity and censorship
+resistance. Under controlled conditions it is possible to distinguish Tor
+traffic from other forms of encrypted traffic using traffic analysis. This makes
+it easy for Tor users to be isolated and targeted for attacks. Since Tor relies
+on large numbers of users for the protections it provides, attacks that affect
+the reliability of the network can discourage participation, making it
+ineffective. This paper describes a simple traffic analysis technique which can
+be used to distinguish Tor traffic from another form of commonly encrypted
+traffic.
 
 \section{Significance}
+
+ While it has been the subject of much
+academic literature, the primary objective of researchers has historically been
+the attempt to reveal participant identities \parencite[3]{Murdoch:2005p325}.
 
 Tor is one of the most successful and widely deployed anonymous networks, with
 around one thousand, eight hundred users at the time of writing
@@ -122,8 +123,8 @@ question can be broken down further:
     distinguishable using heuristics based matching?
   \item Do they have characteristics that make them distinguishable using a
     machine learning technique?
-  \item How long does a user have to be
-    connected to the network before a confident match can be made?
+  %\item How long does a user have to be
+  %  connected to the network before a confident match can be made?
 \end{enumerate*}
 
 \input litreview.tex
