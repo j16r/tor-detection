@@ -4,7 +4,7 @@
 \usepackage{graphicx}
 
 % Bibliography
-\bibliography{fullrefs,websites,patents,papers}
+\bibliography{fullrefs,websites,patents}
 
 % Setup the variables for the title page
 \title{Using traffic analysis to identify The Second Generation Onion Router}
@@ -70,7 +70,7 @@ active users as of March 2011 \parencite{The-Tor-Project-Inc.:2011fk}.
 Although Tor succeeds to a certain extent in providing anonymity and censorship
 resistance. Under controlled conditions it is possible to distinguish Tor
 traffic from other forms of encrypted traffic using traffic analysis. This makes
-it easy for Tor users to be isolated and targeted for attacks. Since Tor relies
+it easy for Tor users to be isolated and targeted for attack. Since Tor relies
 on large numbers of users for the protections it provides, attacks that affect
 the reliability of the network can discourage participation, making it
 ineffective. This paper describes a simple traffic analysis technique which can
@@ -79,39 +79,35 @@ traffic.
 
 \section{Significance}
 
- While it has been the subject of much
-academic literature, the primary objective of researchers has historically been
-the attempt to reveal participant identities \parencite[3]{Murdoch:2005p325}.
+The Internet's expanding growth \parencite{Miniwatts-Marketing-Group:2010uq} and
+role in political discourse \parencite{Bonchek:1997p3455} have allowed for
+increased mobility and organization of activist groups
+\parencite{Alexander:2011kx,Anderson:2011vn}. The increasingly sophisticated use
+of censorship \parencite{Crandall:2007p6165,Karlin:2009p6166} and swift
+retribution for dissenting opinion
+\parencite{website:china-yahoo-torture,website:vietnam-bloggers-arrested,website:egypt-arrests,website:blogger-arrests}
+may have chilling effects, effectively neutralizing these benefits. In light of
+these threats the value of anonymous networks and anti-censorship technology can
+be recognized. It is quite telling that new and sometimes unorthodox methods of
+circumventing censorship are being deployed every day
+\parencite{The-Economist:2011fk,Brading:2011ys}.
 
-Tor is one of the most successful and widely deployed anonymous networks, with
-around one thousand, eight hundred users at the time of writing
-\parencite{website:tor-anonymity-online}. While it has been the subject of many
-traffic analysis attacks, the primary objective has historically been the
-attempt to reveal participant identities: ``The principal objective of an
-adversary attacking an anonymous communication system is to link the initiators
-of connections with their respective communication partners and vice versa''
-\parencite[3]{Murdoch:2005p325}.
-
-The traffic analysis techniques proposed will attempt to classify network
-streams belonging to Tor users to distinguish them from regular encrypted
-communications. This research may provide a greater understanding of just
-how much anonymity a user of the Tor network is provided and inspire
-the development of countermeasures against analysis.
+While Tor has been the subject of much academic literature, the primary
+objective of researchers has historically been the attempt to reveal participant
+identities \parencite[3]{Murdoch:2005p325}.  Many attack techniques proposed
+have been somewhat academic in nature and not necessarily feasible in practice.
+Sometimes they require compromise of large parts of the Tor network, supplying
+hostile data to Tor users or complicated knowledge of usage patterns and an
+excess of patience. The technique demonstrated in this paper is a low cost
+technique, which does not require very sophisticated equipment and can be
+completed by a passive observer.
 
 \section{Research Questions}
 
-Given a motivated and universal attacker, it is inexpensive and straightforward
-to disconnect a user from these networks by blocking access to well known and
-published resources. Once these avenues of attack have been exhausted it is
-still possible to connect to the network by connecting to lesser known access
-points. Since these networks are capable of communicating using many of the
-same methods as most conventional Internet applications, a blanket ban on this
-kind of communication would be too broad and extensive.
-
 Tor employs strong encryption, the goal of which is to ensure that the data
-transmitted is indistinguishable from random noise. To an observer, data
-transmitted using encryption looks the same. Thus the traditional means of
-identifying these protocols are ineffective.
+transmitted is indistinguishable from random noise. To an observer, two
+different streams of encrypted data look almost the same. Thus the traditional
+means of identifying these protocols are ineffective.
 
 This raises the question: is it possible to distinguish the traffic created by
 these networks, from encrypted traffic produced by conventional software? This
@@ -121,8 +117,8 @@ question can be broken down further:
   \item Can the traffic be classified using automated matching techniques?
   \item Do these networks have characteristics that make them readily
     distinguishable using heuristics based matching?
-  \item Do they have characteristics that make them distinguishable using a
-    machine learning technique?
+  \item Do they have characteristics that make them distinguishable using
+    machine learning techniques?
   %\item How long does a user have to be
   %  connected to the network before a confident match can be made?
 \end{enumerate*}
