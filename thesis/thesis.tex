@@ -68,22 +68,24 @@ degrade gracefully when subject to attack, so called robust anonymity
 \parencite{P5Sherwood:2005p5872} aimed to provide anonymity features to
 peer-to-peer (P2P) networks. 
 
+Providing resistance to blocking or censorship comes in many forms. The People's
+Republic of China operates a sophisticated Internet firewall capable of blocking
+requests to forbidden information \parencite{The-OpenNet-Initiative:2009uq}.
+This system is often referred to as the Great Firewall of China. Resisting this
+system can involve ignoring spurious reset packets injected into the stream of
+forbidden communications \parencite{springerlink:10.1007/11957454_2}, or be as
+simple as accessing data through an encrypted proxy as is done in FreeGate
+\parencite{Smart:2008kx}.
+
 The goal of anonymity sometimes aligns with that of providing resistance to
 censorship. Many censorship resistance systems are built on top of anonymity
 providing designs, \textcite{Kopsell:2004:ABR:1029179.1029197} describes a
 censorship resistant system built on top of AN.ON
-\parencite{springerlink:10.1007/3-540-44702-4_7}.  Anonymous publishing systems
-such as Freedom \parencite{Goldberg:1999p2231} and Freenet
-\parencite{Clarke:2001p2435} also provide some measure of censorship resistance.
-The goal of aChord \parencite{Hazel:2002p6929} is to provide a distributed
-lookup system for peer-to-peer publishing systems, based on Chord
-\parencite{Stoica:2001:CSP:383059.383071}.
-
-Censorship resistance in aChord and gnuNet
-\parencite{Hazel:2002p6929}, Infranet \parencite{Feamster:2002p307}.
-
-Anonymous networks by acting as a relay for network traffic, provide some level
-of censorship resistance though these goals do not always align.
+\parencite{springerlink:10.1007/3-540-44702-4_7}. Publishing systems such as
+Freedom \parencite{Goldberg:1999p2231} and Freenet \parencite{Clarke:2001p2435}
+aim to provide censorship resistance as well as anonymity. Infranet uses
+steganography to hide sensitive messages in innocuous content Infranet
+\parencite{Feamster:2002p307}.
 
 The Second Generation Onion Router (Tor), is an anonymous network which uses a
 variant of Onion Routing, to provide low latency anonymous communications to a
@@ -143,17 +145,17 @@ successful and widely deployed anonymous networks, with an average of two
 hundred thousand active users as of March 2011
 \parencite{The-Tor-Project-Inc.:2011fk}.
 
-Although Tor succeeds to a certain extent in providing anonymity and censorship
-resistance. Under controlled conditions it is possible to distinguish Tor
-traffic from other forms of encrypted traffic using traffic analysis. This makes
-it easy for Tor users to be isolated and targeted for attack. Since Tor relies
-on large numbers of users for the protections it provides, attacks that affect
-the reliability of the network can discourage participation, making it
-ineffective. This paper describes a simple traffic analysis technique which can
-be used to distinguish Tor traffic from another form of commonly encrypted
-traffic.
+%Although Tor succeeds to a certain extent in providing anonymity and censorship
+%resistance. Under controlled conditions it is possible to distinguish Tor
+%traffic from other forms of encrypted traffic using traffic analysis. This makes
+%it easy for Tor users to be isolated and targeted for attack. Since Tor relies
+%on large numbers of users for the protections it provides, attacks that affect
+%the reliability of the network can discourage participation, making it
+%ineffective. This paper describes a simple traffic analysis technique which can
+%be used to distinguish Tor traffic from another form of commonly encrypted
+%traffic.
 
-\section{Traffic Analysis}
+\section{Tor Weaknesses}
 
 Research into Tor weaknesses has included the use of hostile exit nodes to
 capture private information \parencite{website:tor-password-leak}, attacks that
@@ -162,9 +164,7 @@ user's identities \parencite{Abbott:2007p298} and a number of identity revealing
 traffic analysis techniques
 \parencite{Murdoch:2005p325,Abbott:2007p298,Evans:2009p315}.
 \citeauthor{McLachlan:2009p197} reveals a method for identifying bridge
-operators in \textcite{McLachlan:2009p197} using the Tor protocol directly.  It
-is believed that this is the first proposal of a traffic analysis technique for
-classification of Tor network streams.
+operators in \textcite{McLachlan:2009p197} using the Tor protocol directly. 
 
 When considering the use of traffic analysis for classification of Internet
 communications, three techniques are used. These are: exact matching, heuristic
