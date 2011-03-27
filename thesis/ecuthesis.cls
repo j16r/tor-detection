@@ -27,7 +27,7 @@
 
 \defaultfontfeatures{Scale=MatchLowercase}
 
-\setsansfont[Mapping=tex-text,Scale=1.1]{Junction}
+\setsansfont[Mapping=tex-text,Scale=1.1]{Optima}
 %\setmainfont[Mapping=tex-text,Scale=1.0]{Optima}
 \setmonofont{Menlo}
 
@@ -35,8 +35,6 @@
 %% Table of contents
 %%---------------------------------------------------------------------------%%
 
-% Requiring this makes the table appear properly, otherwise the quotchap
-% package chops the top off!
 \RequirePackage{tocloft}
 
 %%---------------------------------------------------------------------------%%
@@ -46,13 +44,10 @@
 % This package gives us more control over title format
 \RequirePackage[calcwidth]{titlesec}
 
-% Customize the chapter titles with a line underneath and no 'Chapter X'
-% label
-\RequirePackage[avantgarde]{quotchap}
+% Use the fancy chapter package for chapter headings
+\usepackage[Bjornstrup]{fncychap}
 
-% Don't use up so much space for chapters
-\renewcommand\chapterheadstartvskip{\vspace*{-7\baselineskip}}
-\renewcommand\chapterheadendvskip{\vspace*{0.2\baselineskip}}
+\ChTitleVar{\raggedleft\Huge\sffamily\bfseries}
 
 % Put a line under section headings
 \titleformat{\section}[hang]{\sffamily\bfseries}
