@@ -27,8 +27,8 @@
 
 \defaultfontfeatures{Scale=MatchLowercase}
 
-\setsansfont[Mapping=tex-text,Scale=1.1]{Raleway}
-\setmainfont[Mapping=tex-text,Scale=1.0]{Optima}
+\setsansfont[Mapping=tex-text,Scale=1.1]{Junction}
+%\setmainfont[Mapping=tex-text,Scale=1.0]{Optima}
 \setmonofont{Menlo}
 
 %%---------------------------------------------------------------------------%%
@@ -82,7 +82,7 @@
 
 % Allow sentences to be stretched a bit, this is needed since I'm not allowing
 % hyphenation
-\emergencystretch 2em
+\emergencystretch 5em
 
 %%---------------------------------------------------------------------------%%
 %% Bibliography
@@ -121,32 +121,6 @@
 
 % Use the fancy header package
 \RequirePackage{fancyhdr}
-
-% Reset the defaults
-\fancyhead{}
-\fancyfoot{}
-
-% No head rule
-\renewcommand{\headrulewidth}{0pt}
-
-% Footer with line
-\fancyfoot[L]{\rule{0cm}{4mm}\color{black}{\sffamily\bfseries \thepage}}
-
-% Make sure the line appears above the page number box
-\renewcommand{\footrulewidth}{0.4pt}
-\renewcommand{\footruleskip}{2mm}
-
-% Use the page style - must come last
-\pagestyle{fancy}
-
-% Use same footers on plain pages
-\fancypagestyle{plain} {
-  \fancyhead{}
-  \fancyfoot{}
-  \fancyfoot[L]{\rule{0cm}{4mm}\color{black}{\sffamily\bfseries \thepage}}
-  \renewcommand{\footrulewidth}{0.5pt}
-  \renewcommand{\headrulewidth}{0pt}
-}
 
 %%---------------------------------------------------------------------------%%
 %% Code sections
