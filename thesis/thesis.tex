@@ -66,7 +66,7 @@ degrade gracefully when subject to attack, so called robust anonymity
 \parencite{Waidner:1989p5870,Jakobsson:1998p5137}. Designs such as MorphMix
 \parencite{Rennhard:2002p4559}, Tarzan \parencite{Freedman:2002kx} and P5
 \parencite{P5Sherwood:2005p5872} aimed to provide anonymity features to
-peer-to-peer (P2P) networks. 
+peer-to-peer (P2P) networks.
 
 Providing resistance to blocking or censorship comes in many forms. The People's
 Republic of China operates a sophisticated Internet firewall capable of blocking
@@ -75,7 +75,7 @@ This system is often referred to as the Great Firewall of China. Resisting this
 system can involve ignoring spurious reset packets injected into the stream of
 forbidden communications \parencite{springerlink:10.1007/11957454_2}, or be as
 simple as accessing data through an encrypted proxy as is done in FreeGate
-\parencite{Smart:2008kx}. 
+\parencite{Smart:2008kx}.
 
 More sophisticated circumvention tend to be based on anonymity providing
 designs, \textcite{Kopsell:2004:ABR:1029179.1029197} describes a censorship
@@ -113,11 +113,23 @@ features and deviates sufficiently from the original onion routing design in
 order to avoid patent claims. The technique employed by Tor is known as
 telescopic onion routing.
 
-In the Tor network, the intermediate nodes responsible for routing messages are
-known as relays and are typically chained together to construct a circuit.
-Traffic is repeatedly delivered through relays until it reaches another special
-relay known as an exit node, where it is delivered unencrypted to the final
-destination.  Figure \ref{tor-network} shows this typical usage of the Tor
+Tor is developed and maintained  by The Tor Project, Inc. and is made publicly
+available, finding usage in journalism, law enforcement, activism and military
+applications \parencite{The-Tor-Project-Inc.:2011uq}. Tor is one of the most
+successful and widely deployed anonymous networks, with an average of two
+hundred thousand active users as of March 2011
+\parencite{The-Tor-Project-Inc.:2011fk}.
+
+Traffic enters the Tor network through an onion proxy which accepts TCP streams.
+Some identifying features are scrubbed from the data using application filters
+before the data is relayed over the network through TLS \parencite{website:TLS}
+encrypted connections. The intermediate nodes responsible for routing messages
+are known as relays and are typically chained together to construct a circuit.
+When traffic leaves the Tor network it is delivered by a special kind of relay
+known as an exit node. At an exit node the data is transmitted in the original
+format it was supplied to at the onion proxy.
+
+Figure \ref{tor-network} shows the typical path a message takes through the Tor
 network.
 
 \begin{figure}[H]
@@ -126,32 +138,43 @@ network.
   \label{tor-network}
 \end{figure}
 
-Circuits are built incrementally, obtaining a session key from each
-successive relay in the circuit and encrypting messages so that intermediate
-relays are unable to decrypt the message. Since circuits can take some time to
-build, they are pre-emptively created at regular intervals
-\parencite[5]{Dingledine:2004p314}. Although Tor does not support many of the
-traffic normalization techniques that provide strong anonymity, messages passed
-through the Tor network are packaged in cells of a fixed size of 512 bytes
-\parencite[5]{Dingledine:2004p314}. Tor also provides application level filters
-that remove identifying features from common application protocols.
+The onion proxy builds circuits incrementally, first obtaining a session key
+from each successive relay in a circuit. Once all session keys for a circuit
+have been obtained, the message is broken into fixed sized cells of 512 bytes
+and iteratively encrypted using the session key of each node in the circuit in
+the reverse order that the data traverses the network. Cells come in two forms:
+control cells and relay cells. Control cells are used to create and maintain
+circuits, while relay cells contain commands for circuit maintenance and
+additional data for verifying message integrity and identifying streams.
 
-Tor is developed and maintained  by The Tor Project, Inc. and is made publicly
-available, finding usage in journalism, law enforcement, activism and military
-applications \parencite{The-Tor-Project-Inc.:2011uq}. Tor is one of the most
-successful and widely deployed anonymous networks, with an average of two
-hundred thousand active users as of March 2011
-\parencite{The-Tor-Project-Inc.:2011fk}.
+When the first node in the circuit receives a cell, it removes a layer by
+decrypting the message using it's session key. The cell is delivered along the
+circuit and at each node a layer is removed until the cell is completely
+decrypted and can be delivered successfully. Since circuits can take some time
+to build, they are pre-emptively created at regular intervals
+\parencite[5]{Dingledine:2004p314}.
 
 \section{Vulnerabilities and Weaknesses}
 
-The Tor system was designed with a number of compromises, sacrificing some level
-of anonymity in favour of usability and efficiency. This means that it is
-vulnerable to attacks that aim to disrupt users, steal information or identify
-users. A well known attack involves sniffing traffic that leaves exit nodes to
+When designing a system such as Tor, a number of trade-offs have to be made
+between the strength of the security provided and the convenience and
+performance of the system. The Tor designers consciously prioritized low
+latency, usability and flexibility against security goals such as security
+against end to end attacks \parencite[4]{Dingledine:2004p314}. These design
+decisions mean that Tor is vulnerable to several kinds of attacks, some of them
+expected and some not.
+
+A well known attack involves sniffing traffic that leaves exit nodes to
 capture private information \parencite{website:tor-password-leak}. Many users
 assume that Tor provides end to end encryption, and transmit private information
 over the Tor network.
+
+Most conventional attacks against secure networks are known as traffic analysis,
+this is the process of examining information about the communications rather
+than the information contained within them. This information may include the
+size of messages communicated, their frequency and timing. Many researchers have
+proposed traffic analysis techniques that allow attackers to reveal the
+identities of Tor users. 
 
 Technologies such as Javascript and Flash can be embedded in web pages accessed
 by Tor users, and have control over network resources. By injecting network
@@ -161,13 +184,6 @@ be identified \parencite{Abbott:2007p298}.
 Tor bridges, intended as a way to get censored users access to Tor are easily
 identified. They are also vulnerable to clogging attacks which make bridge
 operators more easily identified \textcite{McLachlan:2009p197}. 
-
-Most conventional attacks against secure networks are known as traffic analysis,
-this is the process of examining information about the communications rather
-than the information contained within them. This information may include the
-size of messages communicated, their frequency and timing. Many researchers have
-proposed traffic analysis techniques that allow attackers to reveal the
-identities of Tor users. 
 
 \textcite{Murdoch:2005p325} proposes a technique to identify users by estimating
 the latency of individual Tor nodes using a hostile Tor node. The hostile Tor
@@ -226,152 +242,152 @@ discourage participation, making the network less effective.
 %be used to distinguish Tor traffic from another form of commonly encrypted
 %traffic.
 
-%\section{Traffic Classification}
+\section{Traffic Analysis as Classification}
 
-%When considering the use of traffic analysis for classification of Internet
-%communications, three techniques are used. These are: exact matching, heuristic
-%matching and machine learning \parencite{Zhang:2009p1188}. Exact matching
-%techniques recognise properties of communications that mirror known protocols
-%and communication patterns. This might include the port an application uses or
-%the format of its payload. Since Tor employs strong encryption and communicates
-%using known and commonly used protocols, exact matching techniques would prove
-%ineffective for classification. Heuristic matching looks for patterns in
-%conversations to determine communications patterns and infer relationships,
-%while machine learning involves the use of statistics to train computer
-%algorithms to classify traffic. Both heuristic and machine matching techniques
-%are suitable for traffic analysis of anonymous networks because they do not
-%rely on analysing the content of messages.
+When considering the use of traffic analysis for classification of Internet
+communications, three techniques are used. These are: exact matching, heuristic
+matching and machine learning \parencite{Zhang:2009p1188}. Exact matching
+techniques recognise properties of communications that mirror known protocols
+and communication patterns. This might include the port an application uses or
+the format of its payload. Since Tor employs strong encryption and communicates
+using known and commonly used protocols, exact matching techniques would prove
+ineffective for classification. Heuristic matching looks for patterns in
+conversations to determine communications patterns and infer relationships,
+while machine learning involves the use of statistics to train computer
+algorithms to classify traffic. Both heuristic and machine matching techniques
+are suitable for traffic analysis of anonymous networks because they do not
+rely on analysing the content of messages.
 
-%\subsection{Heuristic Techniques}
+\subsection{Heuristic Techniques}
 
-%The increasing burden of peer to peer (P2P) applications on campus networks,
-%and their shift to encryption motivated the development of heuristics based
-%techniques for identifying P2P traffic. Early techniques include identifying
-%known properties of P2P networks such as often communicating using both the UDP
-%and TCP protocols simultaneously and using a solitary connection to transfer
-%high volumes \parencite{Karagiannis:2004p6400}. This paper also reduced the
-%number of false positives by eliminating packets that matched known
-%communications protocols.
+The increasing burden of peer to peer (P2P) applications on campus networks,
+and their shift to encryption motivated the development of heuristics based
+techniques for identifying P2P traffic. Early techniques include identifying
+known properties of P2P networks such as often communicating using both the UDP
+and TCP protocols simultaneously and using a solitary connection to transfer
+high volumes \parencite{Karagiannis:2004p6400}. This paper also reduced the
+number of false positives by eliminating packets that matched known
+communications protocols.
 
-%Similar techniques have been developed in \textcite{Perenyi:2006p6325} and
-%\textcite{John:2008p1376}, both of which attempt to improve matching accuracy
-%through early elimination of false positives and by expanding the scope of
-%matching parameters. In \textcite{Oneil:2004p6451} the same heuristics are used
-%to identify P2P nodes before applying a secondary heuristic to identify
-%‘supernodes’ which are a subset of all P2P nodes.
+Similar techniques have been developed in \textcite{Perenyi:2006p6325} and
+\textcite{John:2008p1376}, both of which attempt to improve matching accuracy
+through early elimination of false positives and by expanding the scope of
+matching parameters. In \textcite{Oneil:2004p6451} the same heuristics are used
+to identify P2P nodes before applying a secondary heuristic to identify
+‘supernodes’ which are a subset of all P2P nodes.
 
-%Classifying traffic based on system roles is a key feature of the technique
-%that appears in \citetitle{Karagiannis:2005p6359}
-%\parencite{Karagiannis:2005p6359}. By analysing communications at the host
-%level then at increasing levels of granularity, a greater level of accuracy is
-%achieved.
+Classifying traffic based on system roles is a key feature of the technique
+that appears in \citetitle{Karagiannis:2005p6359}
+\parencite{Karagiannis:2005p6359}. By analysing communications at the host
+level then at increasing levels of granularity, a greater level of accuracy is
+achieved.
 
-%The use of Traffic Dispersion Graphs or TDGs to identify P2P traffic appears in
-%\textcite{Iliofotou:2008p6373} and \textcite{Iliofotou:2009p6461}. Once traffic
-%flows are represented in a TDG, mathematical properties of the flow can be
-%analysed to make positive identifications.
+The use of Traffic Dispersion Graphs or TDGs to identify P2P traffic appears in
+\textcite{Iliofotou:2008p6373} and \textcite{Iliofotou:2009p6461}. Once traffic
+flows are represented in a TDG, mathematical properties of the flow can be
+analysed to make positive identifications.
 
-%Viruses have also posed a problem for network administrators, often
-%over-utilizing network resources and using the network to infect new machines.
-%A technique for identifying various worms was proposed in
-%\textcite{Lazarevic:2003p6450}. Worms often attempt to hide their communications
-%from network administrators to avoid detection, presenting the same problems of
-%identification as Tor network traffic.
+Viruses have also posed a problem for network administrators, often
+over-utilizing network resources and using the network to infect new machines.
+A technique for identifying various worms was proposed in
+\textcite{Lazarevic:2003p6450}. Worms often attempt to hide their communications
+from network administrators to avoid detection, presenting the same problems of
+identification as Tor network traffic.
 
-%\subsection{Machine Learning Techniques}
+\subsection{Machine Learning Techniques}
 
-%\subsubsection{Expectation-Maximisation}
+\subsubsection{Expectation-Maximisation}
 
-%The first use of machine learning to categorise traffic flows appears in
-%\textcite{McGregor:2004p3826}. A detailed analysis of the attributes that can
-%be used for machine learning and an attempt at coarse grained classification
-%using an expectation-maximisation (EM) algorithm are demonstrated. The
-%expectation-maximisation algorithm is a method for finding probabilistic
-%estimates of parameters in a statistical model \parencite{UW:2010p7083}. The
-%same technique is also demonstrated in \textcite{Soule:2004p3817} using
-%histograms for finer grained classification.  The EM algorithm is again used in
-%\textcite{Zander:2005p6212} and \textcite{Erman:2006p3825}, with the latter
-%comparing EM favourably against a Na\"{i}ve Bayes classifier.
+The first use of machine learning to categorise traffic flows appears in
+\textcite{McGregor:2004p3826}. A detailed analysis of the attributes that can
+be used for machine learning and an attempt at coarse grained classification
+using an expectation-maximisation (EM) algorithm are demonstrated. The
+expectation-maximisation algorithm is a method for finding probabilistic
+estimates of parameters in a statistical model \parencite{UW:2010p7083}. The
+same technique is also demonstrated in \textcite{Soule:2004p3817} using
+histograms for finer grained classification.  The EM algorithm is again used in
+\textcite{Zander:2005p6212} and \textcite{Erman:2006p3825}, with the latter
+comparing EM favourably against a Na\"{i}ve Bayes classifier.
 
-%\subsubsection{Na\"{i}ve Bayes}
+\subsubsection{Na\"{i}ve Bayes}
 
-%\textcite{Moore:2005p3827} use a supervised Na\"{i}ve Bayes to classify traffic
-%flows that have previously been sorted into groups by analysing the flow
-%content. This paper focuses on many of the most commonly used Internet
-%protocols while \textcite{Bonfiglio:2007p6453} uses the technique for
-%identifying traffic belonging to the Skype application.
+\textcite{Moore:2005p3827} use a supervised Na\"{i}ve Bayes to classify traffic
+flows that have previously been sorted into groups by analysing the flow
+content. This paper focuses on many of the most commonly used Internet
+protocols while \textcite{Bonfiglio:2007p6453} uses the technique for
+identifying traffic belonging to the Skype application.
 
-%\textcite{Herrmann:2009p1189} uses Bayesian networks to fingerprint visited
-%websites accessed through Privacy Enhancing Technologies (PET), including Tor.
-%This technique performed poorly when applied to the Tor network, but it
-%suggests that Tor traffic has particular characteristics that distinguish it
-%from many existing PETs. It makes a particularly useful observation: ``The most
-%frequent packet sizes in the Tor traffic dumps are, in descending order, 1500,
-%−52, −638, 52, 638 and 1150 bytes, accounting for 87.6 \% of all Tor packets.''
+\textcite{Herrmann:2009p1189} uses Bayesian networks to fingerprint visited
+websites accessed through Privacy Enhancing Technologies (PET), including Tor.
+This technique performed poorly when applied to the Tor network, but it
+suggests that Tor traffic has particular characteristics that distinguish it
+from many existing PETs. It makes a particularly useful observation: ``The most
+frequent packet sizes in the Tor traffic dumps are, in descending order, 1500,
+−52, −638, 52, 638 and 1150 bytes, accounting for 87.6 \% of all Tor packets.''
 
-%\subsubsection{Markov Models}
+\subsubsection{Markov Models}
 
-%Hidden Markov Models (HMM) are a statistical modelling technique useful
-%for classification of systems with an unobservable state
-%\parencite{Rabiner:1990p1153}. HMMs are first used as a traffic analysis
-%technique in \citetitle{Wright:2004p3860} \parencite{Wright:2004p3860}. The
-%primary identification characteristics for use with this algorithm are packet
-%size and inter-packet arrival times. With refinement this algorithm is used
-%with increasing accuracy in \textcite{Wright:2006p322} and
-%\textcite{Dainotti:2008p1435}.
+Hidden Markov Models (HMM) are a statistical modelling technique useful
+for classification of systems with an unobservable state
+\parencite{Rabiner:1990p1153}. HMMs are first used as a traffic analysis
+technique in \citetitle{Wright:2004p3860} \parencite{Wright:2004p3860}. The
+primary identification characteristics for use with this algorithm are packet
+size and inter-packet arrival times. With refinement this algorithm is used
+with increasing accuracy in \textcite{Wright:2006p322} and
+\textcite{Dainotti:2008p1435}.
 
-%In \textcite{Bernaille:2005p6205} a spectral clustering algorithm is used to
-%discover distinguishing characteristics of traffic flows, rather than with a
-%specific set of classification goals. This information is used to build HMMs
-%for the purpose of traffic classification.
+In \textcite{Bernaille:2005p6205} a spectral clustering algorithm is used to
+discover distinguishing characteristics of traffic flows, rather than with a
+specific set of classification goals. This information is used to build HMMs
+for the purpose of traffic classification.
 
-%Since HMMs model particular behaviours, they can be used to recognize
-%deviations from normal behaviour as shown in
-%\textcite{EstevezTapiador:2003p7201}. Motivated by
-%\citeauthor{EstevezTapiador:2003p7201}, \textcite{Munz:2010p7085} uses TCP
-%flags and the position of individual packets in a stream to train an Observable
-%Markov Model for traffic classification, achieving greater classification
-%accuracy than \citeauthor{Bernaille:2005p6205}.
+Since HMMs model particular behaviours, they can be used to recognize
+deviations from normal behaviour as shown in
+\textcite{EstevezTapiador:2003p7201}. Motivated by
+\citeauthor{EstevezTapiador:2003p7201}, \textcite{Munz:2010p7085} uses TCP
+flags and the position of individual packets in a stream to train an Observable
+Markov Model for traffic classification, achieving greater classification
+accuracy than \citeauthor{Bernaille:2005p6205}.
 
-%\subsubsection{Clustering}
+\subsubsection{Clustering}
 
-%Clustering algorithms group observations into subsets based on similar
-%characteristics, they are a form of unsupervised learning technique designed to
-%discover organization in unlabelled data sets. They have been the basis of a
-%number of traffic classification techniques with the K-Means clustering
-%technique being the most prominent.  K-Means cluster analysis appears in
-%\textcite{Bernaille:2006p2366}, \textcite{Erman:2007p3764} and
-%\textcite{Erman:2007p6206}. The use of the Density Based Spatial Clustering of
-%Applications with Noise (DBSCAN) algorithm appears in
-%\textcite{Erman:2006p3766}, alongside K-Means and Autoscan algorithms.
+Clustering algorithms group observations into subsets based on similar
+characteristics, they are a form of unsupervised learning technique designed to
+discover organization in unlabelled data sets. They have been the basis of a
+number of traffic classification techniques with the K-Means clustering
+technique being the most prominent.  K-Means cluster analysis appears in
+\textcite{Bernaille:2006p2366}, \textcite{Erman:2007p3764} and
+\textcite{Erman:2007p6206}. The use of the Density Based Spatial Clustering of
+Applications with Noise (DBSCAN) algorithm appears in
+\textcite{Erman:2006p3766}, alongside K-Means and Autoscan algorithms.
 
-%\subsubsection{Other Techniques}
+\subsubsection{Other Techniques}
 
-%Other algorithms used for traffic classification include Nearest Neighbour and
-%Linear Discriminant Analysis \parencite{Roughan:2004p3823}, Normalized
-%Threshold \parencite{Crotti:2007p3824}. The use of the Gaussian Mixture Model
-%to identify applications and identities inside SSH tunnels was demonstrated in
-%\textcite{Dusi:2008p6254}. Several algorithms are compared in
-%\textcite{Alshammari:2009p7474}, finding the C4.5 algorithm the most accurate
-%for identifying Skype and SSH traffic.
+Other algorithms used for traffic classification include Nearest Neighbour and
+Linear Discriminant Analysis \parencite{Roughan:2004p3823}, Normalized
+Threshold \parencite{Crotti:2007p3824}. The use of the Gaussian Mixture Model
+to identify applications and identities inside SSH tunnels was demonstrated in
+\textcite{Dusi:2008p6254}. Several algorithms are compared in
+\textcite{Alshammari:2009p7474}, finding the C4.5 algorithm the most accurate
+for identifying Skype and SSH traffic.
 
-%\subsubsection{Comparing Techniques}
+\subsubsection{Comparing Techniques}
 
-%It is difficult to say what machine learning technique is the most effective as
-%no consensus has been reached, the literature covers a wide variety of
-%techniques each with vastly different goals and no two techniques can be
-%directly compared as the data used for analysis has not been disclosed
-%\parencite{Kim:2007p3867}. However some attempt has been made at comparison in
-%\textcite{Williams:2006p3849} which suggests that the C4.5 algorithm has the
-%greatest performance and accuracy when compared to a number of Bayesian
-%algorithms. \textcite{Mohd:2009p6484} compares thirty machine learning
-%algorithms  to find random tree, IBI, IBK and random forest algorithms
-%obtaining the greatest classification accuracy.
+It is difficult to say what machine learning technique is the most effective as
+no consensus has been reached, the literature covers a wide variety of
+techniques each with vastly different goals and no two techniques can be
+directly compared as the data used for analysis has not been disclosed
+\parencite{Kim:2007p3867}. However some attempt has been made at comparison in
+\textcite{Williams:2006p3849} which suggests that the C4.5 algorithm has the
+greatest performance and accuracy when compared to a number of Bayesian
+algorithms. \textcite{Mohd:2009p6484} compares thirty machine learning
+algorithms  to find random tree, IBI, IBK and random forest algorithms
+obtaining the greatest classification accuracy.
 
-%An excellent meta study on traffic analysis techniques is presented in
-%\textcite{Nguyen:2008p3837}. This paper compares many of the published papers,
-%the techniques used, criteria analysed and how effectively they meet stated
-%goals.
+An excellent meta study on traffic analysis techniques is presented in
+\textcite{Nguyen:2008p3837}. This paper compares many of the published papers,
+the techniques used, criteria analysed and how effectively they meet stated
+goals.
 
 \section{Research Questions}
 
