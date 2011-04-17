@@ -30,13 +30,18 @@
 #
 fileinfo	:= LaTeX Makefile
 author		:= Chris Monson
-version		:= 2.2.0-rc13
+version		:= 2.2.0-rc14
 #
+.DEFAULT_GOAL	:= all
 # Note that the user-global version is imported *after* the source directory,
 # so that you can use stuff like ?= to get proper override behavior.
 .PHONY: Makefile GNUmakefile Makefile.ini $(HOME)/.latex-makefile/Makefile.ini
 -include Makefile.ini
 -include $(HOME)/.latex-makefile/Makefile.ini
+# Better names for these things
+.PHONY: Variables.ini $(HOME)/.latex-makefile/Variables.ini
+-include Variables.ini
+-include $(HOME)/.latex-makefile/Variables.ini
 #
 # This can be pdflatex or latex - you can change this by adding the following line to your Makefile.ini:
 # BUILD_STRATEGY := latex
@@ -106,6 +111,12 @@ export LC_ALL		?= C
 #
 #
 # CHANGES:
+# Chris Monson (2011-04-06):
+# * Bumped version to 2.2.0-rc14
+# * Issue 121: Added Targets.ini and corresponding help text for it.
+# * Issue 121: Added Variables.ini (Makefile.ini still works, though).
+# * Issue 121: Added .DEFAULT_GOAL optional setting.
+# * Issue 120: xindy compatibility
 # Chris Monson (2011-03-16):
 # * Bumped version to 2.2.0-rc13
 # * Fixed a bug in kspewhich invocation - random characters and a missing pipe.
@@ -671,6 +682,7 @@ PDFLATEX	?= pdflatex
 XELATEX		?= xelatex
 EPSTOPDF	?= epstopdf
 MAKEINDEX	?= makeindex
+XINDY		?= xindy
 KPSEWHICH	?= kpsewhich
 GS		?= gs
 # = OPTIONAL PROGRAMS =
@@ -700,6 +712,10 @@ PSNUP		?= psnup
 VIEW_POSTSCRIPT	?= gv
 VIEW_PDF	?= xpdf
 VIEW_GRAPHICS	?= display
+
+# Xindy glossaries
+XINDYLANG	?= english
+XINDYENC	?= utf8
 
 # If cygpath is present, then we create a path-norm function that uses it,
 # otherwise the function is just a no-op.  Issue 112 has details.
@@ -1939,6 +1955,15 @@ $(SED) \
 '$1'
 endef
 
+# Colorize xindy errors
+# $(call colorize-xindy-errors,<log file>)
+define colorize-xindy-errors
+$(SED) \
+-e 's/^xindy:.*/$(C_ERROR)&$(C_RESET)/p' \
+-e 'd' \
+'$1'
+endef
+
 # Colorize epstopdf errors
 #
 # $(call colorize-epstopdf-errors,<log file>)
@@ -2143,6 +2168,18 @@ define run-makeindex
 success=1; \
 if ! $(MAKEINDEX) -q $1 -t $3 -o $2 $4 > /dev/null || $(EGREP) -q '^!!' $3; then \
 	$(call colorize-makeindex-errors,$3); \
+	$(RM) -f '$2'; \
+	success=0; \
+fi; \
+[ "$$success" = "1" ] && $(sh_true) || $(sh_false);
+endef
+
+
+# $(call run-xindy,<input>,<output>,<module>,<log>)
+define run-xindy
+success=1; \
+if ! $(XINDY) -q -o $2 -L $(XINDYLANG) -C $(XINDYENC) -I xindy -M $3 -t $4 $1 > /dev/null || $(EGREP) -q '^xindy:' $4; then \
+	$(call colorize-xindy-errors,$4); \
 	$(RM) -f '$2'; \
 	success=0; \
 fi; \
@@ -2714,6 +2751,11 @@ endif
 	$(QUIET)$(call echo-build,$<,$@)
 	$(QUIET)$(call run-makeindex,$<,$@,$*.glg,-s $*.ist)
 
+# Create a glossary file from a glossary input formatted for xindy
+%.gls:	%.glo %.tex %.xdy
+	$(QUIET)$(call echo-build,$<,$@)
+	$(QUIET)$(call run-xindy,$<,$@,$*,$*.glg)
+
 # Create the glossary file from a nomenclature file
 %.gls:	%.glo %.tex nomencl.ist
 	$(QUIET)$(call echo-build,$<,$@)
@@ -3193,7 +3235,7 @@ define help_text
 #
 # STANDARD AUXILIARY FILES:
 #
-#      Makefile.ini
+#      Variables.ini (formerly Makefile.ini, which still works)
 #
 #          This file can contain variable declarations that override various
 #          aspects of the makefile.  For example, one might specify
@@ -3211,26 +3253,25 @@ define help_text
 #          There are numerous variables in this file that can be overridden in
 #          this way.  Search for '?=' to find them all.
 #
-#          Also, you can put arbitrary targets into it if, for example, you
-#          want your source built from something else, e.g.:
+#          The Variables.ini is imported before *anything else* is done, so go
+#          wild with your ideas for changes to this makefile in there.  It
+#          makes it easy to test them before submitting patches.
+#
+#          If you're adding rules or targets, however, see Targets.ini below.
+#
+#      Targets.ini
+#
+#          This is included much later in the makefile, after all variables and
+#          targets are defined.  This is where you would put new make rules,
+#          e.g.,
 #
 #          generated.tex: generating_script.weird_lang depA depB
 #             ./generating_script.weird_lang > $$@
 #
-#          Note that if you are not careful, you can override the default
-#          target (what happens when you type "make" without arguments), so if
-#          you do use Makefile.ini, you probably want to start it with
-#          something like the following line:
-#
-#          default: all
-#
-#          Since the first target in any makefile is automatically the default,
-#          and the makefile already has a sensible "all" target, this will do
-#          what you want.
-#
-#          The Makefile.ini is imported before *anything else* is done, so go
-#          wild with your ideas for changes to this makefile in there.  It
-#          makes it easy to test them before submitting patches.
+#          In this file, you have access to all of the variables that the
+#          makefile creates, like $(onlysources.tex).  While accessing those can
+#          be somewhat brittle (they are implementation details and may change),
+#          it is a great way to test your ideas when submitting feature requests.
 #
 # STANDARD ENVIRONMENT VARIABLES:
 #
@@ -3834,5 +3875,10 @@ define output-dependency-graph
 		$(ECHO) "Cannot determine the name of this makefile."; \
 	fi
 endef
+#
+.PHONY: Targets.ini $(HOME)/.latex-makefile/Targets.ini
+-include Targets.ini
+-include $(HOME)/.latex-makefile/Targets.ini
+#
 # vim: noet sts=0 sw=8 ts=8
 
