@@ -7,10 +7,16 @@ random forest was able to classify HTTP over Tor with 93.7\% accuracy and a
 false positive rate of 3.7\%. HTTPS over Tor was more easily identified with a
 97.7\% accuracy and low false positive rate of 0.3\%.
 
+The table includes the true positive and false positive rate rate of each algorithm and
+include the area under the receiver operating characteristic (ROC) curve. The
+ROC is a tool used for evaluating the usefulness and comparing different
+matching algorithms and is often used to compare Internet traffic
+classification techniques \parencite{citeulike:167557,Nguyen:2008p3837}.
+
 \begin{table}[H]
   \begin{tabular}{lrrr}
     \toprule
-    & True Positive Rate & False Positive Rate & ROC \\
+    & True Positive Rate & False Positive Rate & ROC Area \\
     \midrule
     Random Forest\\
     \midrule
