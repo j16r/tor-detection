@@ -16,7 +16,7 @@ classification techniques \parencite{citeulike:167557,Nguyen:2008p3837}.
 \begin{table}[H]
   \begin{tabular}{lrrr}
     \toprule
-    & True Positive Rate & False Positive Rate & ROC Area \\
+    Algorithm & True Positive Rate & False Positive Rate & ROC Area \\
     \midrule
     Random Forest\\
     \midrule
@@ -61,26 +61,41 @@ a small fraction of the width and breadth of conditions available on a wider
 area network. The characteristics that allow for classification of Tor network
 may be masked by the natural variability introduced by a heterogeneous network.
 
+The real Tor network consists of over two hundred thousand computer systems,
+with over two thousand routers \parencite{TorStatus:2011fk}, all with different
+operating systems, different hardware, different configurations and available
+bandwidth. All the variables that were controlled for during this experiment
+are present in the real network, and may be amplified by it's greater size.
+Without further research it is difficult to say if the technique demonstrated
+here will apply in the wild.
+
 \section{Addressing Research Questions}
 
 \begin{enumerate*}
-  \item{Can the traffic be classified using automated matching techniques?}
+  \item{Can Tor traffic be distinguished from other network traffic that uses
+    similar or the same encryption and protocols?}
 
   Yes, the classification algorithms trialled were all able to identify Tor traffic
   with reasonable accuracy.
 
-  \item{Do these networks have characteristics that make them readily
-  distinguishable using heuristics based matching?}
+  \item{Can Tor traffic be identified using automated matching techniques?}
+
+  All the classification algorithms trialled were able to successfully classify
+  web browser traffic routed over the simulated Tor network, with the best
+  performing algorithm able to correctly classify 95\%.
+
+  The value of this level of accuracy depends on the application. Identifying
+  multiple regular connections to the Tor network may provide sufficient
+  confidence to classify a system as a Tor node. This could be combined with
+  other known properties of the Tor network to increase confidence.
+
+  \item{Does Tor traffic have characteristics that make it readily distinguishable using
+    heuristics based matching?}
 
   Insert answer here.
 
-  \item{Do they have characteristics that make them distinguishable using a
-  machine learning technique?}
-
-  Insert answer here.
-
-  \item{How long does a user have to be connected to the network before a
-  confident match can be made?}
+  \item{Does Tor traffic have characteristics that make it distinguishable using
+    machine learning techniques?}
 
   Insert answer here.
 
