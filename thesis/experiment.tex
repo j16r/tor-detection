@@ -13,7 +13,7 @@ described in the following chapter.
   Most modern network appliances used for routing, even those labelled as hubs,
   include switching capabilities, which means that packets routed are only
   delivered to the addressed host. This makes eavesdropping difficult. For
-  the purpose of this experiment a simple hub or repeater is required. A hub
+  the purpose of this experiment a Netgear DS106 dual speed hub was used. A hub
   does not examine packet delivery information, it simple broadcasts all packets
   received to every connected port, allowing for passive eavesdropping without
   complicated network configuration \parencite{website:hub-reference}.
@@ -25,7 +25,8 @@ described in the following chapter.
   available on most operating systems and supports a flexible filtering language
   for capturing only the specific packets desired. The format of output produced
   by tcpdump is well documented \parencite{:nx} which makes it ideal for
-  transformation and processing by third party tools.
+  transformation and processing by third party tools. Tcpdump version 4.0.0
+  combined with libpcap 1.0.0 was used for this experiment.
 
   \item Tor Software
 
@@ -47,6 +48,7 @@ described in the following chapter.
   isolated virtual environment on a host operating system \parencite{:fk}.
   It is free software and supports both snapshots and a remote control facility
   which make it useful for running a controlled experiment \parencite{Oracle:2011kx}.
+  VirtualBox version 3.2.6 r63112 was used in this experiment.
 
   \item Ruby Software
 
@@ -54,7 +56,32 @@ described in the following chapter.
   rapid prototyping and is supported by a large community that has developed
   powerful add on software in the form of Ruby Gems \parencite{:2010uq}. These
   Gems include support for the Selenium browser testing framework, process
-  monitoring, dynamic web content generation and automated testing.
+  monitoring, dynamic web content generation and automated testing. The Ruby
+  1.8.7 (2010-01-10 patchlevel 249) Ubuntu package was installed where Ruby was
+  required. The exact version of all gems used in the experiment are shown in
+  table \ref{table:gems}.
+
+  \begin{center}
+    \begin{minipage}[t]{\linewidth}
+      \begin{table}[H]
+        \begin{tabular}{llr}
+          \toprule
+          Gem name & Purpose & Version \\
+          \midrule
+          bundler & Application gem manager & 1.0.2 \\
+          daemon\_controller & Monitor and control daemon processes & 0.2.6 \\
+          rspec & Testing and control of selenium & 1.3.0 \\
+          selenium-client & Control browser using selenium and ruby & 1.2.18 \\
+          haml & A simple HTML like markup language & 3.0.21 \\
+          rack & Rack web serving framework & 1.2.1 \\
+          sinatra & Ruby web framework & 1.0 \\
+          \bottomrule
+        \end{tabular}
+        \caption{Ruby Gems}
+        \label{table:gems}
+      \end{table}
+    \end{minipage}
+  \end{center}
 
   \item Ubuntu Linux Software
 
@@ -62,7 +89,8 @@ described in the following chapter.
   available for desktop personal computers \parencite{:2010ly}. It comes
   packaged with the 'tcpdump' software and can be configured in a reliable and
   consistent way with typical set of POSIX tools and the 'apt-get' package
-  manager \parencite{Pereira:2011uq}.
+  manager \parencite{Pereira:2011uq}. Both the desktop and server editions were
+  used for this experiment, version 10.04 commonly referred to as lucid lynx.
 
   \item Selenium Software
 
@@ -71,7 +99,7 @@ described in the following chapter.
   can be controlled remotely using the Selenium Remote Control Server component,
   which in turn can be controlled with a number of programming languages including
   Ruby. Using Selenium the typical interactions a user makes when viewing a
-  website can be simulated.
+  website can be simulated. Selenium version 1.0.6 was used for this experiment.
 
   \item Firefox Software
 
@@ -79,7 +107,8 @@ described in the following chapter.
   available for most desktop personal computers \parencite{Foundation:2011fk}.
   It's strong standards compliance \parencite{Hammond:2010fk} and popularity
   \parencite{:2010kx,:2010vn} on the simulation platform make it an ideal
-  candidate for this experiment.
+  candidate for this experiment. The Ubuntu Firefox package was used in this
+  expriment, version 3.6.8.
 
   \item OpenSSH Software
 
@@ -87,27 +116,31 @@ described in the following chapter.
   \parencite{:2010zr,:ve} that supports remote command execution
   \parencite{Tucker:2010ly}. The client component of OpenSSH is installed by
   default on the Ubuntu operating system and the server component is easily
-  installed using the apt-get package management system.
+  installed using the apt-get package management system. The version used for
+  this experiment was OpenSSH\_5.3p1 Debian-3ubuntu4, OpenSSL 0.9.8k 25 Mar 2009.
 
   \item Apache Software
 
   The Apache web server is the most prevalent web server used on the Internet
   \parencite{2010:dq}. The Apache web server can serve static web content over
   both the HTTP and HTTPS protocols \parencite{Foundation:2011uq}. Combined with
-  software such as Sinatra it can serve dynamic web content.
+  software such as Sinatra it can serve dynamic web content. Apache version
+  2.2.14/Ubuntu was used to serve web sites in this experiment.
 
   \item Sinatra Software
 
   Sinatra is a simple framework for creating dynamic web applications using the
   Ruby programming language \parencite{:2010bh}. Sinatra requires very little
   configuration and development time to develop dynamic web applications.
+  Sinatra version 1.0 was used in this experiment.
 
   \item RSpec
 
   RSpec is a behaviour driven testing framework for Ruby which allows the
   creation of examples in an easy to read Domain Specific Language (DSL)
   \parencite{Chelimsky:2010vn}. It is well integrated with Selenium which makes
-  it ideal for running large suites of Selenium tests.
+  it ideal for running large suites of Selenium tests. RSpec version 1.3.0 was
+  used in this experiment.
 
 \end{enumerate}
 
