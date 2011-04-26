@@ -30,7 +30,7 @@
 #
 fileinfo	:= LaTeX Makefile
 author		:= Chris Monson
-version		:= 2.2.0-rc14
+version		:= 2.2.0
 #
 .DEFAULT_GOAL	:= all
 # Note that the user-global version is imported *after* the source directory,
@@ -111,6 +111,13 @@ export LC_ALL		?= C
 #
 #
 # CHANGES:
+# Chris Monson (2011-05-20):
+# * Bumped version to 2.2.0 (release!)
+# Chris Monson (2011-05-19):
+# * Bumped version to 2.2.0-rc15
+# * Issue 125: infinite recursion with nomenclature files
+# * Issue 125: removed .d as a target for .nls in get-log-index
+# * Cleaned up invocation of run-makeindex to take an optional .ist instead of flags.
 # Chris Monson (2011-04-06):
 # * Bumped version to 2.2.0-rc14
 # * Issue 121: Added Targets.ini and corresponding help text for it.
@@ -2163,10 +2170,11 @@ run-latex	= $(latex_build_program) -interaction=batchmode -file-line-error $(if 
 # $(call latex-color-log,<LaTeX stem>)
 latex-color-log	= $(color_tex) $1.log
 
-# $(call run-makeindex,<input>,<output>,<log>,<extra flags>)
+# $(call run-makeindex,<input>,<output>,<log>,[.ist style file])
 define run-makeindex
 success=1; \
-if ! $(MAKEINDEX) -q $1 -t $3 -o $2 $4 > /dev/null || $(EGREP) -q '^!!' $3; then \
+if ! $(MAKEINDEX) -q $1 -t $3 -o $2 $(if $4,-s $4,) > /dev/null || $(EGREP) -q '^!!' $3; \
+then \
 	$(call colorize-makeindex-errors,$3); \
 	$(RM) -f '$2'; \
 	success=0; \
@@ -2749,7 +2757,7 @@ endif
 # Create a glossary file from a .ist file
 %.gls:	%.glo %.tex %.ist
 	$(QUIET)$(call echo-build,$<,$@)
-	$(QUIET)$(call run-makeindex,$<,$@,$*.glg,-s $*.ist)
+	$(QUIET)$(call run-makeindex,$<,$@,$*.glg,$*.ist)
 
 # Create a glossary file from a glossary input formatted for xindy
 %.gls:	%.glo %.tex %.xdy
@@ -2759,12 +2767,12 @@ endif
 # Create the glossary file from a nomenclature file
 %.gls:	%.glo %.tex nomencl.ist
 	$(QUIET)$(call echo-build,$<,$@)
-	$(QUIET)$(call run-makeindex,$<,$@,$*.glg,-s nomencl.ist)
+	$(QUIET)$(call run-makeindex,$<,$@,$*.glg,nomencl.ist)
 
 # Create the nomenclature file
 %.nls:	%.nlo %.tex nomencl.ist
 	$(QUIET)$(call echo-build,$<,$@)
-	$(QUIET)$(call run-makeindex,$<,$@,$*.nlg,-s nomencl.ist)
+	$(QUIET)$(call run-makeindex,$<,$@,$*.nlg,nomencl.ist)
 
 # SCRIPTED LaTeX TARGETS
 #
@@ -2954,7 +2962,7 @@ endif
 	$(call get-missing-inputs,$*.log,$(addprefix $*.,aux aux.make d $(build_target_extension))) >> $*.d; \
 	$(ECHO) ".SECONDEXPANSION:" >> $*.d; \
 	$(call get-graphics,$*) >> $*.d; \
-	$(call get-log-index,$*,$(addprefix $*.,d aux aux.make)) >> $*.d; \
+	$(call get-log-index,$*,$(addprefix $*.,aux aux.make)) >> $*.d; \
 	$(call get-bibs,$*.aux.make,$(addprefix $*.,bbl aux aux.make)) >> $*.d; \
 	$(EGREP) -q "# MISSING" $*.d && $(SLEEP) 1 && $(RM) $*.pdf; \
 	$(call move-if-exists,$*.$(build_target_extension),$*.$(build_target_extension).1st.make); \
