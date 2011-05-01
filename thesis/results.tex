@@ -2,21 +2,30 @@
 
 \section{Results}
 
-The classification results are tabulated below. The best performing algorithm
-random forest was able to classify HTTP over Tor with 93.7\% accuracy and a
-false positive rate of 3.7\%. HTTPS over Tor was more easily identified with a
-97.7\% accuracy and low false positive rate of 0.3\%.
+Traffic classification algorithms are evaluated using a number of metrics, the
+primary of these being the true positive rate sometimes known as the detection
+rate (DR) and the false positive rate. A strong traffic classifier typically
+has a high true positive rate and a low false positive rate. In table
+\ref{table:results} the true positive rate indicates the percentage of
+individual sessions correctly classified as the listed protocol. The false
+positive rate indicates the percentage of sessions incorrectly labelled as the
+listed protocol. Included with these is the area under the receiver operating
+characteristic (ROC) curve. The ROC is a tool used for evaluating the
+usefulness and comparing different matching algorithms and is often used to
+compare Internet traffic classification techniques
+\parencite{citeulike:167557,Nguyen:2008p3837}.
 
-The table includes the true positive and false positive rate rate of each algorithm and
-include the area under the receiver operating characteristic (ROC) curve. The
-ROC is a tool used for evaluating the usefulness and comparing different
-matching algorithms and is often used to compare Internet traffic
-classification techniques \parencite{citeulike:167557,Nguyen:2008p3837}.
+All of the algorithms chosen were able to successfully classify HTTPS and HTTP
+over Tor traffic with accuracy in excess of 90\%, with the Adaboost algorithm
+unable to classify HTTPS over Tor. The best performing algorithm random forest
+was able to classify HTTP over Tor with 93.7\% accuracy and a false positive
+rate of 3.7\%. HTTPS over Tor was more easily identified with a 97.7\% accuracy
+and low false positive rate of 0.3\%.
 
 \begin{table}[H]
   \begin{tabular}{lrrr}
     \toprule
-    Algorithm & True Positive Rate & False Positive Rate & ROC Area \\
+    & True Positive Rate & False Positive Rate & ROC Area \\
     \midrule
     Random Forest\\
     \midrule
@@ -75,29 +84,27 @@ here will apply in the wild.
   \item{Can Tor traffic be distinguished from other network traffic that uses
     similar or the same encryption and protocols?}
 
-  Yes, the classification algorithms trialled were all able to identify Tor traffic
-  with reasonable accuracy.
+    Under the controlled conditions of the experiment demonstrated within this
+    thesis, comparing a sample of simulated encrypted network traffic produced
+    by a commonly used web browser versus the same traffic routed over a
+    demonstration Tor network, all the techniques used were able to classify
+    Tor traffic with a high level of accuracy.
 
   \item{Can Tor traffic be identified using automated matching techniques?}
 
-  All the classification algorithms trialled were able to successfully classify
-  web browser traffic routed over the simulated Tor network, with the best
-  performing algorithm able to correctly classify 95\%.
+    All the classification algorithms trialled were able to successfully classify
+    web browser traffic routed over the simulated Tor network, with the best
+    performing algorithm able to correctly classify 95\%.
 
-  The value of this level of accuracy depends on the application. Identifying
-  multiple regular connections to the Tor network may provide sufficient
-  confidence to classify a system as a Tor node. This could be combined with
-  other known properties of the Tor network to increase confidence.
+    The value of this level of accuracy depends on the application. Identifying
+    multiple regular connections to the Tor network may provide sufficient
+    confidence to classify a system as a Tor node. This could be combined with
+    other known properties of the Tor network to increase confidence.
 
   \item{Does Tor traffic have characteristics that make it readily distinguishable using
     heuristics based matching?}
 
-  Insert answer here.
 
-  \item{Does Tor traffic have characteristics that make it distinguishable using
-    machine learning techniques?}
-
-  Insert answer here.
 
 \end{enumerate*}
 
