@@ -60,6 +60,35 @@ and low false positive rate of 0.3\%.
   \label{table:results}
 \end{table}
 
+\section{Algorithms Used}
+
+A brief description of the machine learning algorithms utilized as well as the
+motivation for their inclusion is described below.
+
+\subsection{Random Forest}
+
+The random forest algorithm is a classifier that builds multiple decision trees
+with random sets of features. An input is processed by each tree, and the
+classification chosen is the one which is produced by most of the trees
+\parencite{Ho:1995vm}. For this experiment, the random forest algorithm
+generated 10 trees and used 6 random features.
+
+The random forest algorithm was chosen for its unparalleled accuracy and strong
+performance \parencite{Leo-Breiman:2004fk}.
+
+\subsection{j4.8}
+
+j4.8 is a free Java version of the C4.5 algorithm, a classifier which builds a
+decision tree using the concept of information entropy
+\parencite{Quinlan:1993:CPM:152181}. This algorithm was chosen because of it's
+successful use in earlier traffic classification publications.
+
+\subsection{Random Tree}
+
+\subsection{Adaboost}
+
+AdaBoost or Adaptive Boosting
+
 \chapter{Discussion of Results}
 
 \section{Limitations}
@@ -104,6 +133,11 @@ here will apply in the wild.
   \item{Does Tor traffic have characteristics that make it readily distinguishable using
     heuristics based matching?}
 
+    While each phase of the experiment was conducted over a similar time
+    period, the number of sessions captured differs greatly. This suggests that
+    the Tor network may introduce significant overhead to communications
+    streams. How this latency manifests itself will determine how useful it is
+    as an identifying characteristic.
 
 
 \end{enumerate*}
