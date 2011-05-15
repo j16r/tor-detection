@@ -44,6 +44,15 @@ described in the following chapter.
   for verification purposes in Weka. Version 3.6.4 of Weka was used for
   classification during this experiment.
 
+  \item netAI Software
+
+  netAI is capable of processing packet traces such as the one produced by
+  tcpdump, analysing flows and producing ARFF files containing every flow
+  identified as an individual instance \parencite{swinbut:2006fk}. Each instance
+  includes many attributes produced from statistical analysis of these flows
+  which are useful for traffic classification. An explanation of the statistics
+  gathered by netAI is included in table \ref{table:netmate-attributes}.
+
   \item VirtualBox Software
 
   VirtualBox software allows multiple guest operating systems to run in an
@@ -556,7 +565,7 @@ attributes produced by NetAI are shown in table \ref{table:netmate-attributes}.
 
   \newcounter{netAICounter}
   \newcommand{\netaicnt}[0]{\stepcounter{netAICounter}\arabic{netAICounter}}
-
+  
   \begin{tabular}{lll}
     \toprule
     Index & Attribute name & Description \\
