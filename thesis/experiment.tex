@@ -549,58 +549,62 @@ data.
 The data captured was in the form of 1MB capture files which were recombined
 with mergecap and processed by NetAI to produce ARFF format files for use by
 Weka. NetAI identifies flows inside the capture files and produces a number
-of statistics to be used as attributes for classification. The attributes
-produced by NetAI are shown in table \ref{table:netmate-attributes}.
+of statistics to be used as attributes for classification. The statistical
+attributes produced by NetAI are shown in table \ref{table:netmate-attributes}.
 
 \begin{table}[H]
+
+  \newcounter{netAICounter}
+  \newcommand{\netaicnt}[0]{\stepcounter{netAICounter}\arabic{netAICounter}}
+
   \begin{tabular}{lll}
     \toprule
-    Attribute name & Description \\
+    Index & Attribute name & Description \\
     \midrule
-    srcip & Source IP address \\
-    srcport & Source port \\
-    dstip & Destination IP address \\
-    dstport & Destination port \\
-    proto & Protocol (TCP, UDP) \\
-    total\_fpackets & Total forward packets \\
-    total\_fvolume & Total forward volume \\
-    total\_bpackets & Total backward packets \\
-    total\_bvolume & Total backward volume \\
-    min\_fpktl & Minimum forward packet length \\
-    mean\_fpktl & Mean forward packet length \\
-    max\_fpktl & Maximum forward packet length \\
-    std\_fpktl & Std. Deviation of forward packet length \\
-    min\_bpktl & Minmum backward packet length \\
-    mean\_bpktl & Mean backward packet length \\
-    max\_bpktl & Maximum backward packet length \\
-    std\_bpktl & Std. Deviation of backward packet length \\
-    min\_fiat & Minimum forward inter arrival time \\
-    mean\_fiat & Mean forward inter arrival time \\
-    max\_fiat & Maximum forward inter arrival time \\
-    std\_fiat & Std. Deviation of forward inter arrival time \\
-    min\_biat & Minimum backward inter arrival time \\
-    mean\_biat & Mean backward inter arrival time \\
-    max\_biat & Maximum backward inter arrival time \\
-    std\_biat & Std. Devation of backward inter arrival time \\
-    duration & Session duration \\
-    min\_active & Minimum active \\
-    mean\_active & Mean active \\
-    max\_active & Maximum active \\
-    std\_active & Std. Deviation active \\
-    min\_idle & Minimum idle \\
-    mean\_idle & Mean idle \\
-    max\_idle & Maximum idle \\
-    std\_idle & Std. Deviation of idle \\
-    sflow\_fpackets & Sub flow forward packets \\
-    sflow\_fbytes & Sub flow forward bytes \\
-    sflow\_bpackets & Sub flow backward packets \\
-    sflow\_bbytes & Sub flow backward bytes \\
-    fpsh\_cnt & Forward push counter \\
-    bpsh\_cnt & Backward push counter \\
-    furg\_cnt & Forward urgent counter \\
-    burg\_cnt & Backward urgent counter \\
-    total\_fhlen & Total forward header length \\
-    total\_bhlen & Total backward header length \\
+    %\netaicnt & srcip & Source IP address \\
+    %\netaicnt & srcport & Source port \\
+    %\netaicnt & dstip & Destination IP address \\
+    %\netaicnt & dstport & Destination port \\
+    %\netaicnt & proto & Protocol (TCP, UDP) \\
+    \netaicnt & total\_fpackets & Total forward packets \\
+    \netaicnt & total\_fvolume & Total forward volume \\
+    \netaicnt & total\_bpackets & Total backward packets \\
+    \netaicnt & total\_bvolume & Total backward volume \\
+    \netaicnt & min\_fpktl & Minimum forward packet length \\
+    \netaicnt & mean\_fpktl & Mean forward packet length \\
+    \netaicnt & max\_fpktl & Maximum forward packet length \\
+    \netaicnt & std\_fpktl & Std. Deviation of forward packet length \\
+    \netaicnt & min\_bpktl & Minmum backward packet length \\
+    \netaicnt & mean\_bpktl & Mean backward packet length \\
+    \netaicnt & max\_bpktl & Maximum backward packet length \\
+    \netaicnt & std\_bpktl & Std. Deviation of backward packet length \\
+    \netaicnt & min\_fiat & Minimum forward inter arrival time \\
+    \netaicnt & mean\_fiat & Mean forward inter arrival time \\
+    \netaicnt & max\_fiat & Maximum forward inter arrival time \\
+    \netaicnt & std\_fiat & Std. Deviation of forward inter arrival time \\
+    \netaicnt & min\_biat & Minimum backward inter arrival time \\
+    \netaicnt & mean\_biat & Mean backward inter arrival time \\
+    \netaicnt & max\_biat & Maximum backward inter arrival time \\
+    \netaicnt & std\_biat & Std. Devation of backward inter arrival time \\
+    \netaicnt & duration & Session duration \\
+    \netaicnt & min\_active & Minimum active \\
+    \netaicnt & mean\_active & Mean active \\
+    \netaicnt & max\_active & Maximum active \\
+    \netaicnt & std\_active & Std. Deviation active \\
+    \netaicnt & min\_idle & Minimum idle \\
+    \netaicnt & mean\_idle & Mean idle \\
+    \netaicnt & max\_idle & Maximum idle \\
+    \netaicnt & std\_idle & Std. Deviation of idle \\
+    \netaicnt & sflow\_fpackets & Sub flow forward packets \\
+    \netaicnt & sflow\_fbytes & Sub flow forward bytes \\
+    \netaicnt & sflow\_bpackets & Sub flow backward packets \\
+    \netaicnt & sflow\_bbytes & Sub flow backward bytes \\
+    \netaicnt & fpsh\_cnt & Forward push counter \\
+    \netaicnt & bpsh\_cnt & Backward push counter \\
+    \netaicnt & furg\_cnt & Forward urgent counter \\
+    \netaicnt & burg\_cnt & Backward urgent counter \\
+    \netaicnt & total\_fhlen & Total forward header length \\
+    \netaicnt & total\_bhlen & Total backward header length \\
     \bottomrule
     \label{table:netmate-attributes}
   \end{tabular}
