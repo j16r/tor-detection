@@ -169,10 +169,10 @@ These statistics don't suggest much, the minimum size and 1st quartile
 represent the presence of empty packets typically sent to create and destroy
 connections as well as acknowledge received data. The 3rd quartile and maximum
 sizes represent the maximum transmission unit for the Ethernet specification
-(TODO: ref). Only the median and mean statistics suggest any difference, with
-Tor traffic showing a possible preference for slightly smaller packets.
-Representing each phase as a histogram however, shows a very clear distinction
-between regular and Tor traffic.
+\parencite{Postel:1988fk}. Only the median and mean statistics suggest any
+difference, with Tor traffic showing a possible preference for slightly smaller
+packets.  Representing each phase as a histogram however, shows a very clear
+distinction between regular and Tor traffic.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\linewidth]{https_hist}
@@ -207,6 +207,93 @@ count for each phase is shown in table \ref{table:packet_size_summary}.
   \end{tabular}
   \caption{Summary of packet sizes}
   \label{table:packet_size_summary}
+\end{table}
+
+Investigating more closely, by examining individual packet traces some
+significant patterns begin to appear. Table \ref{table:packet_sizes} shows the
+packet sizes seen for the first 10 packets of a 1\% sample of sessions in each
+phase of data captured. The first few packets contain 0 bytes of data, these
+are the typical SYN, SYN/ACK and ACK flagged packets that are used to initiate
+a TCP/IP connection. Following that only two packet sizes are seen for HTTP
+connections 100 and 110. For Tor sessions a range of packet sizes from 131 to
+152. This knowledge can be used to build a very rudimentary classification
+algorithm to identify Tor traffic, as seen in the pseudo-code below:
+
+\begin{lstlisting}[language=ruby]
+if packet[3] > 130 && packet[3] <  153 && packet[5] > 913 && packet[5] < 937
+  is_tor = true
+else
+  is_tor = false
+end
+\end{lstlisting}
+
+Applying this algorithm to a 10\% sample of each of the packet traces yields
+the results as seen in table \ref{table:heuristic-results}.
+
+\begin{table}[H]
+  \begin{tabular}{lr}
+    \toprule
+    Protocol & Identified as Tor\\
+    \midrule
+    HTTPS & 0.0000\% \\
+    HTTP over Tor & 0.9903\% \\
+    HTTPS over Tor & 0.9826\% \\
+    \bottomrule
+  \end{tabular}
+  \caption{Results}
+  \label{table:heuristic-results}
+\end{table}
+
+\begin{table}[H]
+  \begin{tabular}{lp{14cm}}
+    \toprule
+    Index in Stream & Observed Packet Sizes\\
+    \midrule
+    HTTPS\\
+    \midrule
+    0 & 0\\
+    1 & 0\\
+    2 & 0\\
+    3 & 100, 110\\
+    4 & 0\\
+    5 & 122, 516\\
+    6 & 0\\
+    7 & 6, 139\\
+    8 & 0, 6, 37\\
+    9 & 0, 37, 459, 465, 471, 514, 515\\
+    10 & 0, 37, 417, 418, 419, 429, 436, 438, 439, 447, 448, 449, 454, 459, 463, 464, 465, 466, 470, 471, 486, 497, 499, 512, 513, 514, 523\\
+    \midrule
+    HTTP Over Tor\\
+    \midrule
+    0 & 0\\
+    1 & 0\\
+    2 & 0\\
+    3 & 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152\\
+    4 & 0\\
+    5 & 915, 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929, 930, 931, 932, 933, 934\\
+    6 & 0\\
+    7 & 198\\
+    8 & 0, 250, 266\\
+    9 & 0, 250, 266, 293, 309, 325\\
+    10 & 0, 293, 309, 325, 1448\\
+    \midrule
+    HTTPS Over Tor\\
+    \midrule
+    0 & 0\\
+    1 & 0\\
+    2 & 0\\
+    3 & 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 144, 145, 146, 147, 148, 149, 150, 151, 152\\
+    4 & 0\\
+    5 & 914, 915, 916, 918, 919, 920, 921, 922, 923, 925, 926, 927, 928, 929, 930, 932, 934, 935, 936\\
+    6 & 0\\
+    7 & 197, 198\\
+    8 & 0, 250, 266\\
+    9 & 0, 250, 266, 293, 309, 325\\
+    10 & 0, 293, 309, 325, 1448\\
+    \bottomrule
+  \end{tabular}
+  \caption{Packet sizes}
+  \label{table:packet_sizes}
 \end{table}
 
 \section{Possible Implications of Results}
