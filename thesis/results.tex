@@ -148,6 +148,67 @@ the Tor network may introduce significant overhead to communications
 streams. How this latency manifests itself will determine how useful it is
 as an identifying characteristic.
 
+Examining all of the data sets, we find the following statistics of packet
+sizes:
+
+\begin{table}[H]
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    Phase & Minimum & 1st Quartile & Median & Mean & 3rd Quartile & Max \\
+    \midrule
+    1 & 66 & 66 & 699 & 860.4 & 1514 & 1514\\
+    2 & 66 & 66 & 652 & 760.3 & 1514 & 1514\\
+    3 & 66 & 66 & 652 & 733.7 & 1514 & 1514\\
+    \bottomrule
+  \end{tabular}
+  \caption{Summary of packet sizes}
+  \label{table:packet_size_summary}
+\end{table}
+
+These statistics don't suggest much, the minimum size and 1st quartile
+represent the presence of empty packets typically sent to create and destroy
+connections as well as acknowledge received data. The 3rd quartile and maximum
+sizes represent the maximum transmission unit for the Ethernet specification
+(TODO: ref). Only the median and mean statistics suggest any difference, with
+Tor traffic showing a possible preference for slightly smaller packets.
+Representing each phase as a histogram however, shows a very clear distinction
+between regular and Tor traffic.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=\linewidth]{https_hist}
+  \caption{Histogram of packet size for HTTPS traffic}
+  \label{https_hist}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=\linewidth]{http_tor_hist}
+  \caption{Histogram of packet size for HTTP traffic over Tor}
+  \label{http_tor_hist}
+\end{figure}
+
+\begin{figure}[H]
+  \centering\includegraphics[width=\linewidth]{https_tor_hist}
+  \caption{Histogram of packet size for HTTPS traffic over Tor}
+  \label{https_tor_hist}
+\end{figure}
+
+In fact, the peaks seen in each graph represent individual packet sizes, the
+count for each phase is shown in table \ref{table:packet_size_summary}.
+
+\begin{table}[H]
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    Size & HTTPS & HTTP over Tor & HTTPS over Tor \\
+    \midrule
+    1514 & 5,158,795 & 4,753,794 & 2,245,490\\
+    652 & 347,365 & 4,452,695 & 3,082,768\\
+    66 & 2,954,910 & 4,536,500 & 2,295,206\\
+    \bottomrule
+  \end{tabular}
+  \caption{Summary of packet sizes}
+  \label{table:packet_size_summary}
+\end{table}
+
 \section{Possible Implications of Results}
 
 The research results suggest that the strategies used by anonymous networks to
@@ -167,7 +228,6 @@ Stronger anonymity providing networks utilize more sophisticated techniques to
 hide individual identities such as batching, queuing and normalization. While
 they may be more resistant to identity uncovering attacks, this may also make
 them more easily identifiable by classification techniques.
-
 
 \chapter{Conclusion}
 
