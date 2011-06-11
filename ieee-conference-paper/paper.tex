@@ -1,0 +1,197 @@
+% IEEE Conference paper document class
+\documentclass[conference]{IEEEtran}
+
+% Use hyperlinks for convenience, but let's not make them coloured
+\RequirePackage[bookmarks,colorlinks,breaklinks]{hyperref}
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
+
+% Use biblatex with IEEE style
+\RequirePackage[american]{babel}
+\RequirePackage{csquotes}
+
+% Use the excellent biblatex package with apa style
+% minnames=1,maxnames=2 - abbreviates all author names in citations
+% hyperref - links in pdf
+\RequirePackage[
+  backend=biber,
+  url = false,
+  hyperref = true,
+  style = ieee,
+  minnames = 1,
+  maxnames = 2,
+  bibencoding = utf8]{biblatex}
+\DeclareLanguageMapping{american}{american-apa}
+\DefineBibliographyStrings{american}{% adapt language
+  page = {{}p\adddot},
+  pages = {{}pp\adddot},
+}
+
+% Bibliography
+\bibliography{fullrefs}
+
+\begin{document}
+
+\title{Using traffic analysis to identify The Second Generation Onion Router}
+
+\author{
+  \IEEEauthorblockN{John Barker}
+  \IEEEauthorblockA{
+  School of Computer and\\Security Science\\
+  Edith Cowan University\\
+  Mt Lawley, Western Australia\\
+  Email: john.barker@our.ecu.edu.au}
+  \and
+  \IEEEauthorblockN{Peter Hannay}
+  \IEEEauthorblockA{
+  School of Computer and\\Security Science\\
+  Edith Cowan University\\
+  Mt Lawley, Western Australia\\
+  Email: p.hannay@ecu.edu.au\\
+  Telephone: (08) 9370 6374}
+  \and
+  \IEEEauthorblockN{Patryk Szewczyk}
+  \IEEEauthorblockA{
+  School of Computer and\\Security Science\\
+  Edith Cowan University\\
+  Mt Lawley, Western Australia\\
+  Email: p.szewczyk@ecu.edu.au\\
+  Telephone: (08) 9370 6979\\
+  Fax: (08) 9370 6100}
+}
+
+\maketitle
+
+\begin{abstract}
+Anonymous networks provide security for users by obfuscating messages with
+encryption and hiding communications amongst cover traffic provided by other
+network participants. The traditional goal of academic research into these
+networks has been attacks that aim to uncover the identity of network users.
+But the success of an anonymous network relies not only on it's technical
+capabilities, but on adoption by a large enough user base to provide adequate
+cover traffic. If anonymous network nodes can be identified, the users
+can be harassed, discouraging participation. Tor is an example of widely used
+anonymous network which uses a form of Onion Routing to provide low latency
+anonymous communications. This thesis demonstrates that traffic from a simulated
+Tor network can be distinguished from regular encrypted traffic, suggesting that
+real world Tor users may be vulnerable to the same analysis.
+\end{abstract}
+
+\section{Introduction}
+
+The first anonymous digital network, commonly known as MixNet was proposed by
+\citeauthor{Chaum:1981p296} in \citetitle{Chaum:1981p296}
+\parencite{Chaum:1981p296}. This paper introduced a concept integral to many
+future anonymity providing designs, an intermediate system responsible for
+delivering messages without the identifying details of correspondents. The
+intermediate system, referred to as a 'mix' also employed public key
+cryptography to ensure that eavesdroppers could not obtain delivery information.
+
+This seminal paper spurred research into new techniques for providing anonymity
+and privacy for digital networks. One of these, The Second Generation Onion
+Router (Tor) is based on technology originally designed by the U.S. Naval
+Research Lab in 1996 \parencite{Goldschlag:1996wy} and enjoys some measure of
+popularity, with an average of two hundred thousand active users as of March
+2011 \parencite{The-Tor-Project-Inc.:2011fk}.
+
+\section{The Second Generation Onion Router (Tor)}
+
+Like a mix, messages sent over an onion routing network were encrypted with
+their routing information and delivered to an intermediate server for forward
+delivery.  Unlike the mix however, messages delivered using the onion routing
+network were encrypted multiple times, each 'layer' using a different key and
+routing instructions. The first node in a chain would only be able to encrypt
+the routing instructions to deliver the message to the next node. Each node in
+the sequence decrypting a layer until the complete message is decrypted and
+transmitted to the destination.
+
+Traffic enters the Tor network through an onion proxy which accepts TCP streams.
+Some identifying features are scrubbed from the data using application filters
+before the data is relayed over the network through TLS \parencite{website:TLS}
+encrypted connections. The intermediate nodes responsible for routing messages
+are known as relays and are typically chained together to construct a circuit.
+When traffic leaves the Tor network it is delivered by a special kind of relay
+known as an exit node. At an exit node the data is transmitted in the original
+format it was supplied to at the onion proxy.
+
+The onion proxy builds circuits incrementally, first obtaining a session key
+from each successive relay in a circuit. Once all session keys for a circuit
+have been obtained, the message is broken into fixed sized cells of 512 bytes
+and iteratively encrypted using the session key of each node in the circuit in
+the reverse order that the data traverses the network. Cells come in two forms:
+control cells and relay cells. Control cells are used to create and maintain
+circuits, while relay cells contain commands for circuit maintenance and
+additional data for verifying message integrity and identifying streams.
+
+When the first node in the circuit receives a cell, it removes a layer by
+decrypting the message using it's session key. The cell is delivered along the
+circuit and at each node a layer is removed until the cell is completely
+decrypted and can be delivered successfully. Since circuits can take some time
+to build, they are pre-emptively created at regular intervals
+
+\section{Weaknesses and Attacks}
+
+When designing a system such as Tor, a number of trade-offs have to be made
+between the strength of the security provided and the convenience and
+performance of the system. The Tor designers consciously prioritized low
+latency, usability and flexibility against security goals such as security
+against end to end attacks \parencite[4]{Dingledine:2004p314}. These design
+decisions mean that Tor is vulnerable to several kinds of attacks, some of them
+expected and some not.
+
+A well known attack involves sniffing traffic that leaves exit nodes to
+capture private information \parencite{website:tor-password-leak}. Many users
+assume that Tor provides end to end encryption, and transmit private information
+over the Tor network.
+
+Most conventional attacks against secure networks are known as traffic analysis,
+this is the process of examining information about the communications rather
+than the information contained within them. This information may include the
+size of messages communicated, their frequency and timing. Many researchers have
+proposed traffic analysis techniques that allow attackers to reveal the
+identities of Tor users.
+
+Technologies such as Javascript and Flash can be embedded in web pages accessed
+by Tor users, and have control over network resources. By injecting network
+traffic with certain patterns alongside regular network traffic, Tor users can
+be identified \parencite{Abbott:2007p298}.
+
+Tor bridges, intended as a way to get censored users access to Tor are easily
+identified. They are also vulnerable to clogging attacks which make bridge
+operators more easily identified \textcite{McLachlan:2009p197}.
+
+\textcite{Murdoch:2005p325} proposes a technique to identify users by estimating
+the latency of individual Tor nodes using a hostile Tor node. The hostile Tor
+node is able to send data to users using a predictable traffic pattern and
+identify this pattern as it is repeated through the network, correlating streams
+back to individuals.
+
+This attack was shown to be impractical as the Tor network grew in size, with
+the increased number of users adding enough congestion to mask the introduced
+identifying patterns \parencite{Evans:2009p315}. However a weakness in the Tor
+design meant that particularly configured hostile nodes could amplify the
+deliberately introduced congestion to make individuals identifiable on the
+larger network.
+
+\section{Significance}
+
+While Tor has been the subject of much academic literature, the primary
+objective of researchers has historically been the attempt to reveal participant
+identities \parencite[3]{Murdoch:2005p325}.  Many attack techniques proposed
+have been somewhat academic in nature and not necessarily feasible in practice
+\parencite{Raccoon:2008fk}. Sometimes they require compromise of large parts of
+the Tor network, supplying hostile data to Tor users or complicated knowledge of
+usage patterns and an excess of patience. The technique demonstrated in this
+thesis is a low cost technique, which does not require very sophisticated
+equipment and can be completed by a passive observer.
+
+\parencite[5]{Dingledine:2004p314}.
+
+\printbibliography
+
+\end{document}
