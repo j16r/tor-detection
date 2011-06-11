@@ -1,0 +1,29 @@
+\begin{table}[H]
+  \begin{tabular*}{\linewidth}{lrrr}
+    \toprule
+    & True Positive Rate & False Positive Rate & ROC Area \\
+    \midrule
+    \multicolumn{3}{l}{Random Forest}\\
+    \midrule
+    HTTPS & 0.957 & 0.036 & 0.99\\
+    HTTP over Tor & 0.937 & 0.037 & 0.986\\
+    HTTPS over Tor & 0.977 & 0.003 & 0.999\\
+    Weighted Avg. & 0.954 & 0.03 & 0.99\\
+    \midrule
+    \multicolumn{3}{l}{j4.8 With 10 fold cross validation}\\
+    \midrule
+    HTTPS & 0.951 & 0.04 & 0.989\\
+    HTTP over Tor & 0.978 & 0.043 & 0.98\\
+    HTTPS over Tor & 0.97 & 0.007 & 0.992\\
+    Weighted Avg. & 0.964 & 0.018 & 0.986\\
+    \midrule
+    \multicolumn{3}{l}{Adaboost}\\
+    \midrule
+    HTTPS & 0.95 & 0.001 & 0.975\\
+    HTTP over Tor & 0.999 & 0.324 & 0.838\\
+    HTTPS over Tor & 0 & 0 & 0.777\\
+    Weighted Avg. & 0.785 & 0.109 & 0.891\\
+    \bottomrule
+  \end{tabular*}
+  \caption{Results} \label{table:results}
+\end{table}

@@ -22,36 +22,7 @@ was able to classify HTTP over Tor with 93.7\% accuracy and a false positive
 rate of 3.7\%. HTTPS over Tor was more easily identified with a 97.7\% accuracy
 and low false positive rate of 0.3\%.
 
-\begin{table}[H]
-  \begin{tabular}{lrrr}
-    \toprule
-    & True Positive Rate & False Positive Rate & ROC Area \\
-    \midrule
-    Random Forest\\
-    \midrule
-    HTTPS & 0.957 & 0.036 & 0.99\\
-    HTTP over Tor & 0.937 & 0.037 & 0.986\\
-    HTTPS over Tor & 0.977 & 0.003 & 0.999\\
-    Weighted Avg. & 0.954 & 0.03 & 0.99\\
-    \midrule
-    j4.8 With 10 fold cross validation\\
-    \midrule
-    HTTPS & 0.951 & 0.04 & 0.989\\
-    HTTP over Tor & 0.978 & 0.043 & 0.98\\
-    HTTPS over Tor & 0.97 & 0.007 & 0.992\\
-    Weighted Avg. & 0.964 & 0.018 & 0.986\\
-    \midrule
-    Adaboost\\
-    \midrule
-    HTTPS & 0.95 & 0.001 & 0.975\\
-    HTTP over Tor & 0.999 & 0.324 & 0.838\\
-    HTTPS over Tor & 0 & 0 & 0.777\\
-    Weighted Avg. & 0.785 & 0.109 & 0.891\\
-    \bottomrule
-  \end{tabular}
-  \caption{Results}
-  \label{table:results}
-\end{table}
+\input weka-automated-results.tex
 
 \section{Algorithms Used}
 
@@ -148,8 +119,7 @@ the Tor network may introduce significant overhead to communications
 streams. How this latency manifests itself will determine how useful it is
 as an identifying characteristic.
 
-Examining all of the data sets, we find the following statistics of packet
-sizes:
+Examining all of the data sets, the following set of statistics are obtained:
 
 \begin{table}[H]
   \begin{tabular}{lrrrrrr}
@@ -244,57 +214,7 @@ the results as seen in table \ref{table:heuristic-results}.
   \label{table:heuristic-results}
 \end{table}
 
-\begin{table}[H]
-  \begin{tabular}{lp{14cm}}
-    \toprule
-    Index in Stream & Observed Packet Sizes\\
-    \midrule
-    HTTPS\\
-    \midrule
-    0 & 0\\
-    1 & 0\\
-    2 & 0\\
-    3 & 100, 110\\
-    4 & 0\\
-    5 & 122, 516\\
-    6 & 0\\
-    7 & 6, 139\\
-    8 & 0, 6, 37\\
-    9 & 0, 37, 459, 465, 471, 514, 515\\
-    10 & 0, 37, 417, 418, 419, 429, 436, 438, 439, 447, 448, 449, 454, 459, 463, 464, 465, 466, 470, 471, 486, 497, 499, 512, 513, 514, 523\\
-    \midrule
-    HTTP Over Tor\\
-    \midrule
-    0 & 0\\
-    1 & 0\\
-    2 & 0\\
-    3 & 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152\\
-    4 & 0\\
-    5 & 915, 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929, 930, 931, 932, 933, 934\\
-    6 & 0\\
-    7 & 198\\
-    8 & 0, 250, 266\\
-    9 & 0, 250, 266, 293, 309, 325\\
-    10 & 0, 293, 309, 325, 1448\\
-    \midrule
-    HTTPS Over Tor\\
-    \midrule
-    0 & 0\\
-    1 & 0\\
-    2 & 0\\
-    3 & 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 144, 145, 146, 147, 148, 149, 150, 151, 152\\
-    4 & 0\\
-    5 & 914, 915, 916, 918, 919, 920, 921, 922, 923, 925, 926, 927, 928, 929, 930, 932, 934, 935, 936\\
-    6 & 0\\
-    7 & 197, 198\\
-    8 & 0, 250, 266\\
-    9 & 0, 250, 266, 293, 309, 325\\
-    10 & 0, 293, 309, 325, 1448\\
-    \bottomrule
-  \end{tabular}
-  \caption{Packet sizes}
-  \label{table:packet_sizes}
-\end{table}
+\input{session-packet-sizes.tex}
 
 \section{Possible Implications of Results}
 
