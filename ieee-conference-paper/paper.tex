@@ -1,6 +1,22 @@
 % IEEE Conference paper document class
 \documentclass[conference]{IEEEtran}
 
+% code listings
+\RequirePackage{listings}
+\lstset{
+  basicstyle=\ttfamily,
+  xleftmargin=36pt,
+  xrightmargin=12pt,
+  numberstyle=\tiny,              % the size of the fonts that are used for the line-numbers
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  showstringspaces=false,         % don't show spaces in strings as little _ style characters
+}
+
 % For wrapping text in tables
 \usepackage{array}
 
@@ -215,8 +231,12 @@ obtaining the greatest classification accuracy.
 
 \section{Experiment}
 
-
-\section{Results}
+To determine if Tor traffic can be distinguished from regular encrypted
+traffic, an experiment was conducted to generate a series of traces for
+comparison. HTTPS traffic was generated using the commonly available Firefox
+browser, with a series of typical user interactions simulated with the Selenium
+browser testing framework. The same simulations were run through a simulated
+Tor network using both the HTTP and HTTPS protocol.
 
 The experiment was run over the course of 8 weeks yielding three sets of sample
 data.
@@ -233,6 +253,9 @@ data.
   \end{tabular*}
   \caption{Captured Data} \label{table:datasets}
 \end{table}
+
+
+\section{Results}
 
 All of the algorithms chosen were able to successfully classify HTTPS and HTTP
 over Tor traffic with accuracy in excess of 90\%, with the Adaboost algorithm
@@ -264,9 +287,42 @@ pattern becomes very apparent.
   \label{https_tor_hist}
 \end{figure}
 
-In fact, if i
+Investigating more closely, by examining individual packet traces some
+significant patterns begin to appear. Table \ref{table:packet_sizes} shows the
+packet sizes seen for the first 10 packets of a 1\% sample of sessions in each
+phase of data captured. The first few packets contain 0 bytes of data, these
+are the typical SYN, SYN/ACK and ACK flagged packets that are used to initiate
+a TCP/IP connection. Following that only two packet sizes are seen for HTTP
+connections 100 and 110. For Tor sessions a range of packet sizes from 131 to
+152. This knowledge can be used to build a very rudimentary classification
+algorithm to identify Tor traffic, as seen in the pseudo-code below:
 
 \input{../thesis/session-packet-sizes.tex}
+
+\begin{lstlisting}[language=ruby]
+if packet[3] > 130 && packet[3] <  153 && packet[5] > 913 && packet[5] < 937
+  is_tor = true
+else
+  is_tor = false
+end
+\end{lstlisting}
+
+Applying this algorithm to a 10\% sample of each of the packet traces yields
+the results as seen in table \ref{table:heuristic-results}.
+
+\begin{table}[H]
+  \begin{tabular*}{\linewidth}{lr}
+    \toprule
+    Protocol & Identified as Tor\\
+    \midrule
+    HTTPS & 0.0000\% \\
+    HTTP over Tor & 0.9903\% \\
+    HTTPS over Tor & 0.9826\% \\
+    \bottomrule
+  \end{tabular*}
+  \caption{Results}
+  \label{table:heuristic-results}
+\end{table}
 
 \section{Conclusion}
 
