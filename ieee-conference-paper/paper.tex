@@ -222,13 +222,25 @@ obtaining the greatest classification accuracy.
 
 To determine if Tor traffic can be distinguished from regular encrypted
 traffic, an experiment was conducted to generate a series of traces for
-comparison. HTTPS traffic was generated using the commonly available Firefox
-browser, with a series of typical user interactions simulated with the Selenium
-browser testing framework. The same simulations were run through a simulated
-Tor network using both the HTTP and HTTPS protocol.
+comparison. Network traffic was generated using the commonly available Firefox
+browser, version 3.6.8 installed on an Ubuntu 10.04 desktop operating system.
+One hundred and seventy simulations were run of varied user interactions
+against a sample of thirty websites, using version 1.0.6 of the Selenium
+Browser testing framework. A private Tor network was configured running three
+directory servers and fifteen relays, with version 0.2.1.26.
 
-The experiment was run over the course of 8 weeks yielding three sets of sample
-data:
+The experiment consisted of three phases, the first was the capture of regular
+HTTPS traffic which began Sunday the 3rd of October 2010 and finished Sunday
+the 17th that same month. Phase two began immediately after and continued two
+weeks till the 31st of October. This phase involved capturing regular HTTP
+traffic routed through a private Tor network. The final phase began on the 7th
+of November and concluded on the 21st, this phase was the capture of HTTPS
+traffic through a private Tor network. 
+
+To reduce the affect of confounding variables, all phases conducted the same
+simulations, on an isolated test network and were conducted within a virtual
+machine snapshot which was periodically rolled back to a clean, known state.
+The experiment yielded three sets of sample data:
 
 \begin{table}[H]
   \begin{tabular*}{\linewidth}{lrrr}
