@@ -155,11 +155,11 @@ additional data for verifying message integrity and identifying streams.
 
 When designing a system such as Tor, a number of trade-offs have to be made
 between the strength of the security provided and the convenience and
-performance of the system. The Tor designers consciously prioritized low
-latency, usability and flexibility against security goals such as security
-against end to end attacks \parencite[4]{Dingledine:2004p314}. These design
-decisions mean that Tor is vulnerable to several kinds of attacks, some of them
-expected and some not.
+performance of the system. Tor designers consciously prioritized low latency,
+usability and flexibility against security goals such as security against end
+to end attacks \parencite[4]{Dingledine:2004p314}. This means that by design,
+Tor is vulnerable to a global passive adversary, however there are some attacks
+that were not expected by the designers.
 
 A well known attack involves sniffing traffic that leaves exit nodes to
 capture private information \parencite{website:tor-password-leak}. Many users
