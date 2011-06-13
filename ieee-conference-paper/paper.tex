@@ -127,11 +127,11 @@ popularity, with an average of two hundred thousand active users as of March
 Like a mix, messages sent over an onion routing network were encrypted with
 their routing information and delivered to an intermediate server for forward
 delivery.  Unlike the mix however, messages delivered using the onion routing
-network were encrypted multiple times, each 'layer' using a different key and
-routing instructions. The first node in a chain would only be able to encrypt
-the routing instructions to deliver the message to the next node. Each node in
-the sequence decrypting a layer until the complete message is decrypted and
-transmitted to the destination.
+network were encrypted multiple times, each 'layer' using a different
+encryption key and routing instructions. The first node in a chain would only
+be able to encrypt the routing instructions to deliver the message to the next
+node. Each node in the sequence decrypting a layer until the complete message
+is decrypted and transmitted to the destination.
 
 Traffic enters the Tor network through an onion proxy which accepts TCP streams.
 Some identifying features are scrubbed from the data using application filters
@@ -150,12 +150,6 @@ the reverse order that the data traverses the network. Cells come in two forms:
 control cells and relay cells. Control cells are used to create and maintain
 circuits, while relay cells contain commands for circuit maintenance and
 additional data for verifying message integrity and identifying streams.
-
-When the first node in the circuit receives a cell, it removes a layer by
-decrypting the message using it's session key. The cell is delivered along the
-circuit and at each node a layer is removed until the cell is completely
-decrypted and can be delivered successfully. Since circuits can take some time
-to build, they are pre-emptively created at regular intervals
 
 \section{Weaknesses and Attacks}
 
@@ -240,7 +234,7 @@ browser testing framework. The same simulations were run through a simulated
 Tor network using both the HTTP and HTTPS protocol.
 
 The experiment was run over the course of 8 weeks yielding three sets of sample
-data.
+data:
 
 \begin{table}[H]
   \begin{tabular*}{\linewidth}{lrrr}
@@ -258,6 +252,12 @@ data.
 
 \section{Results}
 
+The data captured was in the form of 1MB capture files which were recombined
+with mergecap and processed by NetAI \parencite{swinbut:2006fk} to produce ARFF
+format files for use by Weka \parencite{Hall:2009p7662,Bouckaert:2010we}. NetAI
+identifies flows inside the capture files and produces a number of statistics
+to be used as attributes for classification. 
+
 All of the algorithms chosen were able to successfully classify HTTPS and HTTP
 over Tor traffic with accuracy in excess of 90\%, with the Adaboost algorithm
 unable to classify HTTPS over Tor. The best performing algorithm random forest
@@ -267,8 +267,11 @@ and low false positive rate of 0.3\%.
 
 \input{../thesis/weka-automated-results.tex}
 
-When a histogram of packet sizes for each of the packet traces is produced, a
-pattern becomes very apparent.
+With some relative success classifying Tor traffic using unsupervised machine
+learning techniques, the captures were examined for a heuristics based
+classification approach. When a histogram of packet sizes for each of the
+packet traces is produced, a clear distinction can between seen between the
+sample sets:
 
 \begin{figure}[H]
   \centering\includegraphics[width=\linewidth]{https_hist}
@@ -293,12 +296,10 @@ significant patterns begin to appear. Table \ref{table:packet_sizes} shows the
 packet sizes seen for the first 10 packets of a 1\% sample of sessions in each
 phase of data captured. The first few packets contain 0 bytes of data, these
 are the typical SYN, SYN/ACK and ACK flagged packets that are used to initiate
-a TCP/IP connection. Following that only two packet sizes are seen for HTTP
-connections 100 and 110. For Tor sessions a range of packet sizes from 131 to
-152. This knowledge can be used to build a very rudimentary classification
-algorithm to identify Tor traffic, as seen in the pseudo-code below:
-
-\input{../thesis/session-packet-sizes.tex}
+a TCP/IP connection. Following that only two packet sizes are seen for HTTPS
+connections. For Tor sessions a range of packet sizes from 131 to 152. This
+knowledge can be used to build a very rudimentary classification algorithm to
+identify Tor traffic, as seen in the pseudo-code below:
 
 \begin{lstlisting}[language=ruby]
 if packet[3] > 130 && packet[3] <  153 && packet[5] > 913 && packet[5] < 937
@@ -324,6 +325,13 @@ the results as seen in table \ref{table:heuristic-results}.
   \caption{Results}
   \label{table:heuristic-results}
 \end{table}
+
+When examining the cases where the algorithm failed to identify Tor streams, in
+all cases the session had failed to successfully initiate the handshake
+required for a TCP session. Which meant that no meaningful data could have been
+transmitted.
+
+\input{../thesis/session-packet-sizes.tex}
 
 \section{Conclusion}
 
