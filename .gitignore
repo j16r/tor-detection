@@ -46,3 +46,16 @@ special-topic/*.bbl
 special-topic/*.blg
 special-topic/*.pdf
 special-topic/out/
+ieee-conference-paper/*.log
+ieee-conference-paper/*.aux
+ieee-conference-paper/*.eps
+ieee-conference-paper/*.png
+ieee-conference-paper/*.make
+ieee-conference-paper/*.temp
+ieee-conference-paper/*.out
+ieee-conference-paper/*.d
+ieee-conference-paper/*.fls
+ieee-conference-paper/*.bbl
+ieee-conference-paper/*.blg
+ieee-conference-paper/*.pdf
+ieee-conference-paper/out/
