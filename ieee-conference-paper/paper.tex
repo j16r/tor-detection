@@ -64,7 +64,7 @@
   School of Computer and\\Security Science\\
   Edith Cowan University\\
   Mt Lawley, Western Australia\\
-  Email: john.barker@our.ecu.edu.au}
+  Email: jebarker@our.ecu.edu.au}
   \and
   \IEEEauthorblockN{Peter Hannay}
   \IEEEauthorblockA{
@@ -215,7 +215,7 @@ directly compared as the data used for analysis has not been disclosed
 \textcite{Williams:2006p3849} which suggests that the C4.5 algorithm has the
 greatest performance and accuracy when compared to a number of Bayesian
 algorithms. \textcite{Mohd:2009p6484} compares thirty machine learning
-algorithms to find random tree, IBI, IBK and random forest algorithms
+algorithms to find random tree, IB1, IBK and random forest algorithms
 obtaining the greatest classification accuracy.
 
 \section{Experiment}
@@ -357,7 +357,16 @@ it would be impossible to cover all possible real world conditions. The
 variability and noise present in the real Tor network may make this
 classification technique impossible.
 
-\section{Future Research}
+
+\section{Conclusion}
+
+This research demonstrates that Tor does have characteristics that make it
+distinguishable from regular encrypted traffic. The encryption used by Tor does
+not appear to blur the size of communication cells sufficiently to prevent
+automated identification of Tor traffic, even with only a few observed packets.
+While the scope of this research is limited, it suggests that it may be
+possible to build simple software to automatically identify Tor users and block
+them from the network.
 
 Further research needs to be conducted with live packet traces from real
 participants in the Tor network. Most existing traffic classification research
@@ -382,16 +391,6 @@ applications use the same protocol with encryption and have characteristics
 similar to that produced by Tor. This would lead to any proposed classifier
 generating false positives. Further research should also consider the nature
 and characteristics of a wider set of encrypted communications.
-
-\section{Conclusion}
-
-This research demonstrates that Tor does have characteristics that make it
-distinguishable from regular encrypted traffic. The encryption used by Tor does
-not appear to blur the size of communication cells sufficiently to prevent
-automated identification of Tor traffic, even with only a few observed packets.
-While the scope of this research is limited, it suggests that it may be
-possible to build simple software to automatically identify Tor users and block
-them from the network.
 
 \printbibliography
 
