@@ -58,7 +58,7 @@ intermediate system, referred to as a 'mix' also employed public key
 cryptography to ensure that eavesdroppers could not obtain delivery information.
 
 This seminal paper spurred research into new techniques for providing anonymity
-and privacy for digital networks. Remailers such as Babel
+and privacy to digital networks. Remailers such as Babel
 \parencite{Gulcu:1996p1662} and Mixminion \parencite{Danezis:2003ys} employed a
 mix to deliver anonymous email. Research produced designs that yielded
 mathematically provable anonymity
@@ -74,26 +74,27 @@ Republic of China operates a sophisticated Internet firewall capable of blocking
 requests to forbidden information \parencite{The-OpenNet-Initiative:2009uq}.
 This system is often referred to as the Great Firewall of China. Resisting this
 system can involve ignoring spurious reset packets injected into the stream of
-forbidden communications \parencite{springerlink:10.1007/11957454-2}, or be as
-simple as accessing data through an encrypted proxy as is done in FreeGate
+forbidden communications \parencite{springerlink:10.1007/11957454-2}, or
+accessing censored sites through an encrypted proxy such as FreeGate
 \parencite{Smart:2008kx}.
 
-More sophisticated circumvention tend to be based on anonymity providing
-designs, \textcite{Kopsell:2004:ABR:1029179.1029197} describes a censorship
-resistant system built on top of AN.ON
-\parencite{springerlink:10.1007/3-540-44702-4-7}. Publishing systems such as
+More sophisticated censorship circumvention involves anonymous digital networks.
+\textcite{Kopsell:2004:ABR:1029179.1029197} describes a censorship resistant
+system built on top of AN.ON \parencite{springerlink:10.1007/3-540-44702-4-7}.
 Freedom \parencite{Goldberg:1999p2231} and Freenet \parencite{Clarke:2001p2435}
-aim to provide censorship resistance as well as anonymity. Infranet uses
-steganography to hide sensitive messages in innocuous content Infranet
-\parencite{Feamster:2002p307}.
+provide a document publication network that aims to provide censorship
+resistance as well as anonymity. Infranet uses steganography to hide sensitive
+messages in images transferred as part of anodyne HTTP sessions
+\parencite{Feamster:2002p307}. However many of these systems have not attained
+significant public exposure.
+
+\section{The Second Generation Onion Router}
 
 The Second Generation Onion Router (Tor), is an anonymous network which uses a
 variant of Onion Routing, to provide low latency anonymous communications to a
 wide variety of Internet communications protocols
 \parencite{Dingledine:2004p314}. It also aims to provide resistance against
 censorship based blocking attempts \parencite{Dingledine:2008p1542}.
-
-\section{The Second Generation Onion Router}
 
 Onion routing was originally developed by the U.S. Naval Research Lab in 1996
 \parencite{Goldschlag:1996wy} for application by the U.S. Navy. Like a mix,
