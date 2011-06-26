@@ -236,6 +236,16 @@ hide individual identities such as batching, queuing and normalization. While
 they may be more resistant to identity uncovering attacks, this may also make
 them more easily identifiable by classification techniques.
 
+\subsection{How long does a user have to be connected to the network before a
+confident match can be made?}
+
+The basic algorithm designed using a simple heuristic approach matches on the
+4th and 5th packets of an individual TCP session. Given that the first three
+packets of any TCP session are the session negotiation packets, the
+demonstrated algorithm only requires two packets before being confident of a
+positive match. It is likely that this is far earlier than any user data has
+had a chance to traverse the Tor network.
+
 \chapter{Conclusion}
 
 \section{Conclusion and Future Research}
