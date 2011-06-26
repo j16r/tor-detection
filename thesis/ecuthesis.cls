@@ -28,7 +28,6 @@
 \defaultfontfeatures{Scale=MatchLowercase}
 
 \setsansfont[Mapping=tex-text,Scale=1.1]{Optima}
-%\setmainfont[Mapping=tex-text,Scale=1.0]{Optima}
 \setmonofont{Menlo}
 
 %%---------------------------------------------------------------------------%%
@@ -211,61 +210,73 @@
 
 % Title page
 \renewcommand{\maketitle}{
-  \thispagestyle{empty}
   \clearpage
-    \setcounter{page}{1}  % ``The title page and signature page together
-                          % count as the first page of the prefatory material''
+  \thispagestyle{empty}
+  \setcounter{page}{1}  % ``The title page and signature page together
+                        % count as the first page of the prefatory material''
 
-    \doublespacing
-    \begin{flushleft}
+  \begin{flushright}
 
-      {\Huge \bfseries \MakeUppercase{\@title} \par}
+    \fontspec[Scale=1.2]{Georgia}
+
+    {\Huge {\@title} \par}
+
+    \rule{\linewidth}{5pt}
+
+    A thesis submitted in partial fulfilment of the requirements for the degree of\\
+    {\large \@degree}
+
+  \end{flushright}
+
+  \vfill
+
+  \begin{flushleft}
+
+    \fontspec[Scale=1.2]{Baskerville}
+
+    \begin{tabular}{@{}p{1.2in}p{3in}}
+    By: & \@author\\
+    Student ID: & \@studentid\\
+    Email: & \@email\\
+    \end{tabular}
 
     \vfill
 
-      A thesis submitted in partial fulfilment of the requirements for the degree of\\
-
-      {\large \@degree}
-
-    \vfill
-
-      \begin{tabular}{@{}p{1.2in}p{3in}}
-      By: & \@author\\
-      Student ID: & \@studentid\\
-      Email: & \@email\\
-      \end{tabular}
-
-    \vfill
-
+    {
+      \large
       \@department\\
       \@school\\
-      % Insert space before table, bit of a hack but otherwise the table
-      % sits too close to the above text
-      \vspace{6pt}
+    }
 
-      \begin{tabular}{@{}p{1.2in}p{3in}}
-      \newcounter{@supervisorsprinted}
-      \@whilenum \value{@supervisorsprinted} < \value{@supervisors} \do {
-        \stepcounter{@supervisorsprinted}
-        \ifcase\value{@supervisorsprinted}
-          \typeout{Thesis style--internal error printing supervisors.} \or
-          \@supervisora \or
-          \@supervisorb \or
-          \@supervisorc \or
-          \@supervisord \or
-          \@supervisore \or
-          \@supervisorf \or
-          \@supervisorg \or
-          \@supervisorh
-        \else
-          \typeout{Internal error printing supervisors}
-        \fi
-        }
-      \end{tabular}\\
+    % Insert space before table, bit of a hack but otherwise the table
+    % sits too close to the above text
+    \vspace{6pt}
 
-      Date of submission: \@date
+    \begin{tabular}{@{}p{1.2in}p{3in}}
+    \newcounter{@supervisorsprinted}
+    \@whilenum \value{@supervisorsprinted} < \value{@supervisors} \do {
+      \stepcounter{@supervisorsprinted}
+      \ifcase\value{@supervisorsprinted}
+        \typeout{Thesis style--internal error printing supervisors.} \or
+        \@supervisora \or
+        \@supervisorb \or
+        \@supervisorc \or
+        \@supervisord \or
+        \@supervisore \or
+        \@supervisorf \or
+        \@supervisorg \or
+        \@supervisorh
+      \else
+        \typeout{Internal error printing supervisors}
+      \fi
+      }
+    \end{tabular}
 
-    \end{flushleft}
+    \vspace{6pt}
+
+    Date of submission: \@date
+
+  \end{flushleft}
   \clearpage
 }
 
