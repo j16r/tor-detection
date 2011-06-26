@@ -158,11 +158,11 @@ to build, they are pre-emptively created at regular intervals
 
 When designing a system such as Tor, a number of trade-offs have to be made
 between the strength of the security provided and the convenience and
-performance of the system. The Tor designers consciously prioritized low
-latency, usability and flexibility against security goals such as security
-against end to end attacks \parencite[4]{Dingledine:2004p314}. These design
-decisions mean that Tor is vulnerable to several kinds of attacks, some of them
-expected and some not.
+performance of the system. Tor designers consciously prioritized low latency,
+usability and flexibility against security goals such as security against end
+to end attacks \parencite[4]{Dingledine:2004p314}. This means that by design,
+Tor is vulnerable to a global passive adversary, however there are some attacks
+that were not expected by the designers.
 
 A well known attack involves sniffing traffic that leaves exit nodes to
 capture private information \parencite{website:tor-password-leak}. Many users
@@ -183,7 +183,7 @@ be identified \parencite{Abbott:2007p298}.
 
 Tor bridges, intended as a way to get censored users access to Tor are easily
 identified. They are also vulnerable to clogging attacks which make bridge
-operators more easily identified \textcite{McLachlan:2009p197}. 
+operators more easily identified \textcite{McLachlan:2009p197}.
 
 \textcite{Murdoch:2005p325} proposes a technique to identify users by estimating
 the latency of individual Tor nodes using a hostile Tor node. The hostile Tor
@@ -191,7 +191,7 @@ node is able to send data to users using a predictable traffic pattern and
 identify this pattern as it is repeated through the network, correlating streams
 back to individuals.
 
-This attack was shown to be impractical as the Tor network grew in size, with 
+This attack was shown to be impractical as the Tor network grew in size, with
 the increased number of users adding enough congestion to mask the introduced
 identifying patterns \parencite{Evans:2009p315}. However a weakness in the Tor
 design meant that particularly configured hostile nodes could amplify the
@@ -213,15 +213,16 @@ be recognized. It is quite telling that new and sometimes unorthodox methods of
 circumventing censorship are being deployed every day
 \parencite{The-Economist:2011fk,Brading:2011ys}.
 
-While Tor has been the subject of much academic literature, the primary
-objective of researchers has historically been the attempt to reveal participant
-identities \parencite[3]{Murdoch:2005p325}.  Many attack techniques proposed
-have been somewhat academic in nature and not necessarily feasible in practice
-\parencite{Raccoon:2008fk}. Sometimes they require compromise of large parts of
-the Tor network, supplying hostile data to Tor users or complicated knowledge of
-usage patterns and an excess of patience. The technique demonstrated in this
-thesis is a low cost technique, which does not require very sophisticated
-equipment and can be completed by a passive observer.
+While Tor has been the subject of much academic literature
+\parencite{Hopper:2007p347,Murdoch:2007p320,Herrmann:2009p1189}, the primary
+objective of researchers has historically been the attempt to reveal
+participant identities \parencite[3]{Murdoch:2005p325}.  Many attack techniques
+proposed have been somewhat academic in nature and not necessarily feasible in
+practice \parencite{Raccoon:2008fk}. In certain circumstances they require
+compromise of large parts of the Tor network, supplying hostile data to Tor
+users or complicated knowledge of usage patterns and an excess of patience. The
+technique demonstrated in this paper is a low cost technique, which does not
+require sophisticated equipment and can be completed by a passive observer.
 
 This thesis describes a simple traffic analysis technique which can be used to
 distinguish Tor traffic from another form of commonly encrypted traffic.
@@ -381,7 +382,7 @@ directly compared as the data used for analysis has not been disclosed
 \textcite{Williams:2006p3849} which suggests that the C4.5 algorithm has the
 greatest performance and accuracy when compared to a number of Bayesian
 algorithms. \textcite{Mohd:2009p6484} compares thirty machine learning
-algorithms to find random tree, IBI, IBK and random forest algorithms
+algorithms to find random tree, IB1, IBK and random forest algorithms
 obtaining the greatest classification accuracy.
 
 An excellent meta study on traffic analysis techniques is presented in

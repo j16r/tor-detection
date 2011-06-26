@@ -238,18 +238,15 @@ them more easily identifiable by classification techniques.
 
 \chapter{Conclusion}
 
-\section{Conclusion}
+\section{Conclusion and Future Research}
 
-Using Tor as a communications proxy incurs some overhead, sufficient enough
-that when using a Tor proxy in controlled conditions, its traffic can be
-distinguished from regularly encrypted traffic. This overhead may be sufficient
-enough that Tor nodes in a real world network can be identified by using
-readily available eavesdropping techniques.
-
-However, this experiment was based on a small set of simulated data, with which
-it would be impossible to cover all possible real world conditions. The
-variability and noise present in the real Tor network may make this
-classification technique impossible.
+This research demonstrates that Tor does have characteristics that make it
+distinguishable from regular encrypted traffic. The encryption used by Tor does
+not appear to blur the size of communication cells sufficiently to prevent
+automated identification of Tor traffic, even with only a few observed packets.
+While the scope of this research is limited, it suggests that it may be
+possible to build simple software to automatically identify Tor users and block
+them from the network.
 
 Further research needs to be conducted with live packet traces from real
 participants in the Tor network. Most existing traffic classification research
@@ -257,3 +254,20 @@ operates this way, using exact matching techniques to separate traces collected
 into treatment and control groups. Real Tor traffic might be captured from
 publicly available and co-operating Tor nodes and compared to real encrypted
 sessions between well known public HTTPS servers.
+
+Training a classifier against real world traffic will account for the different
+and varied nature of packet switching hardware, with different maximum
+transmission units, performance capabilities and geographic location.
+
+The heuristic based classifier used in this paper used a single attribute: the
+size of individual packets in a stream, to classify with great accuracy. But
+other attributes may be considered, the most typical of these being inter
+packet arrival time - though this is likely to be more affected by natural
+variability.
+
+The encrypted traffic generated in the first phase of the experiment, only
+covered a single application and version. It may be possible that other
+applications use the same protocol with encryption and have characteristics
+similar to that produced by Tor. This would lead to any proposed classifier
+generating false positives. Further research should also consider the nature
+and characteristics of a wider set of encrypted communications.
