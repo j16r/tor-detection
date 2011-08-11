@@ -126,6 +126,12 @@ be able to encrypt the routing instructions to deliver the message to the next
 node. Each node in the sequence decrypting a layer until the complete message
 is decrypted and transmitted to the destination.
 
+\begin{figure}[H]
+  \centering\includegraphics[width=\linewidth]{tor-network-diagram}
+  \caption{The Tor Network}
+  \label{tor-network}
+\end{figure}
+
 Traffic enters the Tor network through an onion proxy which accepts TCP streams.
 Some identifying features are scrubbed from the data using application filters
 before the data is relayed over the network through TLS \parencite{website:TLS}
@@ -235,12 +241,13 @@ the 17th that same month. Phase two began immediately after and continued two
 weeks till the 31st of October. This phase involved capturing regular HTTP
 traffic routed through a private Tor network. The final phase began on the 7th
 of November and concluded on the 21st, this phase was the capture of HTTPS
-traffic through a private Tor network. 
+traffic through a private Tor network.
 
 To reduce the affect of confounding variables, all phases conducted the same
 simulations, on an isolated test network and were conducted within a virtual
 machine snapshot which was periodically rolled back to a clean, known state.
-The experiment yielded three sets of sample data:
+The experiment yielded three sets of, a summary is included in table
+\ref{table:datasets}.
 
 \begin{table}[H]
   \begin{tabular*}{\linewidth}{lrrr}
@@ -258,17 +265,19 @@ The experiment yielded three sets of sample data:
 \section{Results}
 
 The data captured was in the form of 1MB capture files which were recombined
-with mergecap and processed by NetAI \parencite{swinbut:2006fk} to produce ARFF
-format files for use by Weka \parencite{Hall:2009p7662,Bouckaert:2010we}. NetAI
-identifies flows inside the capture files and produces a number of statistics
-to be used as attributes for classification. 
+with mergecap \parencite{Renfro:fk} and processed by NetAI
+\parencite{swinbut:2006fk} to produce ARFF format files for use by Weka
+\parencite{Hall:2009p7662,Bouckaert:2010we}. NetAI identifies flows inside the
+capture files and produces a number of statistics to be used as attributes for
+classification.
 
 All of the algorithms chosen were able to successfully classify HTTPS and HTTP
 over Tor traffic with accuracy in excess of 90\%, with the Adaboost algorithm
 unable to classify HTTPS over Tor. The best performing algorithm random forest
 was able to classify HTTP over Tor with 93.7\% accuracy and a false positive
 rate of 3.7\%. HTTPS over Tor was more easily identified with a 97.7\% accuracy
-and low false positive rate of 0.3\%.
+and low false positive rate of 0.3\%. A summary of the results obtained by
+these machine learning classifiers is available in Table \ref{table:results}.
 
 \input{../thesis/weka-automated-results.tex}
 
@@ -276,58 +285,53 @@ With some relative success classifying Tor traffic using unsupervised machine
 learning techniques, the captures were examined for a heuristics based
 classification approach. When a histogram of packet sizes for each of the
 packet traces is produced, a clear distinction can between seen between the
-sample sets:
+sample sets as seen in Figures \ref{https_hist}, \ref{http_tor_hist} and
+\ref{https_tor_hist}.
 
-\begin{figure}[h]
-  \centering\includegraphics[width=\linewidth]{https_hist}
+\begin{figure*}
+  \centering\includegraphics[width=0.6\linewidth]{https_hist}
   \caption{Histogram of packet size for HTTPS traffic}
   \label{https_hist}
-\end{figure}
+\end{figure*}
 
-\begin{figure}[h]
-  \centering\includegraphics[width=\linewidth]{http_tor_hist}
+\begin{figure*}
+  \centering\includegraphics[width=0.6\linewidth]{http_tor_hist}
   \caption{Histogram of packet size for HTTP traffic over Tor}
   \label{http_tor_hist}
-\end{figure}
+\end{figure*}
 
-\begin{figure}[h]
-  \centering\includegraphics[width=\linewidth]{https_tor_hist}
+\begin{figure*}
+  \centering\includegraphics[width=0.6\linewidth]{https_tor_hist}
   \caption{Histogram of packet size for HTTPS traffic over Tor}
   \label{https_tor_hist}
-\end{figure}
+\end{figure*}
 
 Investigating more closely, by examining individual packet traces some
 significant patterns begin to appear. Table \ref{table:packet_sizes} shows the
-packet sizes seen for the first 10 packets of a 1\% sample of sessions in each
+packet sizes seen for the first 6 packets of a 1\% sample of sessions in each
 phase of data captured. The first few packets contain 0 bytes of data, these
 are the typical SYN, SYN/ACK and ACK flagged packets that are used to initiate
 a TCP/IP connection. Following that only two packet sizes are seen for HTTPS
-connections. For Tor sessions a range of packet sizes from 131 to 152. This
-knowledge can be used to build a very rudimentary classification algorithm to
-identify Tor traffic, as seen in the pseudo-code below:
+connections. For Tor sessions a range of packet sizes from 131 to 152.
 
-\begin{lstlisting}[language=ruby]
-if packet[3] > 130 && packet[3] <  153 && packet[5] > 913 && packet[5] < 937
-  is_tor = true
-else
-  is_tor = false
-end
-\end{lstlisting}
+\input{../thesis/session-packet-sizes.tex}
 
-Applying this algorithm to a 10\% sample of each of the packet traces yields
-the results as seen in table \ref{table:heuristic-results}.
+This knowledge can be used to build a rudimentary classification algorithm to
+identify Tor traffic, the pseudo code for an example algorithm is included in
+Figure \ref{psuedo_matcher}. Applying this algorithm to the complete traces
+yields the results as seen in Table \ref{table:heuristic-results}.
 
-\begin{table}[h]
+\begin{table}[H]
   \begin{tabular*}{\linewidth}{lr}
     \toprule
     Protocol & Identified as Tor\\
     \midrule
-    HTTPS & 0.0000\% \\
-    HTTP over Tor & 0.9903\% \\
-    HTTPS over Tor & 0.9826\% \\
+    HTTPS & 1.06\%\\
+    HTTP over Tor & 98.13\%\\
+    HTTPS over Tor & 97.54\%\\
     \bottomrule
   \end{tabular*}
-  \caption{Results}
+  \caption{Results from Heuristic Classifier}
   \label{table:heuristic-results}
 \end{table}
 
@@ -335,8 +339,6 @@ When examining the cases where the algorithm failed to identify Tor streams, in
 all cases the session had failed to successfully initiate the handshake
 required for a TCP session. Which meant that no meaningful data could have been
 transmitted.
-
-\input{../thesis/session-packet-sizes.tex}
 
 \section{Discussion}
 
@@ -391,6 +393,21 @@ applications use the same protocol with encryption and have characteristics
 similar to that produced by Tor. This would lead to any proposed classifier
 generating false positives. Further research should also consider the nature
 and characteristics of a wider set of encrypted communications.
+
+\begin{figure}
+  \begin{lstlisting}[language=ruby]
+    if  packet[3] > 130 and
+        packet[3] <  153 and
+        packet[5] > 913 and
+        packet[5] < 937 then
+      is_tor = true
+    else
+      is_tor = false
+    end
+  \end{lstlisting}
+  \caption{Pseudo Code for Matching a Tor Session}
+  \label{psuedo_matcher}
+\end{figure}
 
 \printbibliography
 
