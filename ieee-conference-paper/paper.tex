@@ -211,7 +211,20 @@ require sophisticated equipment and can be completed by a passive observer.
 
 When considering the use of traffic analysis for classification of Internet
 communications, three techniques are used: exact matching, heuristic matching
-and machine learning \parencite{Zhang:2009p1188}.
+and machine learning \parencite{Zhang:2009p1188}. Since Tor employs strong
+encryption and can communicate on any port, it can easily an exact matching
+technique through simple configuration options.
+
+Heuristic based techniques have been designed to classify encrypted
+communications, including the identification of P2P traffic
+\parencite{Karagiannis:2004p6400,Perenyi:2006p6325,John:2008p1376} and viruses
+\parencite{Lazarevic:2003p6450}.
+
+Machine learning algorithms have also been used successfully to classify
+encrypted traffic including Skype \parencite{Alshammari:2009p7474} and to
+identify application protocols tunnelled over SSH \parencite{Dusi:2008p6254}.
+An previous attempt to classify Tor using Bayesian networks was attempted in
+\textcite{Herrmann:2009p1189} without great success.
 
 It is difficult to say what machine learning technique is the most effective as
 no consensus has been reached, the literature covers a wide variety of
@@ -323,7 +336,7 @@ Figure \ref{psuedo_matcher}.
 \begin{figure}[H]
   \begin{lstlisting}[language=ruby]
     if  packet[3] > 130 and
-        packet[3] <  153 and
+        packet[3] < 153 and
         packet[5] > 913 and
         packet[5] < 937 then
       is_tor = true
