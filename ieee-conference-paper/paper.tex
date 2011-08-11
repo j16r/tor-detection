@@ -289,19 +289,19 @@ sample sets as seen in Figures \ref{https_hist}, \ref{http_tor_hist} and
 \ref{https_tor_hist}.
 
 \begin{figure*}
-  \centering\includegraphics[width=0.6\linewidth]{https_hist}
+  \centering\includegraphics[width=0.9\linewidth]{https_hist}
   \caption{Histogram of packet size for HTTPS traffic}
   \label{https_hist}
 \end{figure*}
 
 \begin{figure*}
-  \centering\includegraphics[width=0.6\linewidth]{http_tor_hist}
+  \centering\includegraphics[width=0.9\linewidth]{http_tor_hist}
   \caption{Histogram of packet size for HTTP traffic over Tor}
   \label{http_tor_hist}
 \end{figure*}
 
 \begin{figure*}
-  \centering\includegraphics[width=0.6\linewidth]{https_tor_hist}
+  \centering\includegraphics[width=0.9\linewidth]{https_tor_hist}
   \caption{Histogram of packet size for HTTPS traffic over Tor}
   \label{https_tor_hist}
 \end{figure*}
@@ -318,7 +318,24 @@ connections. For Tor sessions a range of packet sizes from 131 to 152.
 
 This knowledge can be used to build a rudimentary classification algorithm to
 identify Tor traffic, the pseudo code for an example algorithm is included in
-Figure \ref{psuedo_matcher}. Applying this algorithm to the complete traces
+Figure \ref{psuedo_matcher}.
+
+\begin{figure}[H]
+  \begin{lstlisting}[language=ruby]
+    if  packet[3] > 130 and
+        packet[3] <  153 and
+        packet[5] > 913 and
+        packet[5] < 937 then
+      is_tor = true
+    else
+      is_tor = false
+    end
+  \end{lstlisting}
+  \caption{Pseudo Code for Matching a Tor Session}
+  \label{psuedo_matcher}
+\end{figure}
+
+Applying this algorithm to the complete traces
 yields the results as seen in Table \ref{table:heuristic-results}.
 
 \begin{table}[H]
@@ -393,21 +410,6 @@ applications use the same protocol with encryption and have characteristics
 similar to that produced by Tor. This would lead to any proposed classifier
 generating false positives. Further research should also consider the nature
 and characteristics of a wider set of encrypted communications.
-
-\begin{figure}
-  \begin{lstlisting}[language=ruby]
-    if  packet[3] > 130 and
-        packet[3] <  153 and
-        packet[5] > 913 and
-        packet[5] < 937 then
-      is_tor = true
-    else
-      is_tor = false
-    end
-  \end{lstlisting}
-  \caption{Pseudo Code for Matching a Tor Session}
-  \label{psuedo_matcher}
-\end{figure}
 
 \printbibliography
 
